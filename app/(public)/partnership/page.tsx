@@ -71,12 +71,12 @@ export default function PartnershipPage() {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(130,150,97,0.15),transparent_50%)] -z-10" />
         <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] md:w-[800px] md:h-[400px] bg-emerald-500/10 rounded-full blur-[100px] md:blur-[120px] -z-10 pointer-events-none" />
         
-        <div className="max-w-[800px] w-full mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 mt-[-60px]">
+        <div className="max-w-[720px] w-full mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 mt-[-80px]">
           <motion.div
             initial="initial"
             animate="animate"
             variants={stagger}
-            className="flex flex-col items-center gap-6"
+            className="flex flex-col items-center gap-5"
           >
             <motion.div variants={fadeIn}>
               <div className="inline-flex items-center px-4 py-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 text-xs font-bold uppercase tracking-[0.2em] backdrop-blur-md shadow-[0_0_20px_rgba(16,185,129,0.1)]">
@@ -85,19 +85,20 @@ export default function PartnershipPage() {
             </motion.div>
             
             <motion.div variants={fadeIn}>
-              <h1 className="text-[44px] sm:text-[56px] md:text-[72px] font-bold text-white tracking-tight leading-[100%]">
+              <h1 className="text-[44px] sm:text-[56px] md:text-[68px] font-bold text-white tracking-tight leading-[1.1]">
                 Amplify Your Impact <br className="hidden sm:block" />
-                with <span className="text-forest-accent drop-shadow-sm">JALA VIVE</span>
+                Together with <br className="hidden sm:block" />
+                <span className="text-forest-accent drop-shadow-sm">JALA VIVE</span>
               </h1>
             </motion.div>
             
-            <motion.div variants={fadeIn} className="max-w-[650px] mx-auto">
+            <motion.div variants={fadeIn} className="max-w-[600px] mx-auto">
               <p className="text-[18px] md:text-[20px] text-gray-400 leading-[170%]">
                 Join forces with us to build a more sustainable and caring world. Whether you're a corporation, NGO, or university, we have the right tools to scale your initiatives.
               </p>
             </motion.div>
             
-            <motion.div variants={fadeIn} className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto pt-4">
+            <motion.div variants={fadeIn} className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto pt-2">
               <Link href="/register?role=organization" className="w-full sm:w-auto">
                   <motion.div whileHover={{ scale: 1.03 }} className="w-full">
                     <Button className="w-full sm:w-auto h-[52px] px-8 rounded-[16px] bg-forest-accent hover:bg-[#4A5D23] text-white text-[16px] font-semibold shadow-lg shadow-forest-accent/20 transition-colors">
