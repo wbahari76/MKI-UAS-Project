@@ -64,7 +64,7 @@ export default function SettingsPage() {
 
       <div className="grid gap-6">
         {/* Account Settings */}
-        <Card className="border-0 shadow-sm shadow-slate-200">
+        <Card className="border-0 shadow-sm shadow-forest-border/20">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Shield className="w-5 h-5 text-[#829661]" />
@@ -92,7 +92,7 @@ export default function SettingsPage() {
         </Card>
 
         {/* Notifications */}
-        <Card className="border-0 shadow-sm shadow-slate-200">
+        <Card className="border-0 shadow-sm shadow-forest-border/20">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Bell className="w-5 h-5 text-[#829661]" />
@@ -135,7 +135,7 @@ export default function SettingsPage() {
         </Card>
 
         {/* Privacy */}
-        <Card className="border-0 shadow-sm shadow-slate-200">
+        <Card className="border-0 shadow-sm shadow-forest-border/20">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Eye className="w-5 h-5 text-[#829661]" />

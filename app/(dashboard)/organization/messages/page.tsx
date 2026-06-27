@@ -99,7 +99,7 @@ export default function OrganizationMessagesPage() {
   const currentMessages = chats[activeContact.id] || [];
 
   return (
-    <div className="h-[calc(100vh-140px)] -mx-4 sm:-mx-6 lg:-mx-8 -my-4 sm:-my-6 lg:-my-8 flex bg-forest-card rounded-xl sm:rounded-none overflow-hidden shadow-sm shadow-slate-200 border border-forest-border">
+    <div className="h-[calc(100vh-140px)] -mx-4 sm:-mx-6 lg:-mx-8 -my-4 sm:-my-6 lg:-my-8 flex bg-forest-card rounded-xl sm:rounded-none overflow-hidden shadow-sm shadow-forest-border/20 border border-forest-border">
       
       {/* Sidebar Contacts */}
       <div className="w-full sm:w-80 border-r border-forest-border flex flex-col bg-[#181A15]/50 hidden sm:flex">
@@ -207,7 +207,7 @@ export default function OrganizationMessagesPage() {
                 <div className={`px-4 py-3 rounded-2xl ${
                   msg.isMe 
                     ? 'bg-forest-accent text-forest-beige rounded-br-sm' 
-                    : 'bg-forest-card border border-forest-border text-forest-beige rounded-bl-sm shadow-sm shadow-slate-100'
+                    : 'bg-forest-card border border-forest-border text-forest-beige rounded-bl-sm shadow-sm shadow-forest-border/10'
                 }`}>
                   <p className="text-sm leading-relaxed">{msg.text}</p>
                 </div>

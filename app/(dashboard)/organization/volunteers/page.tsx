@@ -152,7 +152,7 @@ export default function ManageVolunteersPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.05 }}
           >
-            <Card className="border-0 shadow-sm shadow-slate-200 hover:shadow-md transition-all group overflow-hidden h-full flex flex-col">
+            <Card className="border-0 shadow-sm shadow-forest-border/20 hover:shadow-md transition-all group overflow-hidden h-full flex flex-col">
               <div className="h-16 bg-[#21261B] relative border-b border-[#2C3322]">
                 <div className="absolute -bottom-8 left-6">
                   <Avatar className="w-16 h-16 border-4 border-forest-border shadow-sm group-hover:scale-105 transition-transform cursor-pointer" onClick={() => handleViewProfile(vol)}>
@@ -204,7 +204,7 @@ export default function ManageVolunteersPage() {
                 </div>
 
                 <div className="flex items-center gap-2 pt-4 border-t border-forest-border">
-                  <Button variant="outline" className="flex-1 text-blue-600 hover:text-blue-700 hover:bg-blue-50 border-blue-200">
+                  <Button variant="outline" className="flex-1 text-blue-400 hover:text-blue-400 hover:bg-blue-500/10 border-blue-500/20">
                     <MessageCircle className="w-4 h-4 mr-2" /> Message
                   </Button>
                   <DropdownMenu>
@@ -219,7 +219,7 @@ export default function ManageVolunteersPage() {
                       <DropdownMenuItem onClick={() => handleIssueClick(vol)}>Issue E-Certificate</DropdownMenuItem>
                       <DropdownMenuItem>Download Resume</DropdownMenuItem>
                       {vol.status === 'Active' ? (
-                        <DropdownMenuItem className="text-amber-600 focus:text-amber-600 focus:bg-amber-50">Mark as Inactive</DropdownMenuItem>
+                        <DropdownMenuItem className="text-amber-400 focus:text-amber-400 focus:bg-amber-500/10">Mark as Inactive</DropdownMenuItem>
                       ) : (
                         <DropdownMenuItem className="text-[#829661] focus:text-[#829661] focus:bg-[#21261B]">Mark as Active</DropdownMenuItem>
                       )}

@@ -63,7 +63,7 @@ export default function OrganizationProjectsPage() {
       case "draft":
         return <Badge className="bg-[#1E211A] text-[#DFD5C2] border-forest-border">Draft</Badge>;
       case "completed":
-        return <Badge className="bg-blue-100 text-blue-700 border-blue-200">Completed</Badge>;
+        return <Badge className="bg-blue-500/10 text-blue-400 border-blue-500/20">Completed</Badge>;
       default:
         return <Badge>{status}</Badge>;
     }
@@ -84,7 +84,7 @@ export default function OrganizationProjectsPage() {
         </Link>
       </div>
 
-      <Card className="border-0 shadow-sm shadow-slate-200">
+      <Card className="border-0 shadow-sm shadow-forest-border/20">
         <CardContent className="p-6">
           <div className="flex items-center gap-4 mb-6">
             <div className="relative flex-1 max-w-md">
@@ -147,7 +147,7 @@ export default function OrganizationProjectsPage() {
                             </DropdownMenuItem>
                           </Link>
                           <DropdownMenuItem 
-                            className="cursor-pointer text-red-600 focus:text-red-600 focus:bg-red-50"
+                            className="cursor-pointer text-red-600 focus:text-red-600 focus:bg-red-500/10"
                             onClick={() => handleDelete(project.id)}
                           >
                             <Trash2 className="w-4 h-4 mr-2" /> Delete

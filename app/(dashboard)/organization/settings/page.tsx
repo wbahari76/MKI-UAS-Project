@@ -65,7 +65,7 @@ export default function OrganizationSettingsPage() {
       <div className="grid gap-6">
         
         {/* Organization Info */}
-        <Card className="border-0 shadow-sm shadow-slate-200">
+        <Card className="border-0 shadow-sm shadow-forest-border/20">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Building2 className="w-5 h-5 text-[#829661]" />
@@ -87,7 +87,7 @@ export default function OrganizationSettingsPage() {
         </Card>
 
         {/* Account Security */}
-        <Card className="border-0 shadow-sm shadow-slate-200">
+        <Card className="border-0 shadow-sm shadow-forest-border/20">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Shield className="w-5 h-5 text-[#829661]" />
@@ -110,7 +110,7 @@ export default function OrganizationSettingsPage() {
         </Card>
 
         {/* Notifications */}
-        <Card className="border-0 shadow-sm shadow-slate-200">
+        <Card className="border-0 shadow-sm shadow-forest-border/20">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Bell className="w-5 h-5 text-[#829661]" />
@@ -153,7 +153,7 @@ export default function OrganizationSettingsPage() {
         </Card>
 
         {/* Privacy */}
-        <Card className="border-0 shadow-sm shadow-slate-200">
+        <Card className="border-0 shadow-sm shadow-forest-border/20">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Eye className="w-5 h-5 text-[#829661]" />

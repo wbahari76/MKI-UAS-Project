@@ -80,7 +80,7 @@ export default function PublicCommunitiesPage() {
         {/* Header Section */}
         <div className="text-center max-w-3xl mx-auto mb-16 space-y-6">
           <motion.div initial="initial" animate="animate" variants={fadeInUp}>
-            <span className="inline-block py-1 px-3 rounded-full bg-blue-100 text-blue-700 text-sm font-semibold tracking-wider uppercase mb-4">
+            <span className="inline-block py-1 px-3 rounded-full bg-blue-500/10 text-blue-400 text-sm font-semibold tracking-wider uppercase mb-4">
               Community Directory
             </span>
             <h1 className="text-4xl md:text-5xl font-extrabold text-forest-beige tracking-tight leading-tight">
@@ -138,7 +138,7 @@ export default function PublicCommunitiesPage() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent" />
                 <div className="absolute bottom-4 left-6 flex items-center gap-4">
-                  <div className="w-16 h-16 rounded-2xl bg-forest-card flex items-center justify-center text-2xl font-bold text-blue-600 shadow-md">
+                  <div className="w-16 h-16 rounded-2xl bg-forest-card flex items-center justify-center text-2xl font-bold text-blue-400 shadow-md">
                     {community.logo}
                   </div>
                   <div>
@@ -175,7 +175,7 @@ export default function PublicCommunitiesPage() {
 
                 <div className="flex items-center justify-between pt-4 border-t border-forest-border">
                   <Link href="/register">
-                    <Button variant="ghost" className="text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-full px-4">
+                    <Button variant="ghost" className="text-blue-400 hover:text-blue-400 hover:bg-blue-500/10 rounded-full px-4">
                       View Profile
                     </Button>
                   </Link>
@@ -212,7 +212,7 @@ export default function PublicCommunitiesPage() {
             Join JALA VIVE to recruit passionate volunteers, manage your projects efficiently, and measure your impact in real-time.
           </p>
           <Link href="/register?type=organization">
-            <Button className="h-14 px-8 rounded-full bg-forest-card text-blue-600 hover:bg-[#181A15] text-lg font-semibold shadow-xl shadow-blue-900/20 transition-all">
+            <Button className="h-14 px-8 rounded-full bg-forest-card text-blue-400 hover:bg-[#181A15] text-lg font-semibold shadow-xl shadow-blue-900/20 transition-all">
               Register Your Organization
             </Button>
           </Link>

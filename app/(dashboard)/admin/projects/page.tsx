@@ -63,13 +63,13 @@ export default function AdminProjectsPage() {
         </div>
       </div>
 
-      <Card className="border-0 shadow-sm shadow-slate-200 overflow-hidden">
+      <Card className="border-0 shadow-sm shadow-forest-border/20 overflow-hidden">
         <Tabs defaultValue="all" className="w-full">
           <div className="border-b border-forest-border p-4">
             <TabsList>
               <TabsTrigger value="all">All Projects</TabsTrigger>
               <TabsTrigger value="pending">Pending Review</TabsTrigger>
-              <TabsTrigger value="flagged" className="text-red-600 data-[state=active]:text-red-700">Reported</TabsTrigger>
+              <TabsTrigger value="flagged" className="text-red-600 data-[state=active]:text-red-400">Reported</TabsTrigger>
             </TabsList>
           </div>
           
@@ -115,9 +115,9 @@ export default function AdminProjectsPage() {
                       <td className="px-6 py-4">
                         <Badge variant="outline" className={`
                           ${project.status === 'Active' ? 'border-[#4A5D23] text-[#829661] bg-[#21261B]' : ''}
-                          ${project.status === 'Pending' ? 'border-amber-200 text-amber-700 bg-amber-50' : ''}
-                          ${project.status === 'Flagged' ? 'border-red-200 text-red-700 bg-red-50' : ''}
-                          ${project.status === 'Completed' ? 'border-blue-200 text-blue-700 bg-blue-50' : ''}
+                          ${project.status === 'Pending' ? 'border-amber-200 text-amber-400 bg-amber-500/10' : ''}
+                          ${project.status === 'Flagged' ? 'border-red-500/20 text-red-400 bg-red-500/10' : ''}
+                          ${project.status === 'Completed' ? 'border-blue-500/20 text-blue-400 bg-blue-500/10' : ''}
                           ${project.status === 'Rejected' ? 'border-forest-border text-[#DFD5C2] bg-[#181A15]' : ''}
                         `}>
                           {project.status}

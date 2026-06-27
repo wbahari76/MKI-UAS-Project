@@ -51,7 +51,7 @@ export default function AdminDashboardPage() {
         
         {/* Broadcast System */}
         <div className="lg:col-span-2">
-          <Card className="border-0 shadow-sm shadow-slate-200">
+          <Card className="border-0 shadow-sm shadow-forest-border/20">
             <CardHeader className="border-b border-forest-border bg-forest text-forest-beige rounded-t-xl">
               <CardTitle className="flex items-center gap-2 text-lg">
                 <Megaphone className="w-5 h-5 text-emerald-400" />
@@ -90,7 +90,7 @@ export default function AdminDashboardPage() {
 
         {/* System Logs */}
         <div className="lg:col-span-1">
-          <Card className="border-0 shadow-sm shadow-slate-200 h-full">
+          <Card className="border-0 shadow-sm shadow-forest-border/20 h-full">
             <CardHeader className="border-b border-forest-border">
               <CardTitle className="text-lg flex items-center gap-2">
                 <Server className="w-5 h-5 text-[#7A8072]" />

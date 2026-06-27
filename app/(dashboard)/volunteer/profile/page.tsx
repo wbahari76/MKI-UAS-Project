@@ -74,7 +74,7 @@ export default function ProfilePage() {
         
         {/* Left Sidebar */}
         <div className="md:col-span-1 space-y-6">
-          <Card className="border-0 shadow-sm shadow-slate-200">
+          <Card className="border-0 shadow-sm shadow-forest-border/20">
             <CardContent className="p-6 flex flex-col items-center text-center">
               <div className="relative mb-4 group cursor-pointer">
                 <div className="w-24 h-24 rounded-full bg-[#2C3322] flex items-center justify-center border-4 border-forest-border shadow-lg overflow-hidden text-[#829661] font-bold text-3xl tracking-wider">
@@ -94,7 +94,7 @@ export default function ProfilePage() {
             </CardContent>
           </Card>
           
-          <Card className="border-0 shadow-sm shadow-slate-200">
+          <Card className="border-0 shadow-sm shadow-forest-border/20">
             <CardHeader className="p-6 pb-2">
               <CardTitle className="text-lg">Stats</CardTitle>
             </CardHeader>
@@ -124,7 +124,7 @@ export default function ProfilePage() {
             </TabsList>
             
             <TabsContent value="personal">
-              <Card className="border-0 shadow-sm shadow-slate-200">
+              <Card className="border-0 shadow-sm shadow-forest-border/20">
                 <CardHeader>
                   <CardTitle>Personal Information</CardTitle>
                 </CardHeader>

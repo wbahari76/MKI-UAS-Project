@@ -34,7 +34,7 @@ export default function ImpactPage() {
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-20 space-y-6">
           <motion.div initial="initial" animate="animate" variants={fadeInUp}>
-            <span className="inline-block py-1 px-3 rounded-full bg-blue-100 text-blue-700 text-sm font-semibold tracking-wider uppercase mb-4">
+            <span className="inline-block py-1 px-3 rounded-full bg-blue-500/10 text-blue-400 text-sm font-semibold tracking-wider uppercase mb-4">
               Our Impact
             </span>
             <h1 className="text-4xl md:text-6xl font-extrabold text-forest-beige tracking-tight leading-tight">
@@ -55,13 +55,13 @@ export default function ImpactPage() {
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-24"
         >
           {[
-            { label: "Total Volunteers", value: "24,500+", icon: Users, color: "text-blue-600", bg: "bg-blue-100", border: "border-blue-100" },
+            { label: "Total Volunteers", value: "24,500+", icon: Users, color: "text-blue-400", bg: "bg-blue-500/10", border: "border-blue-100" },
             { label: "Projects Completed", value: "1,240", icon: Award, color: "text-[#829661]", bg: "bg-[#2C3322]", border: "border-[#2C3322]" },
-            { label: "Communities Served", value: "350+", icon: Globe, color: "text-amber-600", bg: "bg-amber-100", border: "border-amber-100" },
-            { label: "Total Impact Hours", value: "1.2M", icon: Activity, color: "text-purple-600", bg: "bg-purple-100", border: "border-purple-100" }
+            { label: "Communities Served", value: "350+", icon: Globe, color: "text-amber-400", bg: "bg-amber-500/10", border: "border-amber-100" },
+            { label: "Total Impact Hours", value: "1.2M", icon: Activity, color: "text-purple-400", bg: "bg-purple-500/10", border: "border-purple-100" }
           ].map((stat, i) => (
             <motion.div key={i} variants={fadeInUp}>
-              <Card className={`border ${stat.border} shadow-sm shadow-slate-200 hover:shadow-md transition-all`}>
+              <Card className={`border ${stat.border} shadow-sm shadow-forest-border/20 hover:shadow-md transition-all`}>
                 <CardContent className="p-6 text-center">
                   <div className={`w-12 h-12 rounded-full ${stat.bg} ${stat.color} flex items-center justify-center mx-auto mb-4`}>
                     <stat.icon size={24} />
@@ -75,7 +75,7 @@ export default function ImpactPage() {
         </motion.div>
 
         {/* Detailed Impact Report */}
-        <div className="bg-forest-card rounded-3xl p-8 md:p-12 shadow-xl shadow-slate-200/50 border border-forest-border mb-24 relative overflow-hidden">
+        <div className="bg-forest-card rounded-3xl p-8 md:p-12 shadow-xl shadow-forest-border/20/50 border border-forest-border mb-24 relative overflow-hidden">
           <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-emerald-100/50 to-transparent rounded-bl-full -z-10" />
           
           <div className="grid lg:grid-cols-2 gap-16 items-center">
@@ -148,7 +148,7 @@ export default function ImpactPage() {
           viewport={{ once: true }}
           className="text-center space-y-6 max-w-2xl mx-auto"
         >
-          <div className="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-6">
+          <div className="w-16 h-16 bg-blue-500/10 text-blue-400 rounded-full flex items-center justify-center mx-auto mb-6">
             <Heart size={32} />
           </div>
           <h2 className="text-3xl font-bold text-forest-beige">Be Part of the Next Million Hours</h2>

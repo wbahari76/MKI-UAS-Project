@@ -61,7 +61,7 @@ function HeroSection() {
             {/* Background Pattern */}
             <div className="absolute inset-0 opacity-30">
                 <div className="absolute top-20 left-10 w-72 h-72 bg-[#1B1E16] rounded-full mix-blend-multiply filter blur-3xl animate-pulse" />
-                <div className="absolute bottom-20 right-10 w-72 h-72 bg-blue-200 rounded-full mix-blend-multiply filter blur-3xl animate-pulse" style={{ animationDelay: '500ms' }} />
+                <div className="absolute bottom-20 right-10 w-72 h-72 bg-blue-500/20 rounded-full mix-blend-multiply filter blur-3xl animate-pulse" style={{ animationDelay: '500ms' }} />
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-[#22261C] rounded-full mix-blend-multiply filter blur-3xl animate-pulse" style={{ animationDelay: '300ms' }} />
             </div>
 
@@ -157,16 +157,16 @@ function StatsSection() {
                                 <div className={cn(
                                     "w-12 h-12 rounded-xl mx-auto mb-4 flex items-center justify-center",
                                     stat.color === 'emerald' && "bg-[#2C3322]",
-                                    stat.color === 'blue' && "bg-blue-100",
-                                    stat.color === 'amber' && "bg-amber-100",
-                                    stat.color === 'purple' && "bg-purple-100"
+                                    stat.color === 'blue' && "bg-blue-500/10",
+                                    stat.color === 'amber' && "bg-amber-500/10",
+                                    stat.color === 'purple' && "bg-purple-500/10"
                                 )}>
                                     <Icon className={cn(
                                         "w-6 h-6",
                                         stat.color === 'emerald' && "text-[#829661]",
-                                        stat.color === 'blue' && "text-blue-600",
-                                        stat.color === 'amber' && "text-amber-600",
-                                        stat.color === 'purple' && "text-purple-600"
+                                        stat.color === 'blue' && "text-blue-400",
+                                        stat.color === 'amber' && "text-amber-400",
+                                        stat.color === 'purple' && "text-purple-400"
                                     )} />
                                 </div>
                                 <p className="text-3xl md:text-4xl font-bold text-forest-beige mb-1">
@@ -359,11 +359,11 @@ function CategoriesSection() {
                                         <CardContent className="p-6 text-center">
                                             <div className={cn(
                                                 "w-14 h-14 rounded-xl mx-auto mb-3 flex items-center justify-center transition-colors",
-                                                category.color === 'blue' && "bg-blue-100 text-blue-600",
+                                                category.color === 'blue' && "bg-blue-500/10 text-blue-400",
                                                 category.color === 'emerald' && "bg-[#2C3322] text-[#829661]",
-                                                category.color === 'red' && "bg-red-100 text-red-600",
-                                                category.color === 'amber' && "bg-amber-100 text-amber-600",
-                                                category.color === 'purple' && "bg-purple-100 text-purple-600",
+                                                category.color === 'red' && "bg-red-500/10 text-red-600",
+                                                category.color === 'amber' && "bg-amber-500/10 text-amber-400",
+                                                category.color === 'purple' && "bg-purple-500/10 text-purple-400",
                                                 category.color === 'indigo' && "bg-indigo-100 text-indigo-600"
                                             )}>
                                                 <Icon className="w-7 h-7" />
@@ -421,7 +421,7 @@ function HowItWorksSection() {
                     viewport={{ once: true }}
                     className="text-center max-w-2xl mx-auto mb-12"
                 >
-                    <Badge className="mb-4 bg-blue-100 text-blue-700">How It Works</Badge>
+                    <Badge className="mb-4 bg-blue-500/10 text-blue-400">How It Works</Badge>
                     <h2 className="text-3xl md:text-4xl font-bold text-forest-beige mb-4">
                         Your Journey Starts Here
                     </h2>
@@ -585,7 +585,7 @@ function FAQSection() {
                     viewport={{ once: true }}
                     className="text-center max-w-2xl mx-auto mb-12"
                 >
-                    <Badge className="mb-4 bg-amber-100 text-amber-700">FAQ</Badge>
+                    <Badge className="mb-4 bg-amber-500/10 text-amber-400">FAQ</Badge>
                     <h2 className="text-3xl md:text-4xl font-bold text-forest-beige mb-4">
                         Frequently Asked Questions
                     </h2>

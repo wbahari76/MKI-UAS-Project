@@ -119,7 +119,7 @@ export default function RegisterPage() {
                                     <button
                                         onClick={() => handleRoleSelect('organization')}
                                         className={`w-full flex items-start gap-4 p-4 rounded-xl border-2 transition-all duration-200 text-left ${role === 'organization'
-                                                ? 'border-blue-500 bg-blue-50'
+                                                ? 'border-blue-500 bg-blue-500/10'
                                                 : 'border-forest-border hover:border-blue-300 hover:bg-[#181A15]'
                                             }`}
                                     >

@@ -172,8 +172,8 @@ export default function AboutPage() {
                 title: "Community First", 
                 desc: "We prioritize the needs of the communities we serve above all else, ensuring our platform is inclusive and accessible.",
                 icon: Users,
-                color: "text-blue-600",
-                bg: "bg-blue-100"
+                color: "text-blue-400",
+                bg: "bg-blue-500/10"
               },
               { 
                 title: "Transparency", 
@@ -186,8 +186,8 @@ export default function AboutPage() {
                 title: "Impact Driven", 
                 desc: "Every feature we build is designed to maximize the positive impact our users can have on the world.",
                 icon: Target,
-                color: "text-amber-600",
-                bg: "bg-amber-100"
+                color: "text-amber-400",
+                bg: "bg-amber-500/10"
               }
             ].map((value, i) => (
               <motion.div
@@ -196,7 +196,7 @@ export default function AboutPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1, duration: 0.5 }}
-                className="bg-forest-card p-8 rounded-3xl shadow-sm shadow-slate-200 border border-forest-border hover:shadow-lg transition-all"
+                className="bg-forest-card p-8 rounded-3xl shadow-sm shadow-forest-border/20 border border-forest-border hover:shadow-lg transition-all"
               >
                 <div className={`w-14 h-14 rounded-2xl ${value.bg} ${value.color} flex items-center justify-center mx-auto mb-6`}>
                   <value.icon size={28} />

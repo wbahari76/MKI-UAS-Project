@@ -170,7 +170,7 @@ export default function PublicEventsPage() {
                 </div>
 
                 <div className="flex items-center justify-between pt-4 border-t border-forest-border">
-                  <span className="text-sm font-medium text-amber-600 bg-amber-50 px-3 py-1 rounded-full">
+                  <span className="text-sm font-medium text-amber-400 bg-amber-500/10 px-3 py-1 rounded-full">
                     {event.spotsLeft} spots left
                   </span>
                   <Link href="/register">

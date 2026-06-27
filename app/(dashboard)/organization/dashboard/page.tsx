@@ -121,7 +121,7 @@ export default function OrganizationDashboard() {
             <h1 className="text-3xl font-bold text-forest-beige tracking-tight">
               {orgName} Dashboard
             </h1>
-            <Badge className="bg-blue-100 text-blue-700 hover:bg-blue-200 border-0">Verified</Badge>
+            <Badge className="bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 border-0">Verified</Badge>
           </div>
           <p className="text-forest-muted">
             Manage your projects and volunteers efficiently.
@@ -152,7 +152,7 @@ export default function OrganizationDashboard() {
           title="Total Volunteers"
           value="128"
           icon={Users}
-          iconClassName="bg-blue-100 text-blue-600"
+          iconClassName="bg-blue-500/10 text-blue-400"
           trend={{ value: 12, isPositive: true }}
         />
         <StatsCard
@@ -165,14 +165,14 @@ export default function OrganizationDashboard() {
           title="Total Hours Logged"
           value="1,450"
           icon={Clock}
-          iconClassName="bg-amber-100 text-amber-600"
+          iconClassName="bg-amber-500/10 text-amber-400"
           trend={{ value: 5, isPositive: true }}
         />
         <StatsCard
           title="Profile Views"
           value="452"
           icon={TrendingUp}
-          iconClassName="bg-purple-100 text-purple-600"
+          iconClassName="bg-purple-500/10 text-purple-400"
           trend={{ value: 24, isPositive: true }}
         />
       </motion.div>
@@ -186,11 +186,11 @@ export default function OrganizationDashboard() {
           transition={{ delay: 0.3 }}
           className="lg:col-span-2 space-y-6"
         >
-          <Card className="h-full border-0 shadow-sm shadow-slate-200">
+          <Card className="h-full border-0 shadow-sm shadow-forest-border/20">
             <CardHeader className="flex flex-row items-center justify-between border-b border-forest-border pb-4">
               <CardTitle className="text-xl">Recent Projects</CardTitle>
               <Link href="/organization/projects">
-                <Button variant="ghost" size="sm" className="text-blue-600 font-medium hover:text-blue-700 hover:bg-blue-50">
+                <Button variant="ghost" size="sm" className="text-blue-400 font-medium hover:text-blue-400 hover:bg-blue-500/10">
                   Manage All
                 </Button>
               </Link>
@@ -203,13 +203,13 @@ export default function OrganizationDashboard() {
                   { title: "Tree Planting Day", status: "In Progress", volunteers: 20, max: 20, date: "Jun 30, 2026" },
                   { title: "Food Bank Distribution", status: "Draft", volunteers: 0, max: 15, date: "Aug 10, 2026" }
                 ].map((project, i) => (
-                  <div key={i} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-xl border border-forest-border hover:border-blue-200 hover:shadow-md transition-all group bg-forest-card">
+                  <div key={i} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-xl border border-forest-border hover:border-blue-500/20 hover:shadow-md transition-all group bg-forest-card">
                     <div className="flex items-start gap-4 mb-4 sm:mb-0">
                       <div className="w-12 h-12 rounded-lg bg-[#181A15] flex items-center justify-center text-[#7A8072] shrink-0 border border-forest-border">
                         <FolderKanban className="w-6 h-6" />
                       </div>
                       <div>
-                        <h4 className="font-semibold text-forest-beige group-hover:text-blue-600 transition-colors">
+                        <h4 className="font-semibold text-forest-beige group-hover:text-blue-400 transition-colors">
                           {project.title}
                         </h4>
                         <div className="flex items-center gap-3 mt-1">
@@ -229,7 +229,7 @@ export default function OrganizationDashboard() {
                         variant="outline" 
                         className={
                           project.status === 'Recruiting' ? 'bg-[#21261B] text-[#829661] border-[#4A5D23]' : 
-                          project.status === 'In Progress' ? 'bg-blue-50 text-blue-700 border-blue-200' :
+                          project.status === 'In Progress' ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' :
                           'bg-[#181A15] text-[#DFD5C2] border-forest-border'
                         }
                       >
@@ -263,7 +263,7 @@ export default function OrganizationDashboard() {
           className="space-y-6"
         >
           {/* New Applications */}
-          <Card className="border-0 shadow-sm shadow-slate-200">
+          <Card className="border-0 shadow-sm shadow-forest-border/20">
             <CardHeader className="border-b border-forest-border pb-4 flex flex-row items-center justify-between">
               <CardTitle className="text-lg">New Applications</CardTitle>
               {pendingApps.length > 0 ? (
@@ -292,14 +292,14 @@ export default function OrganizationDashboard() {
               </div>
               <div className="px-4 pt-2">
                 <Link href="/organization/applications">
-                  <Button variant="ghost" className="w-full text-sm text-blue-600">View All Applications</Button>
+                  <Button variant="ghost" className="w-full text-sm text-blue-400">View All Applications</Button>
                 </Link>
               </div>
             </CardContent>
           </Card>
 
           {/* Activity Feed */}
-          <Card className="border-0 shadow-sm shadow-slate-200">
+          <Card className="border-0 shadow-sm shadow-forest-border/20">
             <CardHeader className="border-b border-forest-border pb-4">
               <CardTitle className="text-lg flex items-center gap-2">
                 <Activity className="w-5 h-5 text-[#7A8072]" />
@@ -339,7 +339,7 @@ export default function OrganizationDashboard() {
             <div className="space-y-6 py-4">
               {/* Profile Overview */}
               <div className="flex items-center gap-4 p-4 bg-[#181A15] rounded-xl border border-forest-border">
-                <div className="w-12 h-12 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-lg">
+                <div className="w-12 h-12 rounded-full bg-blue-500/10 text-blue-400 flex items-center justify-center font-bold text-lg">
                   {selectedApp.name.charAt(0)}
                 </div>
                 <div>
@@ -382,7 +382,7 @@ export default function OrganizationDashboard() {
             <Button
               variant="outline"
               onClick={() => handleReject(selectedApp?.id)}
-              className="text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200"
+              className="text-red-600 hover:text-red-400 hover:bg-red-500/10 border-red-500/20"
             >
               Reject
             </Button>

@@ -92,7 +92,7 @@ export default function PublicProjectDetailsPage() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="relative w-full h-[300px] md:h-[400px] rounded-2xl overflow-hidden shadow-lg shadow-slate-200"
+        className="relative w-full h-[300px] md:h-[400px] rounded-2xl overflow-hidden shadow-lg shadow-forest-border/20"
       >
         <img
           src={PROJECT.image}
@@ -189,13 +189,13 @@ export default function PublicProjectDetailsPage() {
           transition={{ delay: 0.2 }}
           className="space-y-6"
         >
-          <Card className="border-0 shadow-lg shadow-slate-100 sticky top-24">
+          <Card className="border-0 shadow-lg shadow-forest-border/10 sticky top-24">
             <CardContent className="p-6">
 
               <div className="space-y-6">
                 {/* Timeline info */}
                 <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center text-blue-600 shrink-0">
+                  <div className="w-10 h-10 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-400 shrink-0">
                     <CalendarDays className="w-5 h-5" />
                   </div>
                   <div>
@@ -254,7 +254,7 @@ export default function PublicProjectDetailsPage() {
                         </DialogDescription>
                       </DialogHeader>
                       <div className="py-4">
-                        <div className="flex items-start gap-3 p-4 rounded-xl bg-amber-50 border border-amber-200 text-amber-800">
+                        <div className="flex items-start gap-3 p-4 rounded-xl bg-amber-500/10 border border-amber-200 text-amber-800">
                           <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
                           <p className="text-sm">
                             Make sure you have read all the requirements and are available on the specified dates before proceeding.

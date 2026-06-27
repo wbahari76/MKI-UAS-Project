@@ -91,7 +91,7 @@ export default function OrganizationAnalyticsPage() {
           title="Total Volunteers"
           value="128"
           icon={Users}
-          iconClassName="bg-blue-100 text-blue-600"
+          iconClassName="bg-blue-500/10 text-blue-400"
           trend={{ value: 24, isPositive: true }}
         />
         <StatsCard
@@ -105,14 +105,14 @@ export default function OrganizationAnalyticsPage() {
           title="Volunteer Retention"
           value="92%"
           icon={Award}
-          iconClassName="bg-purple-100 text-purple-600"
+          iconClassName="bg-purple-500/10 text-purple-400"
           trend={{ value: 4, isPositive: true }}
         />
         <StatsCard
           title="Avg. Cost per Project"
           value="$120"
           icon={TrendingUp}
-          iconClassName="bg-amber-100 text-amber-600"
+          iconClassName="bg-amber-500/10 text-amber-400"
           trend={{ value: 5, isPositive: false }}
         />
       </motion.div>
@@ -126,7 +126,7 @@ export default function OrganizationAnalyticsPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
         >
-          <Card className="border-0 shadow-sm shadow-slate-200 h-full">
+          <Card className="border-0 shadow-sm shadow-forest-border/20 h-full">
             <CardHeader className="pb-2">
               <CardTitle className="text-lg">Volunteer Growth</CardTitle>
               <CardDescription>Number of active volunteers over time</CardDescription>
@@ -162,7 +162,7 @@ export default function OrganizationAnalyticsPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
         >
-          <Card className="border-0 shadow-sm shadow-slate-200 h-full">
+          <Card className="border-0 shadow-sm shadow-forest-border/20 h-full">
             <CardHeader className="pb-2">
               <CardTitle className="text-lg">Hours by Project</CardTitle>
               <CardDescription>Distribution of volunteer hours</CardDescription>
@@ -193,7 +193,7 @@ export default function OrganizationAnalyticsPage() {
           transition={{ delay: 0.4 }}
           className="lg:col-span-2"
         >
-          <Card className="border-0 shadow-sm shadow-slate-200 h-full">
+          <Card className="border-0 shadow-sm shadow-forest-border/20 h-full">
             <CardHeader className="pb-2 flex flex-row items-center justify-between">
               <div>
                 <CardTitle className="text-lg">Retention Rate (%)</CardTitle>

@@ -113,7 +113,7 @@ export default function MyEventsPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
               >
-                <Card className="overflow-hidden border-0 shadow-lg shadow-slate-200 hover:shadow-xl transition-all duration-300 group">
+                <Card className="overflow-hidden border-0 shadow-lg shadow-forest-border/20 hover:shadow-xl transition-all duration-300 group">
                   <div className="h-48 relative overflow-hidden">
                     <img 
                       src={event.image} 

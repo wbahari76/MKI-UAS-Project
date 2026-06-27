@@ -295,7 +295,7 @@ export function PublicNavbar() {
                                                 signOut();
                                                 setIsMobileMenuOpen(false);
                                             }}
-                                            className="w-full text-left px-4 py-3 rounded-xl text-sm font-medium text-red-600 hover:bg-red-50"
+                                            className="w-full text-left px-4 py-3 rounded-xl text-sm font-medium text-red-600 hover:bg-red-500/10"
                                         >
                                             Sign Out
                                         </button>

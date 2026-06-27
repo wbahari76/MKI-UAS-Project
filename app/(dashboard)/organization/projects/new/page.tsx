@@ -68,7 +68,7 @@ export default function CreateProjectPage() {
         onSubmit={(e) => handleSubmit(e, false)}
       >
         {/* Basic Information */}
-        <Card className="border-0 shadow-sm shadow-slate-200">
+        <Card className="border-0 shadow-sm shadow-forest-border/20">
           <CardContent className="p-6 md:p-8 space-y-6">
             <div className="space-y-4">
               <h3 className="text-lg font-bold text-forest-beige">1. Basic Information</h3>
@@ -117,7 +117,7 @@ export default function CreateProjectPage() {
         </Card>
 
         {/* Requirements & Benefits */}
-        <Card className="border-0 shadow-sm shadow-slate-200">
+        <Card className="border-0 shadow-sm shadow-forest-border/20">
           <CardContent className="p-6 md:p-8 space-y-6">
             <div className="space-y-4">
               <h3 className="text-lg font-bold text-forest-beige">2. Requirements & Benefits</h3>
@@ -147,7 +147,7 @@ export default function CreateProjectPage() {
         </Card>
 
         {/* Timeline & Capacity */}
-        <Card className="border-0 shadow-sm shadow-slate-200">
+        <Card className="border-0 shadow-sm shadow-forest-border/20">
           <CardContent className="p-6 md:p-8 space-y-6">
             <div className="space-y-4">
               <h3 className="text-lg font-bold text-forest-beige">3. Timeline & Capacity</h3>
@@ -175,7 +175,7 @@ export default function CreateProjectPage() {
         </Card>
 
         {/* Media */}
-        <Card className="border-0 shadow-sm shadow-slate-200">
+        <Card className="border-0 shadow-sm shadow-forest-border/20">
           <CardContent className="p-6 md:p-8 space-y-6">
             <div className="space-y-4">
               <h3 className="text-lg font-bold text-forest-beige">4. Project Banner</h3>

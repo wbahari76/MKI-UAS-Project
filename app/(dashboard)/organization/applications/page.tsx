@@ -138,9 +138,9 @@ export default function OrganizationApplicationsPage() {
       case "approved":
         return <Badge className="bg-[#2C3322] text-[#829661] hover:bg-[#38402D] border-0">Approved</Badge>;
       case "pending":
-        return <Badge className="bg-amber-100 text-amber-700 hover:bg-amber-200 border-0">Pending</Badge>;
+        return <Badge className="bg-amber-500/10 text-amber-400 hover:bg-amber-200 border-0">Pending</Badge>;
       case "rejected":
-        return <Badge className="bg-red-100 text-red-700 hover:bg-red-200 border-0">Rejected</Badge>;
+        return <Badge className="bg-red-500/10 text-red-400 hover:bg-red-200 border-0">Rejected</Badge>;
       default:
         return <Badge>{status}</Badge>;
     }
@@ -155,7 +155,7 @@ export default function OrganizationApplicationsPage() {
         </div>
       </div>
 
-      <Card className="border-0 shadow-sm shadow-slate-200">
+      <Card className="border-0 shadow-sm shadow-forest-border/20">
         <CardContent className="p-6">
           <div className="flex flex-col sm:flex-row items-center gap-4 mb-6">
             <div className="relative flex-1 w-full max-w-md">
@@ -208,7 +208,7 @@ export default function OrganizationApplicationsPage() {
                           </AvatarFallback>
                         </Avatar>
                         <div>
-                          <div className="font-medium text-forest-beige group-hover/name:text-blue-600 group-hover/name:underline transition-colors">{app.name}</div>
+                          <div className="font-medium text-forest-beige group-hover/name:text-blue-400 group-hover/name:underline transition-colors">{app.name}</div>
                         </div>
                       </div>
                     </td>
@@ -238,7 +238,7 @@ export default function OrganizationApplicationsPage() {
                             <Button 
                               size="sm" 
                               variant="outline" 
-                              className="text-red-600 border-red-200 hover:bg-red-50 h-8 px-2"
+                              className="text-red-600 border-red-500/20 hover:bg-red-500/10 h-8 px-2"
                               onClick={() => handleStatusChange(app.id, 'rejected')}
                               title="Reject"
                             >
@@ -249,7 +249,7 @@ export default function OrganizationApplicationsPage() {
                           <Button 
                             size="sm" 
                             variant="ghost" 
-                            className="h-8 text-forest-muted hover:text-blue-600 hover:bg-blue-50"
+                            className="h-8 text-forest-muted hover:text-blue-400 hover:bg-blue-500/10"
                             onClick={() => handleViewProfile(app)}
                           >
                             <FileText className="w-4 h-4 mr-2" /> View Profile
@@ -301,7 +301,7 @@ export default function OrganizationApplicationsPage() {
             {/* Header info */}
             <div>
               <h3 className="text-2xl font-bold text-forest-beige">{selectedApp?.name}</h3>
-              <p className="text-sm font-medium text-blue-600 mt-1">{selectedApp?.role} Applied for {selectedApp?.project}</p>
+              <p className="text-sm font-medium text-blue-400 mt-1">{selectedApp?.role} Applied for {selectedApp?.project}</p>
             </div>
 
             {/* Quick Stats Grid */}
@@ -358,7 +358,7 @@ export default function OrganizationApplicationsPage() {
               <h4 className="text-sm font-semibold text-forest-beige">Skills</h4>
               <div className="flex flex-wrap gap-2">
                 {selectedApp?.skills?.map((skill: string, idx: number) => (
-                  <Badge key={idx} variant="secondary" className="bg-blue-50 text-blue-700 hover:bg-blue-100 border-0">
+                  <Badge key={idx} variant="secondary" className="bg-blue-500/10 text-blue-400 hover:bg-blue-500/10 border-0">
                     {skill}
                   </Badge>
                 ))}
@@ -374,7 +374,7 @@ export default function OrganizationApplicationsPage() {
               <>
                 <Button 
                   variant="outline" 
-                  className="text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200 rounded-xl"
+                  className="text-red-600 hover:text-red-400 hover:bg-red-500/10 border-red-500/20 rounded-xl"
                   onClick={() => {
                     handleStatusChange(selectedApp.id, 'rejected');
                     setIsDialogOpen(false);

@@ -81,7 +81,7 @@ export default function VolunteerDashboard() {
           title="Total Hours"
           value="24"
           icon={Clock}
-          iconClassName="bg-blue-100 text-blue-600"
+          iconClassName="bg-blue-500/10 text-blue-400"
         />
         <StatsCard
           title="Active Projects"
@@ -93,13 +93,13 @@ export default function VolunteerDashboard() {
           title="Certificates"
           value="1"
           icon={Award}
-          iconClassName="bg-amber-100 text-amber-600"
+          iconClassName="bg-amber-500/10 text-amber-400"
         />
         <StatsCard
           title="Impact Points"
           value="1,250"
           icon={Star}
-          iconClassName="bg-purple-100 text-purple-600"
+          iconClassName="bg-purple-500/10 text-purple-400"
         />
       </motion.div>
 
@@ -112,7 +112,7 @@ export default function VolunteerDashboard() {
           transition={{ delay: 0.3 }}
           className="lg:col-span-2 space-y-6"
         >
-          <Card className="h-full border-0 shadow-sm shadow-slate-200">
+          <Card className="h-full border-0 shadow-sm shadow-forest-border/20">
             <CardHeader className="flex flex-row items-center justify-between border-b border-forest-border pb-4">
               <CardTitle className="text-xl">Active Projects</CardTitle>
               <Link href="/volunteer/events">
@@ -151,7 +151,7 @@ export default function VolunteerDashboard() {
                             <div className="h-full bg-forest-accent rounded-full" style={{ width: `${project.progress}%` }} />
                           </div>
                         </div>
-                        <Badge variant="outline" className={project.status === 'In Progress' ? 'bg-blue-50 text-blue-700 border-blue-200' : 'bg-[#21261B] text-[#829661] border-[#4A5D23]'}>
+                        <Badge variant="outline" className={project.status === 'In Progress' ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' : 'bg-[#21261B] text-[#829661] border-[#4A5D23]'}>
                           {project.status}
                         </Badge>
                       </div>
@@ -171,7 +171,7 @@ export default function VolunteerDashboard() {
           className="space-y-6"
         >
           {/* Upcoming Event */}
-          <Card className="border-0 shadow-sm shadow-slate-200 bg-gradient-to-br from-forest-accent to-[#4A5D23] text-forest-beige">
+          <Card className="border-0 shadow-sm shadow-forest-border/20 bg-gradient-to-br from-forest-accent to-[#4A5D23] text-forest-beige">
             <CardHeader className="pb-2">
               <div className="flex items-center justify-between">
                 <CardTitle className="text-lg font-semibold flex items-center gap-2">
@@ -193,7 +193,7 @@ export default function VolunteerDashboard() {
           </Card>
 
           {/* Recent Activity */}
-          <Card className="border-0 shadow-sm shadow-slate-200">
+          <Card className="border-0 shadow-sm shadow-forest-border/20">
             <CardHeader className="border-b border-forest-border pb-4">
               <CardTitle className="text-lg flex items-center gap-2">
                 <Activity className="w-5 h-5 text-[#7A8072]" />

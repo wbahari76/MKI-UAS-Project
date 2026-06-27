@@ -126,7 +126,7 @@ export default function CommunityPage() {
       </div>
 
       {/* Create Post */}
-      <Card className="border-0 shadow-sm shadow-slate-200">
+      <Card className="border-0 shadow-sm shadow-forest-border/20">
         <CardContent className="p-4 sm:p-6">
           <form onSubmit={handlePost}>
             <div className="flex gap-4">
@@ -138,7 +138,7 @@ export default function CommunityPage() {
               <div className="flex-1 space-y-4">
                 <Textarea 
                   placeholder="Share your volunteer experience or thoughts..." 
-                  className="min-h-[100px] resize-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0 px-0 text-base"
+                  className="min-h-[100px] resize-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0 bg-transparent px-0 text-base"
                   value={newPost}
                   onChange={(e) => setNewPost(e.target.value)}
                 />
@@ -172,7 +172,7 @@ export default function CommunityPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
             >
-              <Card className="border-0 shadow-sm shadow-slate-200">
+              <Card className="border-0 shadow-sm shadow-forest-border/20">
                 <CardHeader className="p-4 sm:p-6 pb-2">
                   <div className="flex items-start justify-between">
                     <div className="flex items-center gap-3">
@@ -186,7 +186,7 @@ export default function CommunityPage() {
                         <div className="flex items-center gap-2">
                           <h4 className="font-semibold text-forest-beige">{post.author.name}</h4>
                           {post.author.isVerified && (
-                            <Badge className="bg-blue-100 text-blue-700 hover:bg-blue-200 border-0 h-5 px-1.5 text-[10px]">
+                            <Badge className="bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 border-0 h-5 px-1.5 text-[10px]">
                               Verified
                             </Badge>
                           )}
@@ -225,13 +225,13 @@ export default function CommunityPage() {
                   <div className="flex items-center gap-1 sm:gap-4 mt-4">
                     <Button 
                       variant="ghost" 
-                      className={`gap-2 rounded-full hover:bg-red-50 ${post.isLiked ? 'text-red-500 hover:text-red-600' : 'text-forest-muted hover:text-red-500'}`}
+                      className={`gap-2 rounded-full hover:bg-red-500/10 ${post.isLiked ? 'text-red-500 hover:text-red-600' : 'text-forest-muted hover:text-red-500'}`}
                       onClick={() => handleLike(post.id)}
                     >
                       <Heart className={`w-5 h-5 ${post.isLiked ? 'fill-current' : ''}`} />
                       <span>{post.likes}</span>
                     </Button>
-                    <Button variant="ghost" className="gap-2 text-forest-muted hover:text-blue-500 hover:bg-blue-50 rounded-full">
+                    <Button variant="ghost" className="gap-2 text-forest-muted hover:text-blue-500 hover:bg-blue-500/10 rounded-full">
                       <MessageCircle className="w-5 h-5" />
                       <span>{post.comments}</span>
                     </Button>

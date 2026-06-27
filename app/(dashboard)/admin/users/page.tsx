@@ -63,7 +63,7 @@ export default function AdminUsersPage() {
         </div>
       </div>
 
-      <Card className="border-0 shadow-sm shadow-slate-200 overflow-hidden">
+      <Card className="border-0 shadow-sm shadow-forest-border/20 overflow-hidden">
         <Tabs defaultValue="all" className="w-full">
           <div className="border-b border-forest-border p-4">
             <TabsList>
@@ -91,7 +91,7 @@ export default function AdminUsersPage() {
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-3">
                           <Avatar className="w-8 h-8">
-                            <AvatarFallback className={user.role === 'Organization' ? 'bg-blue-100 text-blue-700' : 'bg-[#2C3322] text-[#829661]'}>
+                            <AvatarFallback className={user.role === 'Organization' ? 'bg-blue-500/10 text-blue-400' : 'bg-[#2C3322] text-[#829661]'}>
                               {user.name.charAt(0)}
                             </AvatarFallback>
                           </Avatar>
@@ -110,9 +110,9 @@ export default function AdminUsersPage() {
                       <td className="px-6 py-4">
                         <Badge variant="outline" className={`
                           ${user.status === 'Active' ? 'border-[#4A5D23] text-[#829661] bg-[#21261B]' : ''}
-                          ${user.status === 'Verified' ? 'border-blue-200 text-blue-700 bg-blue-50' : ''}
-                          ${user.status === 'Pending' ? 'border-amber-200 text-amber-700 bg-amber-50' : ''}
-                          ${user.status === 'Suspended' ? 'border-red-200 text-red-700 bg-red-50' : ''}
+                          ${user.status === 'Verified' ? 'border-blue-500/20 text-blue-400 bg-blue-500/10' : ''}
+                          ${user.status === 'Pending' ? 'border-amber-200 text-amber-400 bg-amber-500/10' : ''}
+                          ${user.status === 'Suspended' ? 'border-red-500/20 text-red-400 bg-red-500/10' : ''}
                         `}>
                           {user.status}
                         </Badge>
@@ -129,7 +129,7 @@ export default function AdminUsersPage() {
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end" className="w-40">
                             {user.role === 'Organization' && user.status === 'Pending' && (
-                              <DropdownMenuItem onClick={() => handleVerify(user.id)} className="text-blue-600">
+                              <DropdownMenuItem onClick={() => handleVerify(user.id)} className="text-blue-400">
                                 <ShieldCheck className="w-4 h-4 mr-2" /> Verify Org
                               </DropdownMenuItem>
                             )}

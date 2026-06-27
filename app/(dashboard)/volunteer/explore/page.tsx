@@ -135,7 +135,7 @@ function ExploreContent() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.1 }}
           >
-            <Card className="h-full border-0 shadow-sm shadow-slate-200 overflow-hidden group hover:shadow-md transition-shadow">
+            <Card className="h-full border-0 shadow-sm shadow-forest-border/20 overflow-hidden group hover:shadow-md transition-shadow">
               <div className="relative h-48 w-full overflow-hidden">
                 <img 
                   src={project.image} 
