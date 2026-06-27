@@ -1,0 +1,8 @@
+  ▲ Next.js 13.5.1
+  - Local:        http://localhost:3000
+  - Environments: .env
+
+ ✓ Ready in 2s
+ ○ compiling /(auth)/register/page ...
+ ✓ Compiled /(auth)/register/page in 5.8s (1415 modules)
+ ✓ Compiled in 582ms (714 modules)

@@ -1,0 +1,273 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    :root {
+        /* JALA VIVE Design System */
+        --primary: 160 84% 39%;
+        --primary-hover: 160 84% 34%;
+        --primary-light: 160 60% 52%;
+        --primary-dark: 160 84% 25%;
+
+        --secondary: 217 91% 60%;
+        --secondary-hover: 218 96% 53%;
+        --secondary-light: 217 91% 72%;
+        --secondary-dark: 217 91% 45%;
+
+        --accent: 38 92% 50%;
+        --accent-hover: 32 95% 44%;
+
+        --success: 142 76% 36%;
+        --warning: 38 92% 50%;
+        --danger: 0 84% 60%;
+        --info: 217 91% 60%;
+
+        --background: 0 0% 100%;
+        --background-secondary: 210 40% 98%;
+        --foreground: 222 47% 11%;
+
+        --card: 0 0% 100%;
+        --card-foreground: 222 47% 11%;
+        --card-hover: 210 40% 96%;
+
+        --popover: 0 0% 100%;
+        --popover-foreground: 222 47% 11%;
+
+        --text-primary: 222 47% 11%;
+        --text-secondary: 215 16% 47%;
+        --text-muted: 215 20% 73%;
+
+        --border: 214 32% 91%;
+        --input: 214 32% 91%;
+        --ring: 160 84% 39%;
+
+        --radius: 0.75rem;
+    }
+
+    * {
+        @apply border-border outline-ring/50;
+    }
+
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        @apply bg-white text-slate-900 antialiased;
+        font-feature-settings: "rlig" 1, "calt" 1;
+        font-optical-sizing: auto;
+    }
+}
+
+@layer components {
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+        @apply w-2 h-2;
+    }
+
+    ::-webkit-scrollbar-track {
+        @apply bg-transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        @apply bg-slate-200 rounded-full;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        @apply bg-slate-300;
+    }
+
+    /* Focus ring */
+    .focus-ring {
+        @apply focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2;
+    }
+
+    /* Gradient text */
+    .gradient-text {
+        @apply bg-gradient-to-r from-emerald-500 to-blue-500 bg-clip-text text-transparent;
+    }
+
+    /* Card hover effect */
+    .card-hover {
+        @apply transition-all duration-200 hover:shadow-lg hover:shadow-emerald-500/10 hover:-translate-y-0.5;
+    }
+
+    /* Glass effect */
+    .glass {
+        @apply bg-white/80 backdrop-blur-xl border border-white/20;
+    }
+
+    /* Skeleton animation */
+    .skeleton {
+        @apply animate-pulse bg-gray-200 rounded;
+    }
+
+    /* Container */
+    .container-custom {
+        @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+    }
+
+    /* Section padding */
+    .section-padding {
+        @apply py-16 md:py-20 lg:py-24;
+    }
+
+    /* Badge styles */
+    .badge {
+        @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+    }
+
+    .badge-primary {
+        @apply bg-emerald-100 text-emerald-800;
+    }
+
+    .badge-secondary {
+        @apply bg-blue-100 text-blue-800;
+    }
+
+    .badge-success {
+        @apply bg-green-100 text-green-800;
+    }
+
+    .badge-warning {
+        @apply bg-amber-100 text-amber-800;
+    }
+
+    .badge-danger {
+        @apply bg-red-100 text-red-800;
+    }
+
+    /* Button styles */
+    .btn {
+        @apply inline-flex items-center justify-center gap-2 rounded-xl font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none;
+    }
+
+    .btn-primary {
+        @apply btn bg-emerald-500 text-white hover:bg-emerald-600 focus:ring-emerald-500 active:scale-[0.98];
+    }
+
+    .btn-secondary {
+        @apply btn bg-blue-500 text-white hover:bg-blue-600 focus:ring-blue-500 active:scale-[0.98];
+    }
+
+    .btn-outline {
+        @apply btn border-2 border-emerald-500 text-emerald-600 hover:bg-emerald-50 focus:ring-emerald-500 active:scale-[0.98];
+    }
+
+    .btn-ghost {
+        @apply btn text-slate-600 hover:bg-slate-100 focus:ring-slate-500;
+    }
+
+    .btn-danger {
+        @apply btn bg-red-500 text-white hover:bg-red-600 focus:ring-red-500 active:scale-[0.98];
+    }
+
+    .btn-sm {
+        @apply px-3 py-1.5 text-sm;
+    }
+
+    .btn-md {
+        @apply px-4 py-2 text-sm;
+    }
+
+    .btn-lg {
+        @apply px-6 py-3 text-base;
+    }
+
+    /* Input styles */
+    .input-field {
+        @apply w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-200 text-slate-900 placeholder:text-slate-400;
+    }
+
+    /* Card styles */
+    .card {
+        @apply bg-white rounded-2xl border border-slate-100 shadow-sm;
+    }
+
+    /* Stats card */
+    .stats-card {
+        @apply card p-6 hover:shadow-lg transition-all duration-200;
+    }
+}
+
+@layer utilities {
+
+    /* Hide scrollbar but keep functionality */
+    .scrollbar-hide {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+
+    .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+    }
+
+    /* Gradient backgrounds */
+    .bg-gradient-primary {
+        @apply bg-gradient-to-br from-emerald-500 to-emerald-600;
+    }
+
+    .bg-gradient-secondary {
+        @apply bg-gradient-to-br from-blue-500 to-blue-600;
+    }
+
+    .bg-gradient-accent {
+        @apply bg-gradient-to-br from-amber-500 to-amber-600;
+    }
+
+    .bg-gradient-hero {
+        @apply bg-gradient-to-br from-emerald-50 via-blue-50 to-white;
+    }
+
+    /* Text gradient */
+    .text-gradient {
+        @apply bg-clip-text text-transparent bg-gradient-to-r from-emerald-600 to-blue-600;
+    }
+
+    /* Animate on scroll */
+    .animate-fade-up {
+        animation: fadeUp 0.6s ease-out forwards;
+    }
+
+    @keyframes fadeUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Stagger animation delay */
+    .animation-delay-100 {
+        animation-delay: 100ms;
+    }
+
+    .animation-delay-200 {
+        animation-delay: 200ms;
+    }
+
+    .animation-delay-300 {
+        animation-delay: 300ms;
+    }
+
+    .animation-delay-400 {
+        animation-delay: 400ms;
+    }
+
+    .animation-delay-500 {
+        animation-delay: 500ms;
+    }
+
+    /* Counter animation */
+    .counter {
+        @apply inline-block tabular-nums;
+    }
+}
