@@ -11,16 +11,51 @@ import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Skeleton } from "@/components/ui/skeleton";
+import { supabase } from "@/lib/supabase/client";
 
 export default function VolunteerDashboard() {
-  const { user, profile, loading } = useAuth();
+  const { user, profile, loading: authLoading } = useAuth();
   const [isMounted, setIsMounted] = useState(false);
+  const [applications, setApplications] = useState<any[]>([]);
+  const [dataLoading, setDataLoading] = useState(true);
 
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
-  if (!isMounted || loading) {
+  useEffect(() => {
+    async function fetchDashboardData() {
+      if (!user) return;
+      try {
+        // Fetch volunteer's project applications
+        const { data: apps, error: appsError } = await supabase
+          .from('project_applications')
+          .select(`
+            *,
+            projects (
+              *,
+              organizations (name)
+            )
+          `)
+          .eq('user_id', user.id)
+          .order('created_at', { ascending: false });
+          
+        if (appsError) throw appsError;
+        setApplications(apps || []);
+        
+      } catch (error) {
+        console.error("Error fetching dashboard data:", error);
+      } finally {
+        setDataLoading(false);
+      }
+    }
+
+    if (user && !authLoading) {
+      fetchDashboardData();
+    }
+  }, [user, authLoading]);
+
+  if (!isMounted || authLoading || dataLoading) {
     return (
       <div className="space-y-6">
         <Skeleton className="h-10 w-1/3" />
@@ -39,6 +74,15 @@ export default function VolunteerDashboard() {
   }
 
   const firstName = profile?.full_name?.split(" ")[0] || user?.email?.split("@")[0] || "Volunteer";
+  
+  // Calculate real stats based on applications
+  const activeApps = applications.filter(a => a.status === 'approved' || a.status === 'in_progress');
+  const completedApps = applications.filter(a => a.status === 'completed' || a.status === 'certified');
+  
+  // Note: Total hours and Impact Points can be calculated if we add them to the schema later.
+  // For now, we will use mock logic for points based on completed projects.
+  const totalHours = completedApps.length * 10; 
+  const impactPoints = completedApps.length * 150 + activeApps.length * 50;
 
   return (
     <div className="space-y-8">
@@ -79,25 +123,25 @@ export default function VolunteerDashboard() {
       >
         <StatsCard
           title="Total Hours"
-          value="24"
+          value={totalHours.toString()}
           icon={Clock}
           iconClassName="bg-blue-500/10 text-blue-400"
         />
         <StatsCard
           title="Active Projects"
-          value="2"
+          value={activeApps.length.toString()}
           icon={FolderKanban}
           iconClassName="bg-[#2C3322] text-[#829661]"
         />
         <StatsCard
           title="Certificates"
-          value="1"
+          value={completedApps.filter(a => a.status === 'certified').length.toString()}
           icon={Award}
           iconClassName="bg-amber-500/10 text-amber-400"
         />
         <StatsCard
           title="Impact Points"
-          value="1,250"
+          value={impactPoints.toString()}
           icon={Star}
           iconClassName="bg-purple-500/10 text-purple-400"
         />
@@ -114,7 +158,7 @@ export default function VolunteerDashboard() {
         >
           <Card className="h-full border-0 shadow-sm shadow-forest-border/20">
             <CardHeader className="flex flex-row items-center justify-between border-b border-forest-border pb-4">
-              <CardTitle className="text-xl">Active Projects</CardTitle>
+              <CardTitle className="text-xl">Your Projects</CardTitle>
               <Link href="/volunteer/events">
                 <Button variant="ghost" size="sm" className="text-[#829661] font-medium hover:text-[#829661] hover:bg-[#21261B]">
                   View All
@@ -122,98 +166,121 @@ export default function VolunteerDashboard() {
               </Link>
             </CardHeader>
             <CardContent className="pt-6">
-              {/* Mock Data for Active Projects */}
-              <div className="space-y-4">
-                {[
-                  { title: "Beach Cleanup & Education", org: "Ocean Care ID", progress: 65, status: "In Progress" },
-                  { title: "Digital Literacy for Seniors", org: "Tech For All", progress: 30, status: "Recruiting" }
-                ].map((project, i) => (
-                  <Link href={`/volunteer/explore`} key={i}>
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-xl border border-forest-border hover:border-[#4A5D23] hover:shadow-md transition-all group bg-forest-card">
-                      <div className="flex items-start gap-4 mb-4 sm:mb-0">
-                        <div className="w-12 h-12 rounded-lg bg-[#21261B] flex items-center justify-center text-[#829661] shrink-0">
-                          <FolderKanban className="w-6 h-6" />
-                        </div>
-                        <div>
-                          <h4 className="font-semibold text-forest-beige group-hover:text-[#829661] transition-colors">
-                            {project.title}
-                          </h4>
-                          <p className="text-sm text-forest-muted">{project.org}</p>
-                        </div>
-                      </div>
-                      <div className="flex items-center justify-between sm:justify-end gap-6 sm:w-1/3">
-                        <div className="w-full sm:w-24">
-                          <div className="flex items-center justify-between text-xs mb-1">
-                            <span className="text-forest-muted">Progress</span>
-                            <span className="font-medium">{project.progress}%</span>
+              {applications.length > 0 ? (
+                <div className="space-y-4">
+                  {applications.slice(0, 4).map((app, i) => (
+                    <Link href={`/volunteer/explore`} key={i}>
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-xl border border-forest-border hover:border-[#4A5D23] hover:shadow-md transition-all group bg-forest-card mb-4">
+                        <div className="flex items-start gap-4 mb-4 sm:mb-0">
+                          <div className="w-12 h-12 rounded-lg bg-[#21261B] flex items-center justify-center text-[#829661] shrink-0">
+                            <FolderKanban className="w-6 h-6" />
                           </div>
-                          <div className="h-1.5 w-full bg-[#1E211A] rounded-full overflow-hidden">
-                            <div className="h-full bg-forest-accent rounded-full" style={{ width: `${project.progress}%` }} />
+                          <div>
+                            <h4 className="font-semibold text-forest-beige group-hover:text-[#829661] transition-colors">
+                              {app.projects?.title || "Unknown Project"}
+                            </h4>
+                            <p className="text-sm text-forest-muted">{app.projects?.organizations?.name || "Unknown Organization"}</p>
                           </div>
                         </div>
-                        <Badge variant="outline" className={project.status === 'In Progress' ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' : 'bg-[#21261B] text-[#829661] border-[#4A5D23]'}>
-                          {project.status}
-                        </Badge>
+                        <div className="flex items-center justify-between sm:justify-end gap-6 sm:w-1/3">
+                          <div className="w-full sm:w-24">
+                            <div className="flex items-center justify-between text-xs mb-1">
+                              <span className="text-forest-muted">Status</span>
+                              <span className="font-medium capitalize">{app.status}</span>
+                            </div>
+                            <div className="h-1.5 w-full bg-[#1E211A] rounded-full overflow-hidden">
+                              <div 
+                                className="h-full bg-[#829661] rounded-full" 
+                                style={{ width: app.status === 'approved' ? '50%' : app.status === 'completed' ? '100%' : '10%' }} 
+                              />
+                            </div>
+                          </div>
+                          <Badge variant="outline" className="shrink-0 bg-[#21261B] text-[#829661] border-none capitalize">
+                            {app.status}
+                          </Badge>
+                        </div>
                       </div>
-                    </div>
-                  </Link>
-                ))}
-              </div>
+                    </Link>
+                  ))}
+                </div>
+              ) : (
+                <EmptyState
+                  icon={FolderKanban}
+                  title="No Active Projects"
+                  description="You haven't applied to any projects yet. Start exploring to make an impact!"
+                  actionLabel="Explore Projects"
+                  onAction={() => window.location.href = '/volunteer/explore'}
+                />
+              )}
             </CardContent>
           </Card>
         </motion.div>
 
-        {/* Sidebar - Upcoming Events & Activity */}
+        {/* Sidebar */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
           className="space-y-6"
         >
-          {/* Upcoming Event */}
-          <Card className="border-0 shadow-sm shadow-forest-border/20 bg-gradient-to-br from-forest-accent to-[#4A5D23] text-forest-beige">
+          {/* Upcoming Event (Mock for now until events are built) */}
+          <Card className="bg-[#2C3322] border-[#4A5D23] shadow-md relative overflow-hidden">
+            <div className="absolute top-0 right-0 p-3 opacity-20">
+              <CalendarDays className="w-24 h-24 text-[#829661]" />
+            </div>
             <CardHeader className="pb-2">
-              <div className="flex items-center justify-between">
-                <CardTitle className="text-lg font-semibold flex items-center gap-2">
-                  <CalendarDays className="w-5 h-5 text-emerald-100" />
-                  Next Event
-                </CardTitle>
-                <Badge className="bg-forest-card/20 hover:bg-forest-card/30 border-0 text-forest-beige">Tomorrow</Badge>
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center text-amber-400">
+                  <CalendarDays className="w-4 h-4 mr-2" />
+                  <span className="font-medium">Next Event</span>
+                </div>
+                <Badge variant="outline" className="bg-amber-400/20 text-amber-200 border-none text-xs">
+                  Tomorrow
+                </Badge>
               </div>
+              <CardTitle className="text-xl text-forest-beige">Coastal Cleanup Briefing</CardTitle>
             </CardHeader>
             <CardContent>
-              <h4 className="text-xl font-bold mb-1">Coastal Cleanup Briefing</h4>
-              <p className="text-emerald-100 text-sm mb-4">Zoom Meeting • 09:00 AM</p>
-              <Link href="/volunteer/events">
-                <Button className="w-full bg-forest-card text-[#829661] hover:bg-[#181A15] border-0 mt-2">
-                  Join Event
-                </Button>
-              </Link>
+              <p className="text-forest-muted mb-4">Zoom Meeting • 09:00 AM</p>
+              <Button className="w-full bg-[#829661] hover:bg-[#6A7B4F] text-[#11140D] font-semibold border-none">
+                Join Event
+              </Button>
             </CardContent>
           </Card>
 
           {/* Recent Activity */}
           <Card className="border-0 shadow-sm shadow-forest-border/20">
             <CardHeader className="border-b border-forest-border pb-4">
-              <CardTitle className="text-lg flex items-center gap-2">
-                <Activity className="w-5 h-5 text-[#7A8072]" />
-                Recent Activity
-              </CardTitle>
+              <CardTitle className="text-xl">Recent Activity</CardTitle>
             </CardHeader>
             <CardContent className="pt-6">
-              <div className="relative border-l-2 border-forest-border ml-3 space-y-6">
-                {[
-                  { title: "Application Approved", time: "2 hours ago", desc: "Your application for 'Beach Cleanup' was accepted." },
-                  { title: "Earned Badge", time: "Yesterday", desc: "You unlocked the 'Explorer' badge!" },
-                  { title: "Joined Platform", time: "3 days ago", desc: "Welcome to JALA VIVE." }
-                ].map((item, i) => (
-                  <div key={i} className="relative pl-6">
-                    <span className="absolute -left-[9px] top-1 w-4 h-4 rounded-full border-4 border-forest-border bg-forest-accent" />
-                    <h5 className="font-semibold text-forest-beige text-sm">{item.title}</h5>
-                    <p className="text-forest-muted text-xs mb-1">{item.time}</p>
-                    <p className="text-forest-muted text-sm">{item.desc}</p>
+              <div className="space-y-6">
+                {applications.length > 0 ? (
+                  applications.slice(0, 3).map((app, i) => (
+                    <div className="flex gap-4 relative" key={i}>
+                      <div className="w-2 h-2 rounded-full bg-[#829661] mt-2 shrink-0 relative z-10" />
+                      <div className="absolute top-4 left-1 w-0.5 h-12 bg-forest-border -z-0" />
+                      <div>
+                        <p className="font-medium text-forest-beige">
+                          {app.status === 'pending' ? 'Applied for' : 'Status updated for'}
+                        </p>
+                        <p className="text-sm text-forest-muted">{app.projects?.title}</p>
+                        <p className="text-xs text-forest-muted mt-1">
+                          {new Date(app.created_at).toLocaleDateString()}
+                        </p>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <div className="flex gap-4 relative">
+                    <div className="w-2 h-2 rounded-full bg-forest-border mt-2 shrink-0 relative z-10" />
+                    <div>
+                      <p className="font-medium text-forest-beige">Welcome to JALA VIVE!</p>
+                      <p className="text-sm text-forest-muted">Your journey starts here.</p>
+                      <p className="text-xs text-forest-muted mt-1">Today</p>
+                    </div>
                   </div>
-                ))}
+                )}
               </div>
             </CardContent>
           </Card>
