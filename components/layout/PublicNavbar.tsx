@@ -101,69 +101,65 @@ export function PublicNavbar() {
 
     return (
         <>
-        <div className="fixed top-0 left-0 right-0 z-50 flex justify-center pt-6 px-4 pointer-events-none">
-            <motion.header
-                initial={{ y: -100 }}
-                animate={{ y: 0 }}
-                className={cn(
-                    "pointer-events-auto transition-all duration-300 rounded-[28px] border px-2 sm:px-4 flex items-center justify-between w-full max-w-[1200px]",
-                    isScrolled
-                        ? "bg-[#131511]/85 backdrop-blur-xl border-white/10 shadow-2xl shadow-black/50"
-                        : "bg-[#181A15]/60 backdrop-blur-lg border-white/5 shadow-xl"
-                )}
-            >
-                <nav className="flex items-center justify-between h-14 w-full">
+        <motion.header
+            initial={{ y: -100 }}
+            animate={{ y: 0 }}
+            className={cn(
+                "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
+                isScrolled ? "bg-[#131511]/95 backdrop-blur-xl border-b border-white/5" : "bg-[#131511] border-b border-white/5"
+            )}
+        >
+            <div className="w-full px-4 sm:px-6 lg:px-8">
+                <nav className="flex items-center h-[76px] gap-6">
                     {/* Logo */}
-                    <Link href="/" className="flex items-center gap-3 group pl-2">
-                        <motion.div
-                            whileHover={{ rotate: 10, scale: 1.05 }}
-                            className="w-9 h-9 bg-forest-accent rounded-xl flex items-center justify-center shadow-lg shadow-forest-accent/25"
-                        >
-                            <HandHelping className="w-4 h-4 text-forest-beige" />
-                        </motion.div>
-                        <span className="font-bold text-lg tracking-tight text-white hidden sm:block">
-                            JALA<span className="text-forest-accent ml-1">VIVE</span>
+                    <Link href="/" className="flex items-center gap-3 shrink-0">
+                        <HandHelping className="w-7 h-7 text-forest-accent" />
+                        <span className="font-extrabold text-[22px] tracking-tight text-white hidden sm:block">
+                            JALA<span className="text-forest-accent ml-0.5">VIVE</span>
                         </span>
                     </Link>
 
-                    {/* Navigation Dropdown */}
-                    <div className="hidden lg:flex items-center gap-2">
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <Button variant="ghost" size="icon" className="text-forest-muted hover:text-white hover:bg-white/5 rounded-full">
-                                    <Menu className="w-5 h-5" />
-                                </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="start" className="w-56 bg-[#181A15]/95 backdrop-blur-xl border-white/10 rounded-2xl p-2 mt-4 shadow-2xl">
-                                {publicNavItems.map((item) => (
-                                    <DropdownMenuItem key={item.name} asChild className="cursor-pointer">
-                                        <Link
-                                            href={item.href}
-                                            className={cn(
-                                                "w-full flex items-center px-4 py-2.5 text-sm transition-all rounded-xl outline-none focus:bg-white/5 focus:text-white",
-                                                isActive(item.href)
-                                                    ? "text-[#131511] bg-[#829661] font-medium focus:bg-[#829661] focus:text-[#131511]"
-                                                    : "text-forest-muted hover:text-white"
-                                            )}
-                                        >
-                                            {item.name}
-                                        </Link>
-                                    </DropdownMenuItem>
-                                ))}
-                            </DropdownMenuContent>
-                        </DropdownMenu>
+                    {/* Dribbble-style Search Bar */}
+                    <div className="hidden lg:flex flex-1 max-w-[480px] ml-4 relative">
+                        <form onSubmit={handleSearch} className="w-full relative">
+                            <Input
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                placeholder="What are you looking for?"
+                                className="w-full bg-[#181A15] border-transparent hover:border-white/10 focus:border-forest-accent focus:bg-[#131511] rounded-full h-[52px] pl-6 pr-14 text-white text-[15px] transition-all"
+                            />
+                            <Button size="icon" type="submit" className="absolute right-1.5 top-1.5 bottom-1.5 h-10 w-10 rounded-full bg-forest-accent hover:bg-[#4A5D23] text-white">
+                                <Search className="w-4 h-4" />
+                            </Button>
+                        </form>
+                    </div>
+
+                    {/* Desktop Navigation */}
+                    <div className="hidden xl:flex items-center gap-6 ml-auto">
+                        {publicNavItems.map((item) => (
+                            <Link
+                                key={item.name}
+                                href={item.href}
+                                className={cn(
+                                    "text-[15px] font-semibold transition-colors",
+                                    isActive(item.href) ? "text-white" : "text-gray-400 hover:text-white"
+                                )}
+                            >
+                                {item.name}
+                            </Link>
+                        ))}
                     </div>
 
                     {/* Desktop Actions */}
-                    <div className="hidden lg:flex items-center gap-4">
-                        {/* Search Button */}
+                    <div className="flex items-center gap-4 ml-auto xl:ml-0 shrink-0">
+                        {/* Search Button (Mobile) */}
                         <Button
                             variant="ghost"
-                            size="sm"
+                            size="icon"
                             onClick={() => setIsSearchOpen(true)}
-                            className="text-forest-muted hover:text-forest-beige"
+                            className="lg:hidden text-gray-400 hover:text-white"
                         >
-                            <Search className="w-4 h-4" />
+                            <Search className="w-5 h-5" />
                         </Button>
 
                         {user ? (
@@ -224,42 +220,32 @@ export function PublicNavbar() {
                             </>
                         ) : (
                             <>
-                                <Link href="/login">
-                                    <Button variant="ghost" size="sm" className="text-forest-muted hover:text-white rounded-full px-4">
+                                <Link href="/login" className="hidden sm:block">
+                                    <Button variant="ghost" className="text-[15px] font-semibold text-gray-300 hover:text-white hover:bg-white/5 rounded-full px-5 h-12">
                                         Log In
                                     </Button>
                                 </Link>
                                 <Link href="/register">
-                                    <Button className="bg-forest-accent hover:bg-[#4A5D23] text-white rounded-full px-5 shadow-lg shadow-forest-accent/20 transition-transform hover:scale-105">
-                                        Get Started
+                                    <Button className="bg-white hover:bg-gray-200 text-black rounded-full px-6 h-12 font-bold transition-transform hover:scale-105">
+                                        Sign up
                                     </Button>
                                 </Link>
                             </>
                         )}
-                    </div>
 
-                    {/* Mobile Menu Button */}
-                    <div className="flex lg:hidden items-center gap-2">
+                        {/* Mobile Menu Button */}
                         <Button
                             variant="ghost"
-                            size="sm"
-                            onClick={() => setIsSearchOpen(true)}
-                            className="text-forest-muted"
-                        >
-                            <Search className="w-5 h-5" />
-                        </Button>
-                        <Button
-                            variant="ghost"
-                            size="sm"
+                            size="icon"
                             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                            className="text-forest-muted"
+                            className="xl:hidden text-gray-400 hover:text-white ml-1"
                         >
-                            {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+                            {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
                         </Button>
                     </div>
                 </nav>
-            </motion.header>
-        </div>
+            </div>
+        </motion.header>
             <AnimatePresence>
                 {isMobileMenuOpen && (
                     <motion.div
