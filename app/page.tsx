@@ -140,9 +140,21 @@ function StatsSection() {
     ];
 
     return (
-        <section className="py-16 md:py-20 bg-forest-card border-y border-forest-border">
+        <section className="py-20 md:py-28 bg-forest-card border-y border-forest-border relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-forest-accent/5 rounded-full blur-3xl -z-10 pointer-events-none translate-x-1/2 -translate-y-1/2" />
+            
             <div className="container-custom">
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+                <div className="text-center max-w-2xl mx-auto mb-16">
+                    <Badge className="mb-4 bg-emerald-500/10 text-emerald-400 border-emerald-500/20">Our Impact</Badge>
+                    <h2 className="text-3xl md:text-5xl font-bold text-forest-beige mb-4 tracking-tight">
+                        Measuring What <span className="text-forest-accent">Matters</span>
+                    </h2>
+                    <p className="text-forest-muted text-lg">
+                        We track our collective impact to ensure every hour volunteered translates into real, measurable change.
+                    </p>
+                </div>
+
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 relative z-10">
                     {stats.map((stat, index) => {
                         const Icon = stat.icon;
                         return (
@@ -177,6 +189,20 @@ function StatsSection() {
                         );
                     })}
                 </div>
+
+                <motion.div 
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    className="mt-16 text-center"
+                >
+                    <Link href="/impact">
+                        <Button className="rounded-full bg-[#181A15] border border-forest-border text-forest-beige hover:bg-[#2C3322] hover:text-white px-8 h-12 shadow-sm transition-all group">
+                            Explore Detailed Impact Report
+                            <ArrowRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />
+                        </Button>
+                    </Link>
+                </motion.div>
             </div>
         </section>
     );
