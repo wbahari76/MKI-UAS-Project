@@ -7,8 +7,8 @@ import { useRef, useState, useEffect } from 'react';
 import Link from 'next/link';
 import {
     HandHelping, Users, Building2, FolderKanban, Clock,
-    ChevronRight, MapPin, Calendar,
-    Award, MessageCircle, ArrowRight, Sparkles,
+    ChevronRight, MapPin, Calendar, Activity,
+    Award, MessageCircle, ArrowRight, Sparkles, Heart,
     Globe, TreeDeciduous, GraduationCap, Stethoscope, PawPrint
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -131,63 +131,152 @@ function HeroSection() {
     );
 }
 
-function StatsSection() {
-    const stats = [
-        { label: 'Volunteers', value: 12547, icon: Users, color: 'emerald' },
-        { label: 'Organizations', value: 892, icon: Building2, color: 'blue' },
-        { label: 'Projects', value: 2341, icon: FolderKanban, color: 'amber' },
-        { label: 'Hours Contributed', value: 156789, suffix: '+', icon: Clock, color: 'purple' },
+function ImpactKPISection() {
+    const kpis = [
+        { label: 'Active Volunteers', value: 15240, suffix: '+', icon: Users, color: 'emerald' },
+        { label: 'Verified Organizations', value: 328, suffix: '+', icon: Building2, color: 'blue' },
+        { label: 'Completed Projects', value: 1486, suffix: '+', icon: FolderKanban, color: 'amber' },
+        { label: 'Volunteer Hours', value: 182000, suffix: '+', icon: Clock, color: 'purple', format: (v: number) => (v/1000).toFixed(0) + 'K' },
+        { label: 'Lives Impacted', value: 67500, suffix: '+', icon: Heart, color: 'rose', format: (v: number) => (v/1000).toFixed(1) + 'K' },
+        { label: 'Project Success Rate', value: 96, suffix: '%', icon: Award, color: 'emerald' },
     ];
 
+    const activities = [
+        "Sarah joined 'Coastal Cleanup 2026'",
+        "GreenEarth Org was verified",
+        "'Tech for Kids' project reached 80% funding",
+        "Community 'Urban Gardeners' was created",
+        "David logged 5 volunteer hours",
+        "Global Wildlife Fund published a new event",
+        "'Clean Water Initiative' was completed successfully!"
+    ];
+
+    const [activeFeedIndex, setActiveFeedIndex] = useState(0);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setActiveFeedIndex((prev) => (prev + 1) % activities.length);
+        }, 3000);
+        return () => clearInterval(interval);
+    }, [activities.length]);
+
     return (
-        <section className="py-20 md:py-28 bg-forest-card border-y border-forest-border relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-forest-accent/5 rounded-full blur-3xl -z-10 pointer-events-none translate-x-1/2 -translate-y-1/2" />
+        <section className="py-24 bg-[#131511] relative overflow-hidden border-y border-white/5">
+            {/* Background Glows */}
+            <div className="absolute top-1/4 -left-64 w-96 h-96 bg-forest-accent/5 rounded-full blur-3xl -z-10 pointer-events-none" />
+            <div className="absolute bottom-1/4 -right-64 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl -z-10 pointer-events-none" />
             
-            <div className="container-custom">
-                <div className="text-center max-w-2xl mx-auto mb-16">
-                    <Badge className="mb-4 bg-emerald-500/10 text-emerald-400 border-emerald-500/20">Our Impact</Badge>
-                    <h2 className="text-3xl md:text-5xl font-bold text-forest-beige mb-4 tracking-tight">
-                        Measuring What <span className="text-forest-accent">Matters</span>
-                    </h2>
-                    <p className="text-forest-muted text-lg">
-                        We track our collective impact to ensure every hour volunteered translates into real, measurable change.
-                    </p>
+            <div className="container-custom relative z-10">
+                <div className="text-center max-w-3xl mx-auto mb-16">
+                    <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+                        <Badge className="mb-6 bg-emerald-500/10 text-emerald-400 border-emerald-500/20 px-3 py-1 text-xs tracking-widest uppercase">Live Metrics</Badge>
+                        <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 tracking-tight">
+                            Our Collective <span className="text-forest-accent">Impact</span>
+                        </h2>
+                        <p className="text-forest-muted text-lg md:text-xl">
+                            Every connection creates measurable social impact.
+                        </p>
+                    </motion.div>
                 </div>
 
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 relative z-10">
-                    {stats.map((stat, index) => {
-                        const Icon = stat.icon;
-                        return (
-                            <motion.div
-                                key={stat.label}
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ delay: index * 0.1 }}
-                                className="text-center p-6 rounded-2xl bg-[#181A15] border border-forest-border"
-                            >
-                                <div className={cn(
-                                    "w-12 h-12 rounded-xl mx-auto mb-4 flex items-center justify-center",
-                                    stat.color === 'emerald' && "bg-[#2C3322]",
-                                    stat.color === 'blue' && "bg-blue-500/10",
-                                    stat.color === 'amber' && "bg-amber-500/10",
-                                    stat.color === 'purple' && "bg-purple-500/10"
-                                )}>
-                                    <Icon className={cn(
-                                        "w-6 h-6",
-                                        stat.color === 'emerald' && "text-[#829661]",
-                                        stat.color === 'blue' && "text-blue-400",
-                                        stat.color === 'amber' && "text-amber-400",
-                                        stat.color === 'purple' && "text-purple-400"
-                                    )} />
+                <div className="grid lg:grid-cols-12 gap-8">
+                    {/* KPI Grid */}
+                    <div className="lg:col-span-8 grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
+                        {kpis.map((kpi, index) => {
+                            const Icon = kpi.icon;
+                            return (
+                                <motion.div
+                                    key={kpi.label}
+                                    initial={{ opacity: 0, y: 20 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ once: true }}
+                                    transition={{ delay: index * 0.1 }}
+                                    whileHover={{ y: -5, transition: { duration: 0.2 } }}
+                                    className="p-6 rounded-[20px] bg-[#181A15]/80 backdrop-blur-md border border-white/5 shadow-lg flex flex-col justify-between group"
+                                >
+                                    <div className="flex items-start justify-between mb-8">
+                                        <div className={cn(
+                                            "w-10 h-10 rounded-xl flex items-center justify-center transition-colors duration-300",
+                                            kpi.color === 'emerald' ? "bg-emerald-500/10 text-emerald-400 group-hover:bg-emerald-500/20" :
+                                            kpi.color === 'blue' ? "bg-blue-500/10 text-blue-400 group-hover:bg-blue-500/20" :
+                                            kpi.color === 'amber' ? "bg-amber-500/10 text-amber-400 group-hover:bg-amber-500/20" :
+                                            kpi.color === 'purple' ? "bg-purple-500/10 text-purple-400 group-hover:bg-purple-500/20" :
+                                            "bg-rose-500/10 text-rose-400 group-hover:bg-rose-500/20"
+                                        )}>
+                                            <Icon className="w-5 h-5" />
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <p className="text-3xl md:text-4xl font-extrabold text-white mb-2 tracking-tight">
+                                            {kpi.format ? (
+                                                <span>{kpi.format(kpi.value)}{kpi.suffix}</span>
+                                            ) : (
+                                                <AnimatedCounter value={kpi.value} suffix={kpi.suffix} />
+                                            )}
+                                        </p>
+                                        <p className="text-sm font-medium text-forest-muted">{kpi.label}</p>
+                                    </div>
+                                </motion.div>
+                            );
+                        })}
+                    </div>
+
+                    {/* Live Activity Feed */}
+                    <div className="lg:col-span-4 h-full">
+                        <motion.div
+                            initial={{ opacity: 0, x: 20 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            viewport={{ once: true }}
+                            className="h-full p-6 md:p-8 rounded-[20px] bg-gradient-to-b from-[#181A15] to-[#131511] border border-white/5 shadow-xl flex flex-col"
+                        >
+                            <div className="flex items-center gap-3 mb-8">
+                                <div className="relative flex h-3 w-3">
+                                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                  <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
                                 </div>
-                                <p className="text-3xl md:text-4xl font-bold text-forest-beige mb-1">
-                                    <AnimatedCounter value={stat.value} suffix={stat.suffix} />
-                                </p>
-                                <p className="text-sm text-forest-muted">{stat.label}</p>
-                            </motion.div>
-                        );
-                    })}
+                                <h3 className="text-lg font-semibold text-white">Live Activity</h3>
+                            </div>
+                            
+                            <div className="flex-1 relative overflow-hidden min-h-[200px]">
+                                <div className="absolute inset-0 flex flex-col justify-center">
+                                    {activities.map((activity, index) => {
+                                        const isActive = index === activeFeedIndex;
+                                        const isPrev = index === (activeFeedIndex - 1 + activities.length) % activities.length;
+                                        const isNext = index === (activeFeedIndex + 1) % activities.length;
+                                        
+                                        let yOffset = 100;
+                                        let opacity = 0;
+                                        let scale = 0.9;
+                                        
+                                        if (isActive) { yOffset = 0; opacity = 1; scale = 1; }
+                                        else if (isPrev) { yOffset = -40; opacity = 0.3; scale = 0.95; }
+                                        else if (isNext) { yOffset = 40; opacity = 0.3; scale = 0.95; }
+                                        
+                                        return (
+                                            <motion.div
+                                                key={index}
+                                                className="absolute w-full left-0 right-0 flex items-center gap-4 bg-white/5 p-4 rounded-xl border border-white/5"
+                                                animate={{ 
+                                                    y: yOffset, 
+                                                    opacity: opacity,
+                                                    scale: scale,
+                                                    zIndex: isActive ? 10 : 5
+                                                }}
+                                                transition={{ duration: 0.5, ease: "easeOut" }}
+                                            >
+                                                <div className="w-8 h-8 rounded-full bg-forest-accent/20 flex items-center justify-center shrink-0">
+                                                    <Activity className="w-4 h-4 text-forest-accent" />
+                                                </div>
+                                                <p className="text-sm font-medium text-gray-300 line-clamp-2">
+                                                    {activity}
+                                                </p>
+                                            </motion.div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                        </motion.div>
+                    </div>
                 </div>
 
                 <motion.div 
@@ -197,9 +286,8 @@ function StatsSection() {
                     className="mt-16 text-center"
                 >
                     <Link href="/impact">
-                        <Button className="rounded-full bg-[#181A15] border border-forest-border text-forest-beige hover:bg-[#2C3322] hover:text-white px-8 h-12 shadow-sm transition-all group">
-                            Explore Detailed Impact Report
-                            <ArrowRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />
+                        <Button className="rounded-full bg-white text-black hover:bg-gray-200 px-8 h-12 font-bold shadow-lg transition-transform hover:scale-105">
+                            View Full Impact Report
                         </Button>
                     </Link>
                 </motion.div>
@@ -689,11 +777,11 @@ function CTASection() {
 
 export default function HomePage() {
     return (
-        <main className="min-h-screen">
+        <main className="min-h-screen bg-forest">
             <PublicNavbar />
             <div className="pt-16 md:pt-20">
                 <HeroSection />
-                <StatsSection />
+                <ImpactKPISection />
                 <FeaturedProjectsSection />
                 <CategoriesSection />
                 <HowItWorksSection />
