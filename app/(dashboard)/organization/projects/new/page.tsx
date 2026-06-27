@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { ArrowLeft, Save, Upload, Calendar as CalendarIcon, Loader2, CheckCircle2, X } from "lucide-react";
+import { ArrowLeft, Save, Upload, Calendar as CalendarIcon, Loader2, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -11,13 +11,29 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
-import Link from "next/link";
+import { supabase } from "@/lib/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function CreateProjectPage() {
   const router = useRouter();
+  const { user } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDraft, setIsDraft] = useState(false);
   const [bannerImage, setBannerImage] = useState<string | null>(null);
+
+  // Form State
+  const [title, setTitle] = useState("");
+  const [category, setCategory] = useState("");
+  const [projectType, setProjectType] = useState("");
+  const [isPaid, setIsPaid] = useState(false);
+  const [compensationType, setCompensationType] = useState("");
+  const [compensationAmount, setCompensationAmount] = useState("");
+  const [location, setLocation] = useState("");
+  const [description, setDescription] = useState("");
+  const [requirements, setRequirements] = useState("");
+  const [benefits, setBenefits] = useState("");
+  const [volunteersNeeded, setVolunteersNeeded] = useState("1");
+  const [deadline, setDeadline] = useState("");
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -27,17 +43,70 @@ export default function CreateProjectPage() {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent, asDraft = false) => {
+  const handleSubmit = async (e: React.FormEvent, asDraft = false) => {
     e.preventDefault();
+    if (!user) {
+      toast.error("You must be logged in to create a project.");
+      return;
+    }
+
     setIsSubmitting(true);
     setIsDraft(asDraft);
     
-    // Simulate API call
-    setTimeout(() => {
-      setIsSubmitting(false);
+    try {
+      // First get the user's organization ID
+      const { data: org, error: orgError } = await supabase
+        .from('organizations')
+        .select('id')
+        .eq('owner_id', user.id)
+        .single();
+
+      if (orgError || !org) {
+        toast.error("Could not find your organization profile.");
+        setIsSubmitting(false);
+        return;
+      }
+
+      // Format arrays
+      const reqArray = requirements.split('\n').filter(r => r.trim() !== '');
+      const benArray = benefits.split('\n').filter(b => b.trim() !== '');
+
+      // Insert project
+      const { error: insertError } = await supabase
+        .from('projects')
+        .insert({
+          organization_id: org.id,
+          title: title,
+          slug: title.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-' + Date.now(),
+          category: category,
+          project_type: projectType,
+          is_paid: isPaid,
+          compensation_type: isPaid ? compensationType : null,
+          compensation_amount: isPaid ? compensationAmount : null,
+          location: location,
+          description: description,
+          requirements: reqArray,
+          benefits: benArray,
+          volunteer_needed: parseInt(volunteersNeeded),
+          deadline: deadline ? new Date(deadline).toISOString() : null,
+          status: asDraft ? 'draft' : 'published',
+          banner_url: bannerImage // For real implementation, upload to storage first
+        });
+
+      if (insertError) {
+        throw insertError;
+      }
+
       toast.success(asDraft ? "Project saved as draft" : "Project published successfully!");
-      router.push('/organization/dashboard');
-    }, 1500);
+      router.push('/organization/projects');
+      router.refresh();
+      
+    } catch (error: any) {
+      console.error(error);
+      toast.error(error.message || "Failed to create project");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -78,13 +147,20 @@ export default function CreateProjectPage() {
             <div className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="title">Project Title <span className="text-red-500">*</span></Label>
-                <Input id="title" placeholder="e.g. Coastal Cleanup Initiative" required className="focus-ring" />
+                <Input 
+                  id="title" 
+                  placeholder="e.g. Coastal Cleanup Initiative" 
+                  required 
+                  className="focus-ring" 
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                />
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="category">Category <span className="text-red-500">*</span></Label>
-                  <Select required>
+                  <Select required onValueChange={setCategory} value={category}>
                     <SelectTrigger className="focus-ring">
                       <SelectValue placeholder="Select a category" />
                     </SelectTrigger>
@@ -97,10 +173,76 @@ export default function CreateProjectPage() {
                     </SelectContent>
                   </Select>
                 </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="projectType">Project Type <span className="text-red-500">*</span></Label>
+                  <Select required onValueChange={setProjectType} value={projectType}>
+                    <SelectTrigger className="focus-ring">
+                      <SelectValue placeholder="Select a project type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="social_volunteer">Social Volunteer (General)</SelectItem>
+                      <SelectItem value="disaster_relief">Disaster Relief</SelectItem>
+                      <SelectItem value="capacity_building">Capacity Building</SelectItem>
+                      <SelectItem value="event_staff">Event Staff</SelectItem>
+                      <SelectItem value="professional_pro_bono">Professional Pro Bono</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
                 <div className="space-y-2">
                   <Label htmlFor="location">Location <span className="text-red-500">*</span></Label>
-                  <Input id="location" placeholder="e.g. Kuta Beach, Bali" required className="focus-ring" />
+                  <Input 
+                    id="location" 
+                    placeholder="e.g. Kuta Beach, Bali" 
+                    required 
+                    className="focus-ring" 
+                    value={location}
+                    onChange={(e) => setLocation(e.target.value)}
+                  />
                 </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="isPaid">Compensation <span className="text-red-500">*</span></Label>
+                  <Select required onValueChange={(val) => setIsPaid(val === "paid")} value={isPaid ? "paid" : "unpaid"}>
+                    <SelectTrigger className="focus-ring">
+                      <SelectValue placeholder="Is this project paid?" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="unpaid">Unpaid / Volunteer</SelectItem>
+                      <SelectItem value="paid">Paid Opportunity</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                {isPaid && (
+                  <>
+                    <div className="space-y-2">
+                      <Label htmlFor="compensationType">Compensation Type <span className="text-red-500">*</span></Label>
+                      <Select required={isPaid} onValueChange={setCompensationType} value={compensationType}>
+                        <SelectTrigger className="focus-ring">
+                          <SelectValue placeholder="e.g. Stipend, Hourly" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="stipend">Stipend / Uang Saku</SelectItem>
+                          <SelectItem value="hourly">Hourly Rate</SelectItem>
+                          <SelectItem value="lump_sum">Lump Sum</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="compensationAmount">Amount <span className="text-red-500">*</span></Label>
+                      <Input 
+                        id="compensationAmount" 
+                        placeholder="e.g. Rp 50.000 / day" 
+                        required={isPaid} 
+                        className="focus-ring" 
+                        value={compensationAmount}
+                        onChange={(e) => setCompensationAmount(e.target.value)}
+                      />
+                    </div>
+                  </>
+                )}
               </div>
 
               <div className="space-y-2">
@@ -110,6 +252,8 @@ export default function CreateProjectPage() {
                   placeholder="Describe the project, its goals, and why volunteers should join..." 
                   className="min-h-[150px] focus-ring"
                   required
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
                 />
               </div>
             </div>
@@ -131,6 +275,8 @@ export default function CreateProjectPage() {
                   id="requirements" 
                   placeholder="- Age 17 or above&#10;- Physically fit&#10;- Bring own water bottle" 
                   className="min-h-[100px] focus-ring"
+                  value={requirements}
+                  onChange={(e) => setRequirements(e.target.value)}
                 />
               </div>
 
@@ -140,6 +286,8 @@ export default function CreateProjectPage() {
                   id="benefits" 
                   placeholder="- E-Certificate&#10;- Lunch provided&#10;- Merchandise" 
                   className="min-h-[100px] focus-ring"
+                  value={benefits}
+                  onChange={(e) => setBenefits(e.target.value)}
                 />
               </div>
             </div>
@@ -157,18 +305,30 @@ export default function CreateProjectPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
                 <Label htmlFor="volunteersNeeded">Volunteers Needed <span className="text-red-500">*</span></Label>
-                <Input id="volunteersNeeded" type="number" min="1" placeholder="50" required className="focus-ring" />
+                <Input 
+                  id="volunteersNeeded" 
+                  type="number" 
+                  min="1" 
+                  placeholder="50" 
+                  required 
+                  className="focus-ring" 
+                  value={volunteersNeeded}
+                  onChange={(e) => setVolunteersNeeded(e.target.value)}
+                />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="deadline">Application Deadline <span className="text-red-500">*</span></Label>
                 <div className="relative">
                   <CalendarIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#7A8072]" />
-                  <Input id="deadline" type="date" required className="pl-10 focus-ring" />
+                  <Input 
+                    id="deadline" 
+                    type="date" 
+                    required 
+                    className="pl-10 focus-ring" 
+                    value={deadline}
+                    onChange={(e) => setDeadline(e.target.value)}
+                  />
                 </div>
-              </div>
-              <div className="space-y-2 md:col-span-2">
-                <Label htmlFor="eventDate">Event Date & Time (Optional)</Label>
-                <Input id="eventDate" placeholder="e.g. July 20-21, 09:00 AM - 15:00 PM" className="focus-ring" />
               </div>
             </div>
           </CardContent>
