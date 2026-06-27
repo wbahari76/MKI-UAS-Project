@@ -26,55 +26,55 @@ const config: Config = {
     				border: '#2A2F22',
     			},
     			primary: {
-    				DEFAULT: '#10B981',
-    				hover: '#059669',
-    				light: '#34D399',
-    				dark: '#047857',
-    				foreground: '#FFFFFF'
+    				DEFAULT: '#5C6B45',
+    				hover: '#4A5D23',
+    				light: '#829661',
+    				dark: '#38402D',
+    				foreground: '#EAE1D1'
     			},
     			secondary: {
-    				DEFAULT: '#2563EB',
-    				hover: '#1D4ED8',
-    				light: '#60A5FA',
-    				dark: '#1E40AF',
-    				foreground: '#FFFFFF'
+    				DEFAULT: '#38402D',
+    				hover: '#2C3322',
+    				light: '#5C6B45',
+    				dark: '#21261B',
+    				foreground: '#EAE1D1'
     			},
     			accent: {
-    				DEFAULT: '#F59E0B',
-    				hover: '#D97706',
-    				light: '#FBBF24',
-    				dark: '#B45309'
+    				DEFAULT: '#829661',
+    				hover: '#5C6B45',
+    				light: '#A3A89D',
+    				dark: '#4A5D23'
     			},
     			success: '#22C55E',
     			warning: '#F59E0B',
     			danger: '#EF4444',
     			info: '#3B82F6',
-    			background: '#FFFFFF',
-    			'background-secondary': '#F8FAFC',
-    			'background-hover': '#F1F5F9',
-    			'text-primary': '#0F172A',
-    			'text-secondary': '#475569',
-    			'text-muted': '#94A3B8',
+    			background: '#131511',
+    			'background-secondary': '#1B1E16',
+    			'background-hover': '#2A2F22',
+    			'text-primary': '#EAE1D1',
+    			'text-secondary': '#DFD5C2',
+    			'text-muted': '#A3A89D',
     			card: {
-    				DEFAULT: '#FFFFFF',
-    				hover: '#F1F5F9',
-    				foreground: '#0F172A'
+    				DEFAULT: '#1B1E16',
+    				hover: '#22261C',
+    				foreground: '#EAE1D1'
     			},
     			popover: {
-    				DEFAULT: '#FFFFFF',
-    				foreground: '#0F172A'
+    				DEFAULT: '#1B1E16',
+    				foreground: '#EAE1D1'
     			},
-    			foreground: '#0F172A',
-    			border: '#E2E8F0',
-    			input: '#E2E8F0',
-    			ring: '#10B981',
+    			foreground: '#EAE1D1',
+    			border: '#2A2F22',
+    			input: '#2A2F22',
+    			ring: '#5C6B45',
     			muted: {
-    				DEFAULT: '#F8FAFC',
-    				foreground: '#64748B'
+    				DEFAULT: '#1E211A',
+    				foreground: '#A3A89D'
     			},
     			destructive: {
     				DEFAULT: '#EF4444',
-    				foreground: '#FFFFFF'
+    				foreground: '#EAE1D1'
     			},
     			chart: {
     				'1': '#10B981',
