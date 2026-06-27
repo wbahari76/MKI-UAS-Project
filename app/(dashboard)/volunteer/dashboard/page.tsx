@@ -208,8 +208,10 @@ export default function VolunteerDashboard() {
                   icon={FolderKanban}
                   title="No Active Projects"
                   description="You haven't applied to any projects yet. Start exploring to make an impact!"
-                  actionLabel="Explore Projects"
-                  onAction={() => window.location.href = '/volunteer/explore'}
+                  primaryAction={{
+                    label: "Explore Projects",
+                    onClick: () => window.location.href = '/volunteer/explore'
+                  }}
                 />
               )}
             </CardContent>
