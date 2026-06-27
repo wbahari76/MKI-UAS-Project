@@ -87,7 +87,7 @@ export default function PartnershipPage() {
             </motion.div>
             
             <motion.div variants={fadeIn} className="flex justify-center pt-4">
-              <Link href="mailto:partners@jalavive.com">
+              <Link href="/register?role=organization">
                   <Button className="h-14 px-8 rounded-full bg-forest-accent hover:bg-[#4A5D23] text-forest-beige text-lg font-semibold shadow-lg shadow-forest-accent/20 transition-all gap-2">
                     <Handshake className="w-5 h-5" />
                     Become a Partner
@@ -138,9 +138,11 @@ export default function PartnershipPage() {
                   </ul>
                 </div>
                 
-                <Button variant="outline" className="w-full border-forest-border hover:bg-[#1E211A] text-forest-beige">
-                  Learn More
-                </Button>
+                <Link href="/register?role=organization" className="w-full">
+                  <Button variant="outline" className="w-full border-forest-border hover:bg-[#1E211A] text-forest-beige">
+                    Learn More
+                  </Button>
+                </Link>
               </motion.div>
             ))}
           </div>
@@ -159,7 +161,7 @@ export default function PartnershipPage() {
             Let's discuss how we can work together to maximize your social impact.
           </p>
           <div className="pt-4 flex justify-center">
-            <Link href="mailto:partners@jalavive.com">
+            <Link href="/register?role=organization">
               <Button className="h-14 px-8 rounded-full bg-forest-accent hover:bg-[#4A5D23] text-forest-beige text-lg font-semibold shadow-lg shadow-forest-accent/20 transition-all gap-2">
                 Contact Our Team <ArrowRight size={20} />
               </Button>
