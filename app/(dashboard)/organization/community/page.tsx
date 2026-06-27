@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -49,6 +50,8 @@ export default function OrganizationCommunityPage() {
   const { socket } = useSocket();
   const [posts, setPosts] = useState(INITIAL_POSTS);
   const [newPost, setNewPost] = useState("");
+  const [expandedComments, setExpandedComments] = useState<Record<number, boolean>>({});
+  const [commentInput, setCommentInput] = useState<Record<number, string>>({});
   const [isPosting, setIsPosting] = useState(false);
 
   const userName = profile?.full_name || user?.email?.split("@")[0] || "Organization";
@@ -110,6 +113,23 @@ export default function OrganizationCommunityPage() {
       }
       return post;
     }));
+  };
+
+  const toggleComments = (id: number) => {
+    setExpandedComments(prev => ({ ...prev, [id]: !prev[id] }));
+  };
+
+  const handleCommentSubmit = (e: React.FormEvent, postId: number) => {
+    e.preventDefault();
+    const text = commentInput[postId];
+    if (!text?.trim()) return;
+
+    // Increment comment count locally for mock
+    setPosts(current => current.map(post => 
+      post.id === postId ? { ...post, comments: post.comments + 1 } : post
+    ));
+    setCommentInput(prev => ({ ...prev, [postId]: "" }));
+    toast.success("Comment added!");
   };
 
   return (
@@ -241,7 +261,53 @@ export default function OrganizationCommunityPage() {
                       <Share2 className="w-5 h-5" />
                     </Button>
                   </div>
+                
                 </CardFooter>
+                {/* Comments Section */}
+                <AnimatePresence>
+                  {expandedComments[post.id] && (
+                    <motion.div 
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      className="border-t border-forest-border bg-[#181A15]/50 overflow-hidden"
+                    >
+                      <div className="p-4 sm:p-6 space-y-4">
+                        <div className="flex gap-3">
+                          <Avatar className="w-8 h-8 shrink-0">
+                            <AvatarFallback className="bg-[#2C3322] text-xs">{userName.charAt(0)}</AvatarFallback>
+                          </Avatar>
+                          <form onSubmit={(e) => handleCommentSubmit(e, post.id)} className="flex-1 flex gap-2">
+                            <Input 
+                              value={commentInput[post.id] || ""}
+                              onChange={(e) => setCommentInput(prev => ({ ...prev, [post.id]: e.target.value }))}
+                              placeholder="Write a comment..." 
+                              className="h-9 bg-[#131511] border-forest-border focus-visible:ring-forest-accent rounded-full px-4 text-sm"
+                            />
+                            <Button type="submit" disabled={!commentInput[post.id]?.trim()} className="h-9 w-9 rounded-full bg-forest-accent hover:bg-[#4A5D23] text-forest-beige p-0 shrink-0">
+                              <Send className="w-4 h-4" />
+                            </Button>
+                          </form>
+                        </div>
+                        {/* Mock existing comment */}
+                        {post.comments > 0 && (
+                          <div className="flex gap-3 pt-2">
+                            <Avatar className="w-8 h-8 shrink-0">
+                              <AvatarFallback className="bg-blue-900/50 text-blue-400 text-xs">V</AvatarFallback>
+                            </Avatar>
+                            <div className="flex-1 bg-[#131511] p-3 rounded-2xl rounded-tl-sm border border-forest-border">
+                              <div className="flex items-center justify-between mb-1">
+                                <span className="font-medium text-forest-beige text-xs">Volunteer User</span>
+                                <span className="text-[10px] text-forest-muted">1 hour ago</span>
+                              </div>
+                              <p className="text-sm text-[#DFD5C2]">This is so inspiring! Can't wait for the next event.</p>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </Card>
             </motion.div>
           ))}
