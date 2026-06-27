@@ -57,7 +57,7 @@ function AnimatedCounter({ value, suffix = '' }: { value: number; suffix?: strin
 // Section Components
 function HeroSection() {
     return (
-        <section className="relative pt-32 pb-20 md:pt-40 md:pb-28 bg-forest overflow-hidden">
+        <section className="relative min-h-screen flex items-center bg-forest overflow-hidden">
             {/* Background Pattern */}
             <div className="absolute inset-0 opacity-30">
                 <div className="absolute top-20 left-10 w-72 h-72 bg-[#1B1E16] rounded-full mix-blend-multiply filter blur-3xl animate-pulse" />
