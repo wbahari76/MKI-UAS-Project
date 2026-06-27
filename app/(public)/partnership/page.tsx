@@ -60,38 +60,57 @@ export default function PartnershipPage() {
   return (
     <div className="min-h-screen bg-[#131511]">
       {/* Hero Section */}
-      <section className="relative pt-32 pb-20 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-forest-accent/5 to-blue-500/5 -z-10" />
-        <div className="absolute top-0 right-0 -translate-y-12 translate-x-1/3 w-96 h-96 bg-forest-accent/20 rounded-full blur-3xl -z-10" />
+      <section className="relative pt-24 pb-16 md:pt-32 md:pb-24 overflow-hidden min-h-[85vh] flex items-center justify-center">
+        {/* Background Base */}
+        <div className="absolute inset-0 bg-[#0B0C0A] -z-20" />
         
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        {/* Noise Texture */}
+        <div className="absolute inset-0 opacity-[0.03] mix-blend-overlay -z-10" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E")' }} />
+        
+        {/* Radial Gradients & Blurred Shapes */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(130,150,97,0.15),transparent_50%)] -z-10" />
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] md:w-[800px] md:h-[400px] bg-emerald-500/10 rounded-full blur-[100px] md:blur-[120px] -z-10 pointer-events-none" />
+        
+        <div className="max-w-[800px] w-full mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 mt-[-60px]">
           <motion.div
             initial="initial"
             animate="animate"
             variants={stagger}
-            className="max-w-3xl mx-auto space-y-8"
+            className="flex flex-col items-center gap-6"
           >
             <motion.div variants={fadeIn}>
-              <span className="inline-block py-1 px-3 rounded-full bg-[#2C3322] text-[#829661] text-sm font-semibold tracking-wider uppercase mb-4">
-                Partnership
-              </span>
-              <h1 className="text-4xl md:text-6xl font-extrabold text-forest-beige tracking-tight leading-tight">
-                Amplify Your Impact with <span className="text-[#829661]">JALA VIVE</span>
-              </h1>
+              <div className="inline-flex items-center px-4 py-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 text-xs font-bold uppercase tracking-[0.2em] backdrop-blur-md shadow-[0_0_20px_rgba(16,185,129,0.1)]">
+                PARTNERSHIP
+              </div>
             </motion.div>
             
             <motion.div variants={fadeIn}>
-              <p className="text-lg md:text-xl text-forest-muted leading-relaxed">
+              <h1 className="text-[44px] sm:text-[56px] md:text-[72px] font-bold text-white tracking-tight leading-[100%]">
+                Amplify Your Impact <br className="hidden sm:block" />
+                with <span className="text-forest-accent drop-shadow-sm">JALA VIVE</span>
+              </h1>
+            </motion.div>
+            
+            <motion.div variants={fadeIn} className="max-w-[650px] mx-auto">
+              <p className="text-[18px] md:text-[20px] text-gray-400 leading-[170%]">
                 Join forces with us to build a more sustainable and caring world. Whether you're a corporation, NGO, or university, we have the right tools to scale your initiatives.
               </p>
             </motion.div>
             
-            <motion.div variants={fadeIn} className="flex justify-center pt-4">
-              <Link href="/register?role=organization">
-                  <Button className="h-14 px-8 rounded-full bg-forest-accent hover:bg-[#4A5D23] text-forest-beige text-lg font-semibold shadow-lg shadow-forest-accent/20 transition-all gap-2">
-                    <Handshake className="w-5 h-5" />
-                    Become a Partner
-                  </Button>
+            <motion.div variants={fadeIn} className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto pt-4">
+              <Link href="/register?role=organization" className="w-full sm:w-auto">
+                  <motion.div whileHover={{ scale: 1.03 }} className="w-full">
+                    <Button className="w-full sm:w-auto h-[52px] px-8 rounded-[16px] bg-forest-accent hover:bg-[#4A5D23] text-white text-[16px] font-semibold shadow-lg shadow-forest-accent/20 transition-colors">
+                      Become a Partner
+                    </Button>
+                  </motion.div>
+              </Link>
+              <Link href="/explore" className="w-full sm:w-auto">
+                  <motion.div whileHover={{ scale: 1.03 }} className="w-full">
+                    <Button variant="ghost" className="w-full sm:w-auto h-[52px] px-8 rounded-[16px] border border-white/10 hover:bg-white/5 text-white text-[16px] font-semibold transition-colors">
+                      Explore Projects
+                    </Button>
+                  </motion.div>
               </Link>
             </motion.div>
           </motion.div>

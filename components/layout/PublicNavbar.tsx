@@ -106,36 +106,36 @@ export function PublicNavbar() {
             className={cn(
                 "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
                 isScrolled
-                    ? "bg-forest-card/95 backdrop-blur-xl shadow-sm border-b border-forest-border"
+                    ? "bg-[#131511]/70 backdrop-blur-xl border-b border-white/5"
                     : "bg-transparent"
             )}
         >
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <nav className="flex items-center justify-between h-16 md:h-20">
+                <nav className="flex items-center justify-between h-16">
                     {/* Logo */}
-                    <Link href="/" className="flex items-center gap-2.5 group">
+                    <Link href="/" className="flex items-center gap-4 group">
                         <motion.div
                             whileHover={{ rotate: 10, scale: 1.05 }}
                             className="w-10 h-10 bg-forest-accent rounded-xl flex items-center justify-center shadow-lg shadow-forest-accent/25"
                         >
                             <HandHelping className="w-5 h-5 text-forest-beige" />
                         </motion.div>
-                        <span className="font-bold text-xl text-forest-beige">
-                            JALA<span className="text-forest-accent">VIVE</span>
+                        <span className="font-bold text-xl tracking-tight text-white">
+                            JALA<span className="text-forest-accent ml-1">VIVE</span>
                         </span>
                     </Link>
 
                     {/* Desktop Navigation */}
-                    <div className="hidden lg:flex items-center gap-1">
+                    <div className="hidden lg:flex items-center gap-6">
                         {publicNavItems.map((item) => (
                             <Link
                                 key={item.name}
                                 href={item.href}
                                 className={cn(
-                                    "px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200",
+                                    "px-4 py-2 rounded-full text-sm font-medium transition-all duration-300",
                                     isActive(item.href)
-                                        ? "text-[#829661] bg-[#21261B]"
-                                        : "text-forest-muted hover:text-forest-beige hover:bg-[#181A15]"
+                                        ? "text-white bg-white/10 shadow-[0_0_10px_rgba(255,255,255,0.05)]"
+                                        : "text-forest-muted hover:text-white hover:bg-white/5"
                                 )}
                             >
                                 {item.name}
@@ -144,7 +144,7 @@ export function PublicNavbar() {
                     </div>
 
                     {/* Desktop Actions */}
-                    <div className="hidden lg:flex items-center gap-3">
+                    <div className="hidden lg:flex items-center gap-4">
                         {/* Search Button */}
                         <Button
                             variant="ghost"
@@ -158,18 +158,18 @@ export function PublicNavbar() {
                         {user ? (
                             <>
                                 {/* Notifications */}
-                                <Button variant="ghost" size="sm" onClick={handleNotification} className="relative text-forest-muted hover:text-forest-beige">
-                                    <Bell className="w-4 h-4" />
-                                    <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-red-500 text-forest-beige text-xs rounded-full flex items-center justify-center">
+                                <Button variant="ghost" size="sm" onClick={handleNotification} className="relative rounded-full text-forest-muted hover:text-white group">
+                                    <Bell className="w-4 h-4 transition-transform group-hover:scale-105" />
+                                    <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center animate-pulse shadow-sm shadow-red-500/50">
                                         3
                                     </span>
                                 </Button>
 
                                 {/* Messages */}
                                 <Link href={getMessagesLink()}>
-                                    <Button variant="ghost" size="sm" className="relative text-forest-muted hover:text-forest-beige">
-                                        <MessageCircle className="w-4 h-4" />
-                                        <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-forest-accent text-forest-beige text-xs rounded-full flex items-center justify-center">
+                                    <Button variant="ghost" size="sm" className="relative rounded-full text-forest-muted hover:text-white group">
+                                        <MessageCircle className="w-4 h-4 transition-transform group-hover:scale-105" />
+                                        <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-forest-accent text-white text-[10px] font-bold rounded-full flex items-center justify-center shadow-sm shadow-forest-accent/50">
                                             2
                                         </span>
                                     </Button>
@@ -214,12 +214,12 @@ export function PublicNavbar() {
                         ) : (
                             <>
                                 <Link href="/login">
-                                    <Button variant="ghost" size="sm" className="text-forest-muted hover:text-forest-beige">
+                                    <Button variant="ghost" size="sm" className="text-forest-muted hover:text-white rounded-full px-4">
                                         Log In
                                     </Button>
                                 </Link>
                                 <Link href="/register">
-                                    <Button className="bg-forest-accent hover:bg-[#4A5D23] text-forest-beige shadow-lg shadow-forest-accent/25">
+                                    <Button className="bg-forest-accent hover:bg-[#4A5D23] text-white rounded-full px-5 shadow-lg shadow-forest-accent/20 transition-transform hover:scale-105">
                                         Get Started
                                     </Button>
                                 </Link>
