@@ -1,11 +1,12 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Activity, Award, Globe, Users, TrendingUp, Heart } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { supabase } from "@/lib/supabase/client";
 
 const fadeInUp = {
   initial: { opacity: 0, y: 30 },
@@ -22,6 +23,47 @@ const staggerContainer = {
 };
 
 export default function ImpactPage() {
+  const [stats, setStats] = useState({
+    volunteers: "0",
+    projects: "0",
+    communities: "0",
+    hours: "1.2M", // Hardcoded mock since there is no time-tracking table yet
+  });
+
+  useEffect(() => {
+    async function fetchImpactStats() {
+      try {
+        // Fetch Total Volunteers
+        const { count: volunteersCount } = await supabase
+          .from('profiles')
+          .select('*', { count: 'exact', head: true })
+          .eq('role', 'volunteer');
+
+        // Fetch Projects Completed
+        const { count: projectsCount } = await supabase
+          .from('projects')
+          .select('*', { count: 'exact', head: true })
+          .eq('status', 'completed');
+
+        // Fetch Communities Served (number of distinct organizations)
+        const { count: orgsCount } = await supabase
+          .from('organizations')
+          .select('*', { count: 'exact', head: true });
+
+        setStats({
+          volunteers: (volunteersCount || 0).toLocaleString() + "+",
+          projects: (projectsCount || 0).toLocaleString(),
+          communities: (orgsCount || 0).toLocaleString() + "+",
+          hours: "1.2M", // To be implemented in the future
+        });
+      } catch (error) {
+        console.error("Error fetching impact stats:", error);
+      }
+    }
+
+    fetchImpactStats();
+  }, []);
+
   return (
     <div className="min-h-screen bg-[#181A15] pt-24 pb-20 overflow-hidden">
       
@@ -55,13 +97,13 @@ export default function ImpactPage() {
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-24"
         >
           {[
-            { label: "Total Volunteers", value: "24,500+", icon: Users, color: "text-blue-400", bg: "bg-blue-500/10", border: "border-blue-100" },
-            { label: "Projects Completed", value: "1,240", icon: Award, color: "text-[#829661]", bg: "bg-[#2C3322]", border: "border-[#2C3322]" },
-            { label: "Communities Served", value: "350+", icon: Globe, color: "text-amber-400", bg: "bg-amber-500/10", border: "border-amber-100" },
-            { label: "Total Impact Hours", value: "1.2M", icon: Activity, color: "text-purple-400", bg: "bg-purple-500/10", border: "border-purple-100" }
+            { label: "Total Volunteers", value: stats.volunteers, icon: Users, color: "text-blue-400", bg: "bg-blue-500/10", border: "border-blue-100" },
+            { label: "Projects Completed", value: stats.projects, icon: Award, color: "text-[#829661]", bg: "bg-[#2C3322]", border: "border-[#2C3322]" },
+            { label: "Communities Served", value: stats.communities, icon: Globe, color: "text-amber-400", bg: "bg-amber-500/10", border: "border-amber-100" },
+            { label: "Total Impact Hours", value: stats.hours, icon: Activity, color: "text-purple-400", bg: "bg-purple-500/10", border: "border-purple-100" }
           ].map((stat, i) => (
             <motion.div key={i} variants={fadeInUp}>
-              <Card className={`border ${stat.border} shadow-sm shadow-forest-border/20 hover:shadow-md transition-all`}>
+              <Card className={`border ${stat.border} shadow-sm shadow-forest-border/20 hover:shadow-md transition-all h-full`}>
                 <CardContent className="p-6 text-center">
                   <div className={`w-12 h-12 rounded-full ${stat.bg} ${stat.color} flex items-center justify-center mx-auto mb-4`}>
                     <stat.icon size={24} />
@@ -99,19 +141,13 @@ export default function ImpactPage() {
                   { title: "Education & Mentorship", percentage: 30, color: "bg-blue-500" },
                   { title: "Community Development", percentage: 25, color: "bg-amber-500" }
                 ].map((item, i) => (
-                  <div key={i} className="space-y-2">
-                    <div className="flex justify-between text-sm font-semibold text-[#DFD5C2]">
-                      <span>{item.title}</span>
-                      <span>{item.percentage}%</span>
+                  <div key={i}>
+                    <div className="flex justify-between text-sm font-medium mb-2">
+                      <span className="text-forest-beige">{item.title}</span>
+                      <span className="text-forest-muted">{item.percentage}%</span>
                     </div>
-                    <div className="h-3 w-full bg-[#1E211A] rounded-full overflow-hidden">
-                      <motion.div 
-                        initial={{ width: 0 }}
-                        whileInView={{ width: `${item.percentage}%` }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 1, delay: 0.2 }}
-                        className={`h-full ${item.color} rounded-full`} 
-                      />
+                    <div className="w-full h-2.5 bg-[#1E211A] rounded-full overflow-hidden">
+                      <div className={`h-full rounded-full ${item.color}`} style={{ width: `${item.percentage}%` }} />
                     </div>
                   </div>
                 ))}
@@ -125,40 +161,59 @@ export default function ImpactPage() {
               transition={{ duration: 0.6 }}
               className="relative"
             >
-              <div className="grid grid-cols-2 gap-4">
-                <img 
-                  src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=600&q=80" 
-                  alt="Environmental impact" 
-                  className="rounded-3xl shadow-lg object-cover aspect-square w-full"
-                />
-                <img 
-                  src="https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?auto=format&fit=crop&w=600&q=80" 
-                  alt="Community impact" 
-                  className="rounded-3xl shadow-lg object-cover aspect-square w-full mt-8"
-                />
+              <div className="aspect-square max-w-md mx-auto relative">
+                {/* Decorative Earth/Globe visualization placeholder */}
+                <div className="absolute inset-0 rounded-full border-4 border-[#1E211A] animate-[spin_60s_linear_infinite]" />
+                <div className="absolute inset-4 rounded-full border-2 border-dashed border-[#2A2F22] animate-[spin_40s_linear_infinite_reverse]" />
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <Globe className="w-32 h-32 text-forest-accent/50" strokeWidth={1} />
+                </div>
+                
+                {/* Floating stat chips */}
+                <div className="absolute top-1/4 -left-4 bg-[#181A15] border border-forest-border p-3 rounded-2xl shadow-lg flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
+                    <Heart size={16} />
+                  </div>
+                  <div>
+                    <div className="text-sm font-bold text-forest-beige">1M+ Lives</div>
+                    <div className="text-xs text-forest-muted">Positively Impacted</div>
+                  </div>
+                </div>
+
+                <div className="absolute bottom-1/4 -right-4 bg-[#181A15] border border-forest-border p-3 rounded-2xl shadow-lg flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center">
+                    <TrendingUp size={16} />
+                  </div>
+                  <div>
+                    <div className="text-sm font-bold text-forest-beige">40% Growth</div>
+                    <div className="text-xs text-forest-muted">Year over Year</div>
+                  </div>
+                </div>
               </div>
             </motion.div>
           </div>
         </div>
 
-        {/* Call to Action */}
+        {/* CTA Section */}
         <motion.div 
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center space-y-6 max-w-2xl mx-auto"
+          className="text-center max-w-2xl mx-auto"
         >
-          <div className="w-16 h-16 bg-blue-500/10 text-blue-400 rounded-full flex items-center justify-center mx-auto mb-6">
-            <Heart size={32} />
-          </div>
-          <h2 className="text-3xl font-bold text-forest-beige">Be Part of the Next Million Hours</h2>
-          <p className="text-forest-muted text-lg">
-            Whether you have 2 hours a week or 2 hours a month, your contribution adds up to a massive global impact.
+          <h3 className="text-2xl font-bold text-forest-beige mb-4">Be Part of the Impact</h3>
+          <p className="text-forest-muted mb-8">
+            Every volunteer matters. Join thousands of others who are already making a difference in their communities.
           </p>
-          <div className="pt-4">
+          <div className="flex justify-center gap-4">
             <Link href="/register">
-              <Button className="h-14 px-8 rounded-full bg-blue-600 hover:bg-blue-700 text-forest-beige text-lg font-semibold shadow-lg shadow-blue-500/20 transition-all">
-                Start Volunteering Today
+              <Button className="h-12 px-8 rounded-full bg-forest-accent hover:bg-forest-accent/90 text-white font-semibold">
+                Start Volunteering
+              </Button>
+            </Link>
+            <Link href="/explore">
+              <Button variant="outline" className="h-12 px-8 rounded-full border-forest-border hover:bg-[#1E211A] text-forest-beige">
+                Explore Projects
               </Button>
             </Link>
           </div>

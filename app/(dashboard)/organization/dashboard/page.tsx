@@ -25,10 +25,21 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog";
+import { supabase } from "@/lib/supabase/client";
+import { format } from "date-fns";
 
 export default function OrganizationDashboard() {
   const { user, profile, loading } = useAuth();
   const [isMounted, setIsMounted] = useState(false);
+  const [projects, setProjects] = useState<any[]>([]);
+  const [stats, setStats] = useState({
+    activeProjects: 0,
+    totalVolunteers: 0,
+    totalHours: 1450, // Still mock for now
+    profileViews: 452, // Still mock for now
+  });
+  const [projectsLoading, setProjectsLoading] = useState(true);
+
   const [pendingApps, setPendingApps] = useState([
     {
       id: 1,
@@ -67,6 +78,60 @@ export default function OrganizationDashboard() {
   const [selectedApp, setSelectedApp] = useState<any>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  useEffect(() => {
+    async function fetchDashboardData() {
+      if (!user) return;
+      
+      try {
+        setProjectsLoading(true);
+        const { data: org, error: orgError } = await supabase
+          .from('organizations')
+          .select('id')
+          .eq('owner_id', user.id)
+          .single();
+
+        if (orgError) {
+           console.error("No org profile found yet");
+           setProjectsLoading(false);
+           return;
+        }
+
+        const { data: projectsData, error: projectsError } = await supabase
+          .from('projects')
+          .select('*')
+          .eq('organization_id', org.id)
+          .order('created_at', { ascending: false })
+          .limit(5);
+
+        if (projectsError) throw projectsError;
+        
+        setProjects(projectsData || []);
+        
+        // Calculate basic stats from the projects
+        const activeCount = projectsData?.filter(p => p.status !== 'draft' && p.status !== 'completed').length || 0;
+        const volCount = projectsData?.reduce((acc, p) => acc + (p.volunteer_count || 0), 0) || 0;
+        
+        setStats(prev => ({
+          ...prev,
+          activeProjects: activeCount,
+          totalVolunteers: volCount
+        }));
+      } catch (error) {
+        console.error("Error fetching dashboard data:", error);
+      } finally {
+        setProjectsLoading(false);
+      }
+    }
+
+    if (user && !loading) {
+      fetchDashboardData();
+    }
+  }, [user, loading]);
+
   const handleReviewClick = (app: any) => {
     setSelectedApp(app);
     setIsDialogOpen(true);
@@ -84,11 +149,7 @@ export default function OrganizationDashboard() {
     toast.error(`Application for ${selectedApp?.name} rejected.`);
   };
 
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  if (!isMounted || loading) {
+  if (!isMounted || loading || projectsLoading) {
     return (
       <div className="space-y-6">
         <Skeleton className="h-10 w-1/3" />
@@ -107,6 +168,21 @@ export default function OrganizationDashboard() {
   }
 
   const orgName = profile?.full_name || user?.email?.split("@")[0] || "Organization";
+
+  const getStatusBadge = (status: string) => {
+    switch (status) {
+      case "published":
+      case "recruiting":
+      case "active":
+        return <Badge className="bg-[#2C3322] text-[#829661] border-[#4A5D23]">Active</Badge>;
+      case "draft":
+        return <Badge className="bg-[#1E211A] text-[#DFD5C2] border-forest-border">Draft</Badge>;
+      case "completed":
+        return <Badge className="bg-blue-500/10 text-blue-400 border-blue-500/20">Completed</Badge>;
+      default:
+        return <Badge className="capitalize">{status}</Badge>;
+    }
+  };
 
   return (
     <div className="space-y-8">
@@ -150,27 +226,26 @@ export default function OrganizationDashboard() {
       >
         <StatsCard
           title="Total Volunteers"
-          value="128"
+          value={stats.totalVolunteers.toString()}
           icon={Users}
           iconClassName="bg-blue-500/10 text-blue-400"
-          trend={{ value: 12, isPositive: true }}
         />
         <StatsCard
           title="Active Projects"
-          value="3"
+          value={stats.activeProjects.toString()}
           icon={FolderKanban}
           iconClassName="bg-[#2C3322] text-[#829661]"
         />
         <StatsCard
           title="Total Hours Logged"
-          value="1,450"
+          value={stats.totalHours.toString()}
           icon={Clock}
           iconClassName="bg-amber-500/10 text-amber-400"
           trend={{ value: 5, isPositive: true }}
         />
         <StatsCard
           title="Profile Views"
-          value="452"
+          value={stats.profileViews.toString()}
           icon={TrendingUp}
           iconClassName="bg-purple-500/10 text-purple-400"
           trend={{ value: 24, isPositive: true }}
@@ -196,45 +271,39 @@ export default function OrganizationDashboard() {
               </Link>
             </CardHeader>
             <CardContent className="pt-6">
-              {/* Mock Data for Org Projects */}
               <div className="space-y-4">
-                {[
-                  { title: "Coastal Cleanup Initiative", status: "Recruiting", volunteers: 32, max: 50, date: "Jul 15, 2026" },
-                  { title: "Tree Planting Day", status: "In Progress", volunteers: 20, max: 20, date: "Jun 30, 2026" },
-                  { title: "Food Bank Distribution", status: "Draft", volunteers: 0, max: 15, date: "Aug 10, 2026" }
-                ].map((project, i) => (
+                {projects.length === 0 ? (
+                  <div className="text-center py-8 text-forest-muted">
+                    <FolderKanban className="w-12 h-12 mx-auto mb-3 opacity-20" />
+                    <p>No projects found. Create one to get started!</p>
+                  </div>
+                ) : projects.map((project, i) => (
                   <div key={i} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-xl border border-forest-border hover:border-blue-500/20 hover:shadow-md transition-all group bg-forest-card">
                     <div className="flex items-start gap-4 mb-4 sm:mb-0">
                       <div className="w-12 h-12 rounded-lg bg-[#181A15] flex items-center justify-center text-[#7A8072] shrink-0 border border-forest-border">
                         <FolderKanban className="w-6 h-6" />
                       </div>
                       <div>
-                        <h4 className="font-semibold text-forest-beige group-hover:text-blue-400 transition-colors">
+                        <h4 className="font-semibold text-forest-beige group-hover:text-blue-400 transition-colors flex items-center gap-2">
                           {project.title}
+                          {project.is_paid && (
+                             <Badge className="bg-amber-500/10 text-amber-500 border-amber-500/20 text-[10px] px-1.5 py-0">Paid</Badge>
+                          )}
                         </h4>
                         <div className="flex items-center gap-3 mt-1">
                           <span className="text-xs text-forest-muted flex items-center">
                             <Users className="w-3 h-3 mr-1" />
-                            {project.volunteers} / {project.max} Vol.
+                            {project.volunteer_count || 0} / {project.volunteer_needed || 0} Vol.
                           </span>
                           <span className="text-xs text-forest-muted flex items-center">
                             <Clock className="w-3 h-3 mr-1" />
-                            {project.date}
+                            {format(new Date(project.created_at), 'MMM dd, yyyy')}
                           </span>
                         </div>
                       </div>
                     </div>
                     <div className="flex items-center justify-between sm:justify-end gap-4 w-full sm:w-auto">
-                      <Badge 
-                        variant="outline" 
-                        className={
-                          project.status === 'Recruiting' ? 'bg-[#21261B] text-[#829661] border-[#4A5D23]' : 
-                          project.status === 'In Progress' ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' :
-                          'bg-[#181A15] text-[#DFD5C2] border-forest-border'
-                        }
-                      >
-                        {project.status}
-                      </Badge>
+                      {getStatusBadge(project.status || "draft")}
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <Button variant="ghost" size="icon" className="h-8 w-8 text-[#7A8072] hover:text-forest-muted">
@@ -242,9 +311,9 @@ export default function OrganizationDashboard() {
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" className="w-40 rounded-xl">
-                          <DropdownMenuItem className="cursor-pointer" onClick={() => toast.info("Opening project details...")}>View Details</DropdownMenuItem>
-                          <DropdownMenuItem className="cursor-pointer" onClick={() => toast.info("Editing project...")}>Edit Project</DropdownMenuItem>
-                          <DropdownMenuItem className="cursor-pointer" onClick={() => toast.info("Managing volunteers...")}>Manage Volunteers</DropdownMenuItem>
+                          <DropdownMenuItem className="cursor-pointer">View Details</DropdownMenuItem>
+                          <DropdownMenuItem className="cursor-pointer">Edit Project</DropdownMenuItem>
+                          <DropdownMenuItem className="cursor-pointer">Manage Volunteers</DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </div>

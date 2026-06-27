@@ -1,16 +1,17 @@
 "use client";
 
 import React, { useState } from "react";
-import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { ArrowLeft, Save, Upload, Calendar as CalendarIcon, Loader2, CheckCircle2 } from "lucide-react";
+import { ArrowLeft, Upload, CalendarIcon, Plus, Save, Loader2, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import Link from "next/link";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -24,7 +25,7 @@ export default function CreateProjectPage() {
   // Form State
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("");
-  const [projectType, setProjectType] = useState("");
+  const [projectType, setProjectType] = useState("social");
   const [isPaid, setIsPaid] = useState(false);
   const [compensationType, setCompensationType] = useState("");
   const [compensationAmount, setCompensationAmount] = useState("");
@@ -110,48 +111,38 @@ export default function CreateProjectPage() {
           banner_url: bannerImage // For real implementation, upload to storage first
         });
 
-      if (insertError) {
-        throw insertError;
-      }
+      if (insertError) throw insertError;
 
-      toast.success(asDraft ? "Project saved as draft" : "Project published successfully!");
-      router.push('/organization/projects');
-      router.refresh();
-      
-    } catch (error: any) {
-      console.error(error);
-      toast.error(error.message || "Failed to create project");
+      toast.success(asDraft ? "Project saved as draft!" : "Project published successfully!");
+      router.push("/organization/projects");
+    } catch (error) {
+      console.error("Error creating project:", error);
+      toast.error("Failed to create project");
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="space-y-6 pb-20 max-w-4xl mx-auto">
+    <div className="max-w-4xl mx-auto space-y-8">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="flex items-center gap-4">
+        <Link href="/organization/projects">
+          <Button variant="ghost" size="icon" className="h-10 w-10 rounded-full hover:bg-forest-card">
+            <ArrowLeft className="w-5 h-5 text-forest-muted" />
+          </Button>
+        </Link>
         <div>
-          <button 
-            onClick={() => router.back()}
-            className="flex items-center text-sm font-medium text-forest-muted hover:text-[#829661] transition-colors mb-2"
-          >
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Dashboard
-          </button>
-          <h1 className="text-3xl font-bold text-forest-beige tracking-tight">
-            Create New Project
-          </h1>
-          <p className="text-forest-muted mt-1">
-            Fill in the details below to start recruiting volunteers.
-          </p>
+          <h1 className="text-2xl font-bold text-forest-beige">Create New Project</h1>
+          <p className="text-forest-muted text-sm mt-1">Fill in the details below to publish a new volunteering opportunity.</p>
         </div>
       </div>
 
       <motion.form 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="space-y-8"
         onSubmit={(e) => handleSubmit(e, false)}
+        className="space-y-8"
       >
         {/* Basic Information */}
         <Card className="border-0 shadow-sm shadow-forest-border/20">
@@ -161,12 +152,12 @@ export default function CreateProjectPage() {
               <div className="h-px bg-[#1E211A]" />
             </div>
 
-            <div className="space-y-4">
+            <div className="space-y-6">
               <div className="space-y-2">
                 <Label htmlFor="title">Project Title <span className="text-red-500">*</span></Label>
                 <Input 
                   id="title" 
-                  placeholder="e.g. Coastal Cleanup Initiative" 
+                  placeholder="e.g. Coastal Cleanup Initiative 2026" 
                   required 
                   className="focus-ring" 
                   value={title}
@@ -174,99 +165,92 @@ export default function CreateProjectPage() {
                 />
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <Label htmlFor="category">Category <span className="text-red-500">*</span></Label>
-                  <Select required onValueChange={setCategory} value={category}>
+                  <Label>Category <span className="text-red-500">*</span></Label>
+                  <Select value={category} onValueChange={setCategory} required>
                     <SelectTrigger className="focus-ring">
-                      <SelectValue placeholder="Select a category" />
+                      <SelectValue placeholder="Select category" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="environment">Environment</SelectItem>
-                      <SelectItem value="education">Education</SelectItem>
-                      <SelectItem value="health">Health</SelectItem>
-                      <SelectItem value="animal">Animal Welfare</SelectItem>
-                      <SelectItem value="community">Community</SelectItem>
+                      <SelectItem value="Environment">Environment</SelectItem>
+                      <SelectItem value="Education">Education</SelectItem>
+                      <SelectItem value="Health">Health</SelectItem>
+                      <SelectItem value="Animal Welfare">Animal Welfare</SelectItem>
+                      <SelectItem value="Community">Community</SelectItem>
+                      <SelectItem value="Professional Pro Bono">Professional Pro Bono</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
                 
                 <div className="space-y-2">
-                  <Label htmlFor="projectType">Project Type <span className="text-red-500">*</span></Label>
-                  <Select required onValueChange={setProjectType} value={projectType}>
+                  <Label>Compensation <span className="text-red-500">*</span></Label>
+                  <Select 
+                    value={isPaid ? "paid" : "unpaid"} 
+                    onValueChange={(val) => setIsPaid(val === "paid")} 
+                    required
+                  >
                     <SelectTrigger className="focus-ring">
-                      <SelectValue placeholder="Select a project type" />
+                      <SelectValue placeholder="Select type" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="social_volunteer">Social Volunteer (General)</SelectItem>
-                      <SelectItem value="disaster_relief">Disaster Relief</SelectItem>
-                      <SelectItem value="capacity_building">Capacity Building</SelectItem>
-                      <SelectItem value="event_staff">Event Staff</SelectItem>
-                      <SelectItem value="professional_pro_bono">Professional Pro Bono</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="location">Location <span className="text-red-500">*</span></Label>
-                  <Input 
-                    id="location" 
-                    placeholder="e.g. Kuta Beach, Bali" 
-                    required 
-                    className="focus-ring" 
-                    value={location}
-                    onChange={(e) => setLocation(e.target.value)}
-                  />
-                </div>
-                
-                <div className="space-y-2">
-                  <Label htmlFor="isPaid">Compensation <span className="text-red-500">*</span></Label>
-                  <Select required onValueChange={(val) => setIsPaid(val === "paid")} value={isPaid ? "paid" : "unpaid"}>
-                    <SelectTrigger className="focus-ring">
-                      <SelectValue placeholder="Is this project paid?" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="unpaid">Unpaid / Volunteer</SelectItem>
+                      <SelectItem value="unpaid">Volunteer (Unpaid)</SelectItem>
                       <SelectItem value="paid">Paid Opportunity</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
+              </div>
 
-                {isPaid && (
-                  <>
-                    <div className="space-y-2">
-                      <Label htmlFor="compensationType">Compensation Type <span className="text-red-500">*</span></Label>
-                      <Select required={isPaid} onValueChange={setCompensationType} value={compensationType}>
-                        <SelectTrigger className="focus-ring">
-                          <SelectValue placeholder="e.g. Stipend, Hourly" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="stipend">Stipend / Uang Saku</SelectItem>
-                          <SelectItem value="hourly">Hourly Rate</SelectItem>
-                          <SelectItem value="lump_sum">Lump Sum</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="compensationAmount">Amount <span className="text-red-500">*</span></Label>
-                      <Input 
-                        id="compensationAmount" 
-                        placeholder="e.g. Rp 50.000 / day" 
-                        required={isPaid} 
-                        className="focus-ring" 
-                        value={compensationAmount}
-                        onChange={(e) => setCompensationAmount(e.target.value)}
-                      />
-                    </div>
-                  </>
-                )}
+              {isPaid && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 rounded-xl border border-amber-500/20 bg-amber-500/5">
+                  <div className="space-y-2">
+                    <Label htmlFor="compensationType">Compensation Type <span className="text-red-500">*</span></Label>
+                    <Select 
+                      value={compensationType} 
+                      onValueChange={setCompensationType}
+                      required={isPaid}
+                    >
+                      <SelectTrigger className="focus-ring">
+                        <SelectValue placeholder="Select payment structure" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="stipend">Stipend / Uang Saku</SelectItem>
+                        <SelectItem value="hourly">Hourly Rate</SelectItem>
+                        <SelectItem value="lump_sum">Lump Sum</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="compensationAmount">Amount <span className="text-red-500">*</span></Label>
+                    <Input 
+                      id="compensationAmount" 
+                      placeholder="e.g. Rp 50.000 / day" 
+                      required={isPaid}
+                      className="focus-ring" 
+                      value={compensationAmount}
+                      onChange={(e) => setCompensationAmount(e.target.value)}
+                    />
+                  </div>
+                </div>
+              )}
+
+              <div className="space-y-2">
+                <Label htmlFor="location">Location <span className="text-red-500">*</span></Label>
+                <Input 
+                  id="location" 
+                  placeholder="e.g. Bali, Indonesia or Remote" 
+                  required 
+                  className="focus-ring" 
+                  value={location}
+                  onChange={(e) => setLocation(e.target.value)}
+                />
               </div>
 
               <div className="space-y-2">
                 <Label htmlFor="description">Project Description <span className="text-red-500">*</span></Label>
                 <Textarea 
                   id="description" 
-                  placeholder="Describe the project, its goals, and why volunteers should join..." 
+                  placeholder="Describe the project, its goals, and why volunteers should join..."
                   className="min-h-[150px] focus-ring"
                   required
                   value={description}
@@ -290,7 +274,7 @@ export default function CreateProjectPage() {
                 <Label htmlFor="requirements">Requirements (one per line)</Label>
                 <Textarea 
                   id="requirements" 
-                  placeholder="- Age 17 or above&#10;- Physically fit&#10;- Bring own water bottle" 
+                  placeholder="- Age 17 or above&#10;- Physically fit&#10;- Bring own water bottle"
                   className="min-h-[100px] focus-ring"
                   value={requirements}
                   onChange={(e) => setRequirements(e.target.value)}
@@ -301,7 +285,7 @@ export default function CreateProjectPage() {
                 <Label htmlFor="benefits">Benefits (one per line)</Label>
                 <Textarea 
                   id="benefits" 
-                  placeholder="- E-Certificate&#10;- Lunch provided&#10;- Merchandise" 
+                  placeholder="- E-Certificate&#10;- Lunch provided&#10;- Merchandise"
                   className="min-h-[100px] focus-ring"
                   value={benefits}
                   onChange={(e) => setBenefits(e.target.value)}
@@ -362,7 +346,7 @@ export default function CreateProjectPage() {
             <div className="relative border-2 border-dashed border-forest-border rounded-xl p-10 text-center hover:bg-[#181A15] hover:border-emerald-300 transition-colors cursor-pointer group overflow-hidden">
               <input 
                 type="file" 
-                accept="image/png, image/jpeg, image/webp" 
+                accept="image/png, image/jpeg, image/webp"
                 className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                 onChange={handleImageUpload}
               />
