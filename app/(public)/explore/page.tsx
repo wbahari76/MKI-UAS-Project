@@ -80,7 +80,7 @@ function ExplorePublicContent() {
 
   return (
     <div className="min-h-screen bg-[#181A15] pt-24 pb-20">
-      <div className="absolute top-0 inset-x-0 h-[400px] bg-gradient-to-b from-emerald-500/10 to-transparent -z-10" />
+      <div className="absolute top-0 inset-x-0 h-[400px] bg-gradient-to-b from-forest-accent/10 to-transparent -z-10" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
         {/* Header Section */}
@@ -99,7 +99,7 @@ function ExplorePublicContent() {
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#7A8072]" />
             <Input 
               placeholder="Search projects or organizations..." 
-              className="pl-12 h-14 rounded-full border-forest-border bg-forest-card focus-visible:ring-emerald-500 shadow-sm text-base"
+              className="pl-12 h-14 rounded-full border-forest-border bg-forest-card focus-visible:ring-forest-accent shadow-sm text-base"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
@@ -118,8 +118,8 @@ function ExplorePublicContent() {
               onClick={() => setActiveCategory(category)}
               className={`px-6 py-2.5 rounded-full whitespace-nowrap text-sm font-semibold transition-all shadow-sm ${
                 activeCategory === category 
-                  ? "bg-forest text-white" 
-                  : "bg-forest-card text-forest-muted border border-forest-border hover:border-slate-300 hover:bg-[#181A15]"
+                  ? "bg-forest text-forest-beige" 
+                  : "bg-forest-card text-forest-muted border border-forest-border hover:border-[#38402D] hover:bg-[#181A15]"
               }`}
             >
               {category}

@@ -49,7 +49,7 @@ export function EmptyState({
           </Button>
         )}
         {primaryAction && (
-          <Button className="bg-forest-accent text-white hover:bg-[#4A5D23] shadow-lg shadow-emerald-500/20" onClick={primaryAction.onClick}>
+          <Button className="bg-forest-accent text-forest-beige hover:bg-[#4A5D23] shadow-lg shadow-forest-accent/20" onClick={primaryAction.onClick}>
             {primaryAction.label}
           </Button>
         )}

@@ -94,10 +94,10 @@ export default function ProjectDetailsPage() {
         <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/20 to-transparent" />
 
         <div className="absolute bottom-0 left-0 w-full p-6 md:p-10">
-          <Badge className="mb-4 bg-forest-accent text-white border-0 hover:bg-[#4A5D23]">
+          <Badge className="mb-4 bg-forest-accent text-forest-beige border-0 hover:bg-[#4A5D23]">
             {PROJECT.category}
           </Badge>
-          <h1 className="text-3xl md:text-5xl font-bold text-white mb-2 leading-tight">
+          <h1 className="text-3xl md:text-5xl font-bold text-forest-beige mb-2 leading-tight">
             {PROJECT.title}
           </h1>
           <div className="flex items-center gap-4 text-emerald-50">
@@ -116,13 +116,13 @@ export default function ProjectDetailsPage() {
         {/* Action Buttons */}
         <div className="absolute top-6 right-6 flex items-center gap-3">
           <button
-            className="w-10 h-10 flex items-center justify-center rounded-full bg-forest-card/20 backdrop-blur-md text-white hover:bg-forest-card/30 transition-colors"
+            className="w-10 h-10 flex items-center justify-center rounded-full bg-forest-card/20 backdrop-blur-md text-forest-beige hover:bg-forest-card/30 transition-colors"
           >
             <Share2 className="w-5 h-5" />
           </button>
           <button
             onClick={() => setIsSaved(!isSaved)}
-            className="w-10 h-10 flex items-center justify-center rounded-full bg-forest-card/20 backdrop-blur-md text-white hover:bg-forest-card/30 transition-colors"
+            className="w-10 h-10 flex items-center justify-center rounded-full bg-forest-card/20 backdrop-blur-md text-forest-beige hover:bg-forest-card/30 transition-colors"
           >
             <Heart className={`w-5 h-5 ${isSaved ? 'fill-red-500 text-red-500' : ''}`} />
           </button>
@@ -234,7 +234,7 @@ export default function ProjectDetailsPage() {
                 ) : (
                   <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                     <DialogTrigger asChild>
-                      <Button className="w-full btn-primary h-12 text-base shadow-lg shadow-emerald-500/20">
+                      <Button className="w-full btn-primary h-12 text-base shadow-lg shadow-forest-accent/20">
                         Apply Now
                       </Button>
                     </DialogTrigger>
@@ -257,7 +257,7 @@ export default function ProjectDetailsPage() {
                         <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
                           Cancel
                         </Button>
-                        <Button className="bg-forest-accent hover:bg-[#4A5D23] text-white" onClick={handleApply} disabled={isApplying}>
+                        <Button className="bg-forest-accent hover:bg-[#4A5D23] text-forest-beige" onClick={handleApply} disabled={isApplying}>
                           {isApplying ? "Submitting..." : "Confirm Application"}
                         </Button>
                       </DialogFooter>

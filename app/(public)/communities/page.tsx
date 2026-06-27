@@ -110,7 +110,7 @@ export default function PublicCommunitiesPage() {
             <Button variant="outline" className="h-12 px-6 rounded-xl border-forest-border text-forest-muted hover:bg-[#181A15]">
               <Filter className="w-5 h-5 mr-2" /> Filters
             </Button>
-            <Button className="h-12 px-8 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-medium">
+            <Button className="h-12 px-8 rounded-xl bg-blue-600 hover:bg-blue-700 text-forest-beige font-medium">
               Search
             </Button>
           </div>
@@ -142,10 +142,10 @@ export default function PublicCommunitiesPage() {
                     {community.logo}
                   </div>
                   <div>
-                    <Badge className="bg-blue-500/80 hover:bg-blue-500 backdrop-blur-sm text-white border-0 font-medium mb-1">
+                    <Badge className="bg-blue-500/80 hover:bg-blue-500 backdrop-blur-sm text-forest-beige border-0 font-medium mb-1">
                       {community.focus}
                     </Badge>
-                    <h3 className="text-2xl font-bold text-white line-clamp-1">
+                    <h3 className="text-2xl font-bold text-forest-beige line-clamp-1">
                       {community.name}
                     </h3>
                   </div>
@@ -180,7 +180,7 @@ export default function PublicCommunitiesPage() {
                     </Button>
                   </Link>
                   <Link href="/register">
-                    <Button className="bg-blue-600 hover:bg-blue-700 text-white rounded-full px-6">
+                    <Button className="bg-blue-600 hover:bg-blue-700 text-forest-beige rounded-full px-6">
                       Join Community <ArrowRight className="w-4 h-4 ml-2" />
                     </Button>
                   </Link>
@@ -202,7 +202,7 @@ export default function PublicCommunitiesPage() {
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="mt-24 bg-blue-600 rounded-3xl p-8 md:p-12 text-center text-white relative overflow-hidden"
+          className="mt-24 bg-blue-600 rounded-3xl p-8 md:p-12 text-center text-forest-beige relative overflow-hidden"
         >
           <div className="absolute top-0 right-0 w-64 h-64 bg-forest-card/10 rounded-full blur-3xl -z-10 transform translate-x-1/2 -translate-y-1/2" />
           <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-400/20 rounded-full blur-3xl -z-10 transform -translate-x-1/2 translate-y-1/2" />

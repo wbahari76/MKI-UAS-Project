@@ -91,7 +91,7 @@ export default function OrganizationProjectsPage() {
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#7A8072]" />
               <Input 
                 placeholder="Search projects..." 
-                className="pl-9 bg-[#181A15] border-forest-border focus-visible:ring-emerald-500"
+                className="pl-9 bg-[#181A15] border-forest-border focus-visible:ring-forest-accent"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
@@ -111,7 +111,7 @@ export default function OrganizationProjectsPage() {
               </thead>
               <tbody>
                 {filteredProjects.map((project) => (
-                  <tr key={project.id} className="border-b border-slate-50 hover:bg-[#181A15]/50 transition-colors">
+                  <tr key={project.id} className="border-b border-forest-border hover:bg-[#181A15]/50 transition-colors">
                     <td className="px-6 py-4">
                       <div className="font-medium text-forest-beige">{project.title}</div>
                     </td>

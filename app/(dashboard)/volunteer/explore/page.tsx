@@ -117,7 +117,7 @@ function ExploreContent() {
             onClick={() => setActiveCategory(category)}
             className={`px-4 py-2 rounded-full whitespace-nowrap text-sm font-medium transition-colors ${
               activeCategory === category 
-                ? "bg-forest text-white" 
+                ? "bg-forest text-forest-beige" 
                 : "bg-forest-card text-forest-muted border border-forest-border hover:bg-[#181A15]"
             }`}
           >

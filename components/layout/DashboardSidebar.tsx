@@ -89,7 +89,7 @@ export default function DashboardSidebar({
       <div className="flex h-16 items-center justify-between px-4 border-b border-forest-border">
         {!isCollapsed && (
           <Link href="/" className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-forest-accent text-white font-bold text-lg">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-forest-accent text-forest-beige font-bold text-lg">
               J
             </div>
             <span className="font-bold text-xl tracking-tight text-forest-beige">
@@ -98,7 +98,7 @@ export default function DashboardSidebar({
           </Link>
         )}
         {isCollapsed && (
-          <div className="mx-auto flex h-8 w-8 items-center justify-center rounded-lg bg-forest-accent text-white font-bold text-lg">
+          <div className="mx-auto flex h-8 w-8 items-center justify-center rounded-lg bg-forest-accent text-forest-beige font-bold text-lg">
             J
           </div>
         )}

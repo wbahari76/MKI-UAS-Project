@@ -133,7 +133,7 @@ export default function ManageVolunteersPage() {
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#7A8072]" />
           <Input 
             placeholder="Search by name or skills..." 
-            className="pl-9 bg-forest-card border-forest-border focus-visible:ring-emerald-500"
+            className="pl-9 bg-forest-card border-forest-border focus-visible:ring-forest-accent"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
@@ -153,16 +153,16 @@ export default function ManageVolunteersPage() {
             transition={{ delay: index * 0.05 }}
           >
             <Card className="border-0 shadow-sm shadow-slate-200 hover:shadow-md transition-all group overflow-hidden h-full flex flex-col">
-              <div className="h-16 bg-[#21261B] relative border-b border-emerald-100">
+              <div className="h-16 bg-[#21261B] relative border-b border-[#2C3322]">
                 <div className="absolute -bottom-8 left-6">
-                  <Avatar className="w-16 h-16 border-4 border-white shadow-sm group-hover:scale-105 transition-transform cursor-pointer" onClick={() => handleViewProfile(vol)}>
-                    <AvatarFallback className="bg-slate-200 text-[#DFD5C2] text-lg font-bold">
+                  <Avatar className="w-16 h-16 border-4 border-forest-border shadow-sm group-hover:scale-105 transition-transform cursor-pointer" onClick={() => handleViewProfile(vol)}>
+                    <AvatarFallback className="bg-[#2A2F22] text-[#DFD5C2] text-lg font-bold">
                       {vol.name.charAt(0)}
                     </AvatarFallback>
                   </Avatar>
                 </div>
                 <div className="absolute right-4 top-4">
-                  <Badge className={vol.status === 'Active' ? 'bg-[#2C3322] text-[#829661] border-0 hover:bg-emerald-200' : 'bg-[#1E211A] text-forest-muted border-0 hover:bg-slate-200'}>
+                  <Badge className={vol.status === 'Active' ? 'bg-[#2C3322] text-[#829661] border-0 hover:bg-[#38402D]' : 'bg-[#1E211A] text-forest-muted border-0 hover:bg-[#2A2F22]'}>
                     {vol.status}
                   </Badge>
                 </div>
@@ -247,10 +247,10 @@ export default function ManageVolunteersPage() {
       {/* Volunteer Profile Dialog */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="sm:max-w-[550px] rounded-2xl p-0 border-0 shadow-2xl max-h-[90vh] overflow-y-auto overflow-x-hidden">
-          <div className="h-24 bg-gradient-to-r from-emerald-500 to-teal-600 relative">
+          <div className="h-24 bg-gradient-to-r from-forest-accent to-teal-600 relative">
             <div className="absolute -bottom-8 left-6">
-              <Avatar className="w-20 h-20 border-4 border-white shadow-md">
-                <AvatarFallback className="bg-slate-200 text-[#DFD5C2] text-xl font-bold">
+              <Avatar className="w-20 h-20 border-4 border-forest-border shadow-md">
+                <AvatarFallback className="bg-[#2A2F22] text-[#DFD5C2] text-xl font-bold">
                   {selectedApp?.name?.charAt(0)}
                 </AvatarFallback>
               </Avatar>
@@ -258,8 +258,8 @@ export default function ManageVolunteersPage() {
             {selectedApp && (
               <div className="absolute right-6 bottom-3">
                 <Badge className={
-                  selectedApp.status === 'Active' ? 'bg-forest-accent text-white border-0' :
-                  'bg-slate-500 text-white border-0'
+                  selectedApp.status === 'Active' ? 'bg-forest-accent text-forest-beige border-0' :
+                  'bg-[#181A15]0 text-forest-beige border-0'
                 }>
                   {selectedApp.status.toUpperCase()}
                 </Badge>
@@ -340,7 +340,7 @@ export default function ManageVolunteersPage() {
             <Button variant="outline" className="rounded-xl w-full sm:w-auto" onClick={() => setIsDialogOpen(false)}>
               Close
             </Button>
-            <Button className="rounded-xl w-full sm:w-auto bg-[#4A5D23] hover:bg-emerald-700 text-white" onClick={() => handleIssueClick(selectedApp)}>
+            <Button className="rounded-xl w-full sm:w-auto bg-[#4A5D23] hover:bg-[#38402D] text-forest-beige" onClick={() => handleIssueClick(selectedApp)}>
               Issue E-Certificate
             </Button>
           </DialogFooter>
@@ -368,7 +368,7 @@ export default function ManageVolunteersPage() {
               />
             </div>
             {uploadFile && (
-              <p className="text-sm text-[#829661] bg-[#21261B] p-3 rounded-lg border border-emerald-100 flex items-center">
+              <p className="text-sm text-[#829661] bg-[#21261B] p-3 rounded-lg border border-[#2C3322] flex items-center">
                 <Check className="w-4 h-4 mr-2" />
                 Selected: {uploadFile.name}
               </p>
@@ -380,7 +380,7 @@ export default function ManageVolunteersPage() {
               Cancel
             </Button>
             <Button 
-              className="bg-[#4A5D23] hover:bg-emerald-700 text-white" 
+              className="bg-[#4A5D23] hover:bg-[#38402D] text-forest-beige" 
               disabled={!uploadFile}
               onClick={() => {
                 toast.success(`Certificate "${uploadFile?.name}" sent to ${selectedApp?.name}!`);

@@ -193,7 +193,7 @@ export default function CreateProjectPage() {
                 <div className="absolute inset-0 w-full h-full z-0">
                   <img src={bannerImage} alt="Preview" className="w-full h-full object-cover" />
                   <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                    <p className="text-white font-medium flex items-center gap-2">
+                    <p className="text-forest-beige font-medium flex items-center gap-2">
                       <Upload className="w-5 h-5" /> Click to change image
                     </p>
                   </div>

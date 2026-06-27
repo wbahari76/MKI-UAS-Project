@@ -86,7 +86,7 @@ export default function OrganizationEventsPage() {
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#7A8072]" />
           <Input 
             placeholder="Search events..." 
-            className="pl-9 bg-[#181A15] border-0 focus-visible:ring-emerald-500"
+            className="pl-9 bg-[#181A15] border-0 focus-visible:ring-forest-accent"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
@@ -142,7 +142,7 @@ export default function OrganizationEventsPage() {
                     </div>
                     {event.status === 'completed' && (
                       <div className="absolute top-4 right-4">
-                        <Badge className="bg-forest-accent text-white border-0">
+                        <Badge className="bg-forest-accent text-forest-beige border-0">
                           <CheckCircle2 className="w-3 h-3 mr-1" />
                           Completed
                         </Badge>

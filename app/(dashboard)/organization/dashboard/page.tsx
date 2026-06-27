@@ -269,7 +269,7 @@ export default function OrganizationDashboard() {
               {pendingApps.length > 0 ? (
                 <Badge className="bg-amber-500 hover:bg-amber-600">{pendingApps.length} Pending</Badge>
               ) : (
-                <Badge className="bg-slate-200 text-forest-muted hover:bg-slate-300">0 Pending</Badge>
+                <Badge className="bg-[#2A2F22] text-forest-muted hover:bg-[#38402D]">0 Pending</Badge>
               )}
             </CardHeader>
             <CardContent className="pt-4 px-0">
@@ -313,7 +313,7 @@ export default function OrganizationDashboard() {
                   { title: "Milestone Reached", time: "2 days ago", desc: "100 total volunteers joined!" }
                 ].map((item, i) => (
                   <div key={i} className="relative pl-6">
-                    <span className="absolute -left-[9px] top-1 w-4 h-4 rounded-full border-4 border-white bg-blue-500" />
+                    <span className="absolute -left-[9px] top-1 w-4 h-4 rounded-full border-4 border-forest-border bg-blue-500" />
                     <h5 className="font-semibold text-forest-beige text-sm">{item.title}</h5>
                     <p className="text-forest-muted text-xs mb-1">{item.time}</p>
                     <p className="text-forest-muted text-sm">{item.desc}</p>
@@ -352,19 +352,19 @@ export default function OrganizationDashboard() {
               <div className="space-y-3">
                 <div className="flex items-center gap-3 text-sm text-forest-muted">
                   <FolderKanban className="w-4 h-4 text-[#7A8072]" />
-                  <span className="font-medium text-slate-950">Project:</span> {selectedApp.project}
+                  <span className="font-medium text-forest-beige">Project:</span> {selectedApp.project}
                 </div>
                 <div className="flex items-center gap-3 text-sm text-forest-muted">
                   <Mail className="w-4 h-4 text-[#7A8072]" />
-                  <span className="font-medium text-slate-950">Email:</span> {selectedApp.email}
+                  <span className="font-medium text-forest-beige">Email:</span> {selectedApp.email}
                 </div>
                 <div className="flex items-center gap-3 text-sm text-forest-muted">
                   <Phone className="w-4 h-4 text-[#7A8072]" />
-                  <span className="font-medium text-slate-950">Phone:</span> {selectedApp.phone}
+                  <span className="font-medium text-forest-beige">Phone:</span> {selectedApp.phone}
                 </div>
                 <div className="flex items-center gap-3 text-sm text-forest-muted">
                   <Clock className="w-4 h-4 text-[#7A8072]" />
-                  <span className="font-medium text-slate-950">Applied:</span> {selectedApp.time} ({selectedApp.date})
+                  <span className="font-medium text-forest-beige">Applied:</span> {selectedApp.time} ({selectedApp.date})
                 </div>
               </div>
 
@@ -388,7 +388,7 @@ export default function OrganizationDashboard() {
             </Button>
             <Button
               onClick={() => handleApprove(selectedApp?.id)}
-              className="bg-[#4A5D23] hover:bg-emerald-700 text-white"
+              className="bg-[#4A5D23] hover:bg-[#38402D] text-forest-beige"
             >
               Approve
             </Button>

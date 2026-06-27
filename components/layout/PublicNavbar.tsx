@@ -117,7 +117,7 @@ export function PublicNavbar() {
                             whileHover={{ rotate: 10, scale: 1.05 }}
                             className="w-10 h-10 bg-forest-accent rounded-xl flex items-center justify-center shadow-lg shadow-forest-accent/25"
                         >
-                            <HandHelping className="w-5 h-5 text-white" />
+                            <HandHelping className="w-5 h-5 text-forest-beige" />
                         </motion.div>
                         <span className="font-bold text-xl text-forest-beige">
                             JALA<span className="text-forest-accent">VIVE</span>
@@ -159,7 +159,7 @@ export function PublicNavbar() {
                                 {/* Notifications */}
                                 <Button variant="ghost" size="sm" onClick={handleNotification} className="relative text-forest-muted hover:text-forest-beige">
                                     <Bell className="w-4 h-4" />
-                                    <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
+                                    <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-red-500 text-forest-beige text-xs rounded-full flex items-center justify-center">
                                         3
                                     </span>
                                 </Button>
@@ -168,7 +168,7 @@ export function PublicNavbar() {
                                 <Link href={getMessagesLink()}>
                                     <Button variant="ghost" size="sm" className="relative text-forest-muted hover:text-forest-beige">
                                         <MessageCircle className="w-4 h-4" />
-                                        <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-forest-accent text-white text-xs rounded-full flex items-center justify-center">
+                                        <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-forest-accent text-forest-beige text-xs rounded-full flex items-center justify-center">
                                             2
                                         </span>
                                     </Button>
@@ -178,7 +178,7 @@ export function PublicNavbar() {
                                 <DropdownMenu>
                                     <DropdownMenuTrigger asChild>
                                         <Button variant="ghost" className="flex items-center gap-2 pl-2 pr-3 hover:bg-[#181A15]">
-                                            <Avatar className="w-8 h-8 border-2 border-emerald-100">
+                                            <Avatar className="w-8 h-8 border-2 border-[#2C3322]">
                                                 <AvatarImage src={profile?.avatar_url || ''} />
                                                 <AvatarFallback className="bg-[#2C3322] text-[#829661] text-sm font-medium">
                                                     {profile?.full_name?.charAt(0) || 'U'}
@@ -218,7 +218,7 @@ export function PublicNavbar() {
                                     </Button>
                                 </Link>
                                 <Link href="/register">
-                                    <Button className="bg-forest-accent hover:bg-[#4A5D23] text-white shadow-lg shadow-emerald-500/25">
+                                    <Button className="bg-forest-accent hover:bg-[#4A5D23] text-forest-beige shadow-lg shadow-forest-accent/25">
                                         Get Started
                                     </Button>
                                 </Link>

@@ -109,7 +109,7 @@ export default function OrganizationMessagesPage() {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#7A8072]" />
             <Input 
               placeholder="Search conversations..." 
-              className="pl-9 h-10 bg-[#181A15] border-0 focus-visible:ring-emerald-500"
+              className="pl-9 h-10 bg-[#181A15] border-0 focus-visible:ring-forest-accent"
             />
           </div>
         </div>
@@ -123,7 +123,7 @@ export default function OrganizationMessagesPage() {
               <div 
                 key={contact.id}
                 onClick={() => setActiveContact(contact)}
-                className={`p-4 border-b border-slate-50 cursor-pointer transition-colors flex items-start gap-3 ${
+                className={`p-4 border-b border-forest-border cursor-pointer transition-colors flex items-start gap-3 ${
                   activeContact.id === contact.id ? 'bg-forest-card border-l-2 border-l-emerald-500 shadow-sm' : 'hover:bg-[#1E211A] border-l-2 border-l-transparent'
                 }`}
               >
@@ -134,7 +134,7 @@ export default function OrganizationMessagesPage() {
                     </AvatarFallback>
                   </Avatar>
                   {contact.isOnline && (
-                    <span className="absolute bottom-0 right-0 w-3 h-3 bg-forest-accent border-2 border-white rounded-full" />
+                    <span className="absolute bottom-0 right-0 w-3 h-3 bg-forest-accent border-2 border-forest-border rounded-full" />
                   )}
                 </div>
                 <div className="flex-1 min-w-0">
@@ -145,7 +145,7 @@ export default function OrganizationMessagesPage() {
                   <div className="flex justify-between items-center">
                     <p className="text-sm text-forest-muted truncate">{lastMessage?.text || "No messages yet."}</p>
                     {contact.unread > 0 && contact.id !== activeContact.id && (
-                      <span className="w-5 h-5 flex items-center justify-center bg-forest-accent text-white text-[10px] font-bold rounded-full shrink-0">
+                      <span className="w-5 h-5 flex items-center justify-center bg-forest-accent text-forest-beige text-[10px] font-bold rounded-full shrink-0">
                         {contact.unread}
                       </span>
                     )}
@@ -199,14 +199,14 @@ export default function OrganizationMessagesPage() {
               <div className="flex items-end gap-2 max-w-[80%]">
                 {!msg.isMe && (
                   <Avatar className="w-8 h-8 shrink-0 mb-1">
-                    <AvatarFallback className="bg-slate-200 text-forest-muted text-xs">
+                    <AvatarFallback className="bg-[#2A2F22] text-forest-muted text-xs">
                       {msg.sender.charAt(0)}
                     </AvatarFallback>
                   </Avatar>
                 )}
                 <div className={`px-4 py-3 rounded-2xl ${
                   msg.isMe 
-                    ? 'bg-forest-accent text-white rounded-br-sm' 
+                    ? 'bg-forest-accent text-forest-beige rounded-br-sm' 
                     : 'bg-forest-card border border-forest-border text-forest-beige rounded-bl-sm shadow-sm shadow-slate-100'
                 }`}>
                   <p className="text-sm leading-relaxed">{msg.text}</p>
@@ -231,11 +231,11 @@ export default function OrganizationMessagesPage() {
               value={newMessage}
               onChange={(e) => setNewMessage(e.target.value)}
               placeholder="Type your message..." 
-              className="flex-1 h-12 bg-[#181A15] border-0 focus-visible:ring-emerald-500 rounded-full px-6"
+              className="flex-1 h-12 bg-[#181A15] border-0 focus-visible:ring-forest-accent rounded-full px-6"
             />
             <Button 
               type="submit" 
-              className="w-12 h-12 rounded-full bg-forest-accent hover:bg-[#4A5D23] text-white shrink-0 shadow-sm"
+              className="w-12 h-12 rounded-full bg-forest-accent hover:bg-[#4A5D23] text-forest-beige shrink-0 shadow-sm"
               disabled={!newMessage.trim()}
             >
               <Send className="w-5 h-5" />

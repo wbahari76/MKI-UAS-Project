@@ -96,7 +96,7 @@ function HeroSection() {
                         className="flex flex-col sm:flex-row items-center justify-center gap-4"
                     >
                         <Link href="/register?role=volunteer">
-                            <Button size="lg" className="bg-forest-accent hover:bg-[#4A5D23] text-white shadow-lg shadow-emerald-500/25 h-14 px-8 text-base rounded-xl group">
+                            <Button size="lg" className="bg-forest-accent hover:bg-[#4A5D23] text-forest-beige shadow-lg shadow-forest-accent/25 h-14 px-8 text-base rounded-xl group">
                                 <HandHelping className="w-5 h-5 mr-2" />
                                 Become a Volunteer
                                 <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
@@ -252,7 +252,7 @@ function FeaturedProjectsSection() {
                                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-                                <Badge className="absolute top-3 left-3 bg-forest-accent text-white">
+                                <Badge className="absolute top-3 left-3 bg-forest-accent text-forest-beige">
                                     {project.category}
                                 </Badge>
                             </div>
@@ -448,7 +448,7 @@ function HowItWorksSection() {
                                             <div className="w-16 h-16 rounded-2xl bg-[#2C3322] text-[#829661] flex items-center justify-center mx-auto mb-4">
                                                 <Icon className="w-8 h-8" />
                                             </div>
-                                            <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-7 h-7 bg-forest-accent rounded-full flex items-center justify-center text-white font-bold text-sm shadow-lg shadow-forest-accent/25">
+                                            <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-7 h-7 bg-forest-accent rounded-full flex items-center justify-center text-forest-beige font-bold text-sm shadow-lg shadow-forest-accent/25">
                                                 {step.step}
                                             </div>
                                         </div>
@@ -634,7 +634,7 @@ function CTASection() {
                     viewport={{ once: true }}
                     className="text-center max-w-3xl mx-auto"
                 >
-                    <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+                    <h2 className="text-3xl md:text-4xl font-bold text-forest-beige mb-4">
                         Ready to Make an Impact?
                     </h2>
                     <p className="text-forest-muted text-lg mb-8">
@@ -648,7 +648,7 @@ function CTASection() {
                             </Button>
                         </Link>
                         <Link href="/explore">
-                            <Button size="lg" variant="outline" className="h-14 px-8 text-base rounded-xl border-2 border-white text-white hover:bg-forest-card/10">
+                            <Button size="lg" variant="outline" className="h-14 px-8 text-base rounded-xl border-2 border-forest-border text-forest-beige hover:bg-forest-card/10">
                                 Browse Projects
                             </Button>
                         </Link>

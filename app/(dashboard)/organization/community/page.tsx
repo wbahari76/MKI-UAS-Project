@@ -221,7 +221,7 @@ export default function OrganizationCommunityPage() {
                     </div>
                   )}
                 </CardContent>
-                <CardFooter className="p-4 sm:p-6 pt-0 border-t border-slate-50 mt-4 flex items-center justify-between">
+                <CardFooter className="p-4 sm:p-6 pt-0 border-t border-forest-border mt-4 flex items-center justify-between">
                   <div className="flex items-center gap-1 sm:gap-4 mt-4">
                     <Button 
                       variant="ghost" 

@@ -52,7 +52,7 @@ export default function AdminDashboardPage() {
         {/* Broadcast System */}
         <div className="lg:col-span-2">
           <Card className="border-0 shadow-sm shadow-slate-200">
-            <CardHeader className="border-b border-slate-50 bg-forest text-white rounded-t-xl">
+            <CardHeader className="border-b border-forest-border bg-forest text-forest-beige rounded-t-xl">
               <CardTitle className="flex items-center gap-2 text-lg">
                 <Megaphone className="w-5 h-5 text-emerald-400" />
                 Broadcast Announcement
@@ -65,14 +65,14 @@ export default function AdminDashboardPage() {
                 </p>
                 <Textarea 
                   placeholder="Type your announcement here..."
-                  className="min-h-[120px] bg-[#181A15] border-0 focus-visible:ring-slate-900"
+                  className="min-h-[120px] bg-[#181A15] border-0 focus-visible:ring-forest-border"
                   value={announcement}
                   onChange={(e) => setAnnouncement(e.target.value)}
                 />
                 <div className="flex justify-end">
                   <Button 
                     type="submit" 
-                    className="bg-forest text-white hover:bg-forest-card px-6"
+                    className="bg-forest text-forest-beige hover:bg-forest-card px-6"
                     disabled={!announcement.trim() || isSending}
                   >
                     {isSending ? "Broadcasting..." : (
@@ -91,7 +91,7 @@ export default function AdminDashboardPage() {
         {/* System Logs */}
         <div className="lg:col-span-1">
           <Card className="border-0 shadow-sm shadow-slate-200 h-full">
-            <CardHeader className="border-b border-slate-50">
+            <CardHeader className="border-b border-forest-border">
               <CardTitle className="text-lg flex items-center gap-2">
                 <Server className="w-5 h-5 text-[#7A8072]" />
                 Live Activity

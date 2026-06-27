@@ -74,7 +74,7 @@ export default function PublicEventsPage() {
     <div className="min-h-screen bg-[#181A15] pt-24 pb-20">
       
       {/* Background Decor */}
-      <div className="absolute top-0 inset-x-0 h-[500px] bg-gradient-to-b from-emerald-500/10 to-transparent -z-10" />
+      <div className="absolute top-0 inset-x-0 h-[500px] bg-gradient-to-b from-forest-accent/10 to-transparent -z-10" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header Section */}
@@ -103,14 +103,14 @@ export default function PublicEventsPage() {
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#7A8072]" />
             <Input 
               placeholder="Search for events, organizations, or causes..." 
-              className="pl-12 h-12 bg-[#181A15] border-0 focus-visible:ring-emerald-500 rounded-xl text-base"
+              className="pl-12 h-12 bg-[#181A15] border-0 focus-visible:ring-forest-accent rounded-xl text-base"
             />
           </div>
           <div className="flex gap-4">
             <Button variant="outline" className="h-12 px-6 rounded-xl border-forest-border text-forest-muted hover:bg-[#181A15]">
               <Filter className="w-5 h-5 mr-2" /> Filters
             </Button>
-            <Button className="h-12 px-8 rounded-xl bg-[#4A5D23] hover:bg-emerald-700 text-white font-medium">
+            <Button className="h-12 px-8 rounded-xl bg-[#4A5D23] hover:bg-[#38402D] text-forest-beige font-medium">
               Search
             </Button>
           </div>

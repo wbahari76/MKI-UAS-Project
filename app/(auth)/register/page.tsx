@@ -107,7 +107,7 @@ export default function RegisterPage() {
                                                 : 'border-forest-border hover:border-emerald-300 hover:bg-[#181A15]'
                                             }`}
                                     >
-                                        <div className={`p-2 rounded-lg ${role === 'volunteer' ? 'bg-forest-accent text-white' : 'bg-[#1E211A] text-forest-muted'}`}>
+                                        <div className={`p-2 rounded-lg ${role === 'volunteer' ? 'bg-forest-accent text-forest-beige' : 'bg-[#1E211A] text-forest-muted'}`}>
                                             <HandHelping className="w-6 h-6" />
                                         </div>
                                         <div>
@@ -123,7 +123,7 @@ export default function RegisterPage() {
                                                 : 'border-forest-border hover:border-blue-300 hover:bg-[#181A15]'
                                             }`}
                                     >
-                                        <div className={`p-2 rounded-lg ${role === 'organization' ? 'bg-blue-500 text-white' : 'bg-[#1E211A] text-forest-muted'}`}>
+                                        <div className={`p-2 rounded-lg ${role === 'organization' ? 'bg-blue-500 text-forest-beige' : 'bg-[#1E211A] text-forest-muted'}`}>
                                             <Building2 className="w-6 h-6" />
                                         </div>
                                         <div>

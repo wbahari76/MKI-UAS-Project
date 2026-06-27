@@ -171,14 +171,14 @@ export default function VolunteerDashboard() {
           className="space-y-6"
         >
           {/* Upcoming Event */}
-          <Card className="border-0 shadow-sm shadow-slate-200 bg-gradient-to-br from-emerald-500 to-emerald-600 text-white">
+          <Card className="border-0 shadow-sm shadow-slate-200 bg-gradient-to-br from-forest-accent to-[#4A5D23] text-forest-beige">
             <CardHeader className="pb-2">
               <div className="flex items-center justify-between">
                 <CardTitle className="text-lg font-semibold flex items-center gap-2">
                   <CalendarDays className="w-5 h-5 text-emerald-100" />
                   Next Event
                 </CardTitle>
-                <Badge className="bg-forest-card/20 hover:bg-forest-card/30 border-0 text-white">Tomorrow</Badge>
+                <Badge className="bg-forest-card/20 hover:bg-forest-card/30 border-0 text-forest-beige">Tomorrow</Badge>
               </div>
             </CardHeader>
             <CardContent>
@@ -208,7 +208,7 @@ export default function VolunteerDashboard() {
                   { title: "Joined Platform", time: "3 days ago", desc: "Welcome to JALA VIVE." }
                 ].map((item, i) => (
                   <div key={i} className="relative pl-6">
-                    <span className="absolute -left-[9px] top-1 w-4 h-4 rounded-full border-4 border-white bg-forest-accent" />
+                    <span className="absolute -left-[9px] top-1 w-4 h-4 rounded-full border-4 border-forest-border bg-forest-accent" />
                     <h5 className="font-semibold text-forest-beige text-sm">{item.title}</h5>
                     <p className="text-forest-muted text-xs mb-1">{item.time}</p>
                     <p className="text-forest-muted text-sm">{item.desc}</p>

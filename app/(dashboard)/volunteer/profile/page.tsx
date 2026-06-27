@@ -77,18 +77,18 @@ export default function ProfilePage() {
           <Card className="border-0 shadow-sm shadow-slate-200">
             <CardContent className="p-6 flex flex-col items-center text-center">
               <div className="relative mb-4 group cursor-pointer">
-                <div className="w-24 h-24 rounded-full bg-[#2C3322] flex items-center justify-center border-4 border-white shadow-lg overflow-hidden text-[#829661] font-bold text-3xl tracking-wider">
+                <div className="w-24 h-24 rounded-full bg-[#2C3322] flex items-center justify-center border-4 border-forest-border shadow-lg overflow-hidden text-[#829661] font-bold text-3xl tracking-wider">
                   {userInitials}
                 </div>
                 <div className="absolute inset-0 bg-black/40 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                  <Camera className="w-6 h-6 text-white" />
+                  <Camera className="w-6 h-6 text-forest-beige" />
                 </div>
               </div>
               <h2 className="text-xl font-bold text-forest-beige">
                 {userName}
               </h2>
               <p className="text-sm text-forest-muted mb-4">{user?.email || "No email"}</p>
-              <Badge className="bg-forest-accent text-white border-0">
+              <Badge className="bg-forest-accent text-forest-beige border-0">
                 Active Volunteer
               </Badge>
             </CardContent>

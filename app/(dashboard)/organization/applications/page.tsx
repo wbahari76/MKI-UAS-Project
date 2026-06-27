@@ -136,7 +136,7 @@ export default function OrganizationApplicationsPage() {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "approved":
-        return <Badge className="bg-[#2C3322] text-[#829661] hover:bg-emerald-200 border-0">Approved</Badge>;
+        return <Badge className="bg-[#2C3322] text-[#829661] hover:bg-[#38402D] border-0">Approved</Badge>;
       case "pending":
         return <Badge className="bg-amber-100 text-amber-700 hover:bg-amber-200 border-0">Pending</Badge>;
       case "rejected":
@@ -199,11 +199,11 @@ export default function OrganizationApplicationsPage() {
               </thead>
               <tbody>
                 {filteredApps.map((app) => (
-                  <tr key={app.id} className="border-b border-slate-50 hover:bg-[#181A15]/50 transition-colors">
+                  <tr key={app.id} className="border-b border-forest-border hover:bg-[#181A15]/50 transition-colors">
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3 cursor-pointer group/name" onClick={() => handleViewProfile(app)}>
                         <Avatar className="w-8 h-8 group-hover/name:scale-105 transition-transform">
-                          <AvatarFallback className="bg-slate-200 text-forest-muted text-xs">
+                          <AvatarFallback className="bg-[#2A2F22] text-forest-muted text-xs">
                             {app.name.charAt(0)}
                           </AvatarFallback>
                         </Avatar>
@@ -278,8 +278,8 @@ export default function OrganizationApplicationsPage() {
         <DialogContent className="sm:max-w-[550px] rounded-2xl overflow-hidden p-0 border-0 shadow-2xl">
           <div className="h-24 bg-gradient-to-r from-blue-500 to-indigo-600 relative">
             <div className="absolute -bottom-8 left-6">
-              <Avatar className="w-20 h-20 border-4 border-white shadow-md">
-                <AvatarFallback className="bg-slate-200 text-[#DFD5C2] text-xl font-bold">
+              <Avatar className="w-20 h-20 border-4 border-forest-border shadow-md">
+                <AvatarFallback className="bg-[#2A2F22] text-[#DFD5C2] text-xl font-bold">
                   {selectedApp?.name?.charAt(0)}
                 </AvatarFallback>
               </Avatar>
@@ -287,9 +287,9 @@ export default function OrganizationApplicationsPage() {
             {selectedApp && (
               <div className="absolute right-6 bottom-3">
                 <Badge className={
-                  selectedApp.status === 'approved' ? 'bg-forest-accent text-white border-0' :
-                  selectedApp.status === 'rejected' ? 'bg-red-500 text-white border-0' :
-                  'bg-amber-500 text-white border-0'
+                  selectedApp.status === 'approved' ? 'bg-forest-accent text-forest-beige border-0' :
+                  selectedApp.status === 'rejected' ? 'bg-red-500 text-forest-beige border-0' :
+                  'bg-amber-500 text-forest-beige border-0'
                 }>
                   {selectedApp.status.toUpperCase()}
                 </Badge>
@@ -383,7 +383,7 @@ export default function OrganizationApplicationsPage() {
                   Reject
                 </Button>
                 <Button 
-                  className="bg-[#4A5D23] hover:bg-emerald-700 text-white rounded-xl"
+                  className="bg-[#4A5D23] hover:bg-[#38402D] text-forest-beige rounded-xl"
                   onClick={() => {
                     handleStatusChange(selectedApp.id, 'approved');
                     setIsDialogOpen(false);

@@ -70,8 +70,8 @@ export default function AboutPage() {
     <div className="min-h-screen bg-[#181A15]">
       {/* Hero Section */}
       <section className="relative pt-32 pb-20 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-blue-500/5 -z-10" />
-        <div className="absolute top-0 right-0 -translate-y-12 translate-x-1/3 w-96 h-96 bg-emerald-400/20 rounded-full blur-3xl -z-10" />
+        <div className="absolute inset-0 bg-gradient-to-br from-forest-accent/5 to-blue-500/5 -z-10" />
+        <div className="absolute top-0 right-0 -translate-y-12 translate-x-1/3 w-96 h-96 bg-forest-accent/20 rounded-full blur-3xl -z-10" />
         <div className="absolute bottom-0 left-0 translate-y-1/3 -translate-x-1/3 w-96 h-96 bg-blue-400/20 rounded-full blur-3xl -z-10" />
         
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -98,7 +98,7 @@ export default function AboutPage() {
             
             <motion.div variants={fadeIn} className="flex flex-col sm:flex-row justify-center gap-4 pt-4">
               <Link href="/register">
-                <Button className="w-full sm:w-auto px-8 h-12 rounded-full bg-[#4A5D23] hover:bg-emerald-700 text-white text-base shadow-lg shadow-emerald-500/25 transition-all">
+                <Button className="w-full sm:w-auto px-8 h-12 rounded-full bg-[#4A5D23] hover:bg-[#38402D] text-forest-beige text-base shadow-lg shadow-forest-accent/25 transition-all">
                   Join as Volunteer
                 </Button>
               </Link>
@@ -150,7 +150,7 @@ export default function AboutPage() {
               transition={{ duration: 0.6 }}
               className="relative"
             >
-              <div className="absolute inset-0 bg-gradient-to-tr from-emerald-500 to-teal-400 rounded-3xl transform rotate-3 scale-[1.02] opacity-20" />
+              <div className="absolute inset-0 bg-gradient-to-tr from-forest-accent to-teal-400 rounded-3xl transform rotate-3 scale-[1.02] opacity-20" />
               <img 
                 src="https://images.unsplash.com/photo-1593113563332-e14b58e7279b?auto=format&fit=crop&w=1200&q=80" 
                 alt="Volunteers working together"
@@ -267,15 +267,15 @@ export default function AboutPage() {
         <div className="absolute inset-0 bg-gradient-to-br from-emerald-600/20 to-transparent" />
         
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8">
-          <h2 className="text-3xl md:text-5xl font-bold text-white leading-tight">
+          <h2 className="text-3xl md:text-5xl font-bold text-forest-beige leading-tight">
             Ready to make a difference?
           </h2>
-          <p className="text-lg text-slate-300">
+          <p className="text-lg text-[#EAE1D1]">
             Join thousands of volunteers and organizations already working together on JALA VIVE.
           </p>
           <div className="pt-4 flex justify-center">
             <Link href="/register">
-              <Button className="h-14 px-8 rounded-full bg-forest-accent hover:bg-emerald-400 text-white text-lg font-semibold shadow-lg shadow-emerald-500/20 transition-all gap-2">
+              <Button className="h-14 px-8 rounded-full bg-forest-accent hover:bg-forest-accent text-forest-beige text-lg font-semibold shadow-lg shadow-forest-accent/20 transition-all gap-2">
                 Get Started Today <ArrowRight size={20} />
               </Button>
             </Link>

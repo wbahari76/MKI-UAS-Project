@@ -56,7 +56,7 @@ export default function DashboardHeader({
           <Menu size={24} />
         </button>
 
-        <form onSubmit={handleSearch} className="hidden sm:flex items-center gap-2 rounded-full border border-forest-border bg-[#181A15] px-3 py-1.5 focus-within:ring-2 focus-within:ring-emerald-500/20 focus-within:border-forest-accent transition-all w-64 lg:w-80">
+        <form onSubmit={handleSearch} className="hidden sm:flex items-center gap-2 rounded-full border border-forest-border bg-[#181A15] px-3 py-1.5 focus-within:ring-2 focus-within:ring-forest-accent/20 focus-within:border-forest-accent transition-all w-64 lg:w-80">
           <Search size={18} className="text-[#7A8072]" />
           <input
             type="text"

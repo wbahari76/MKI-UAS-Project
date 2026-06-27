@@ -27,7 +27,7 @@ export default function ImpactPage() {
       
       {/* Background Decor */}
       <div className="absolute top-0 inset-x-0 h-96 bg-gradient-to-b from-blue-500/10 to-transparent -z-10" />
-      <div className="absolute top-20 left-10 w-72 h-72 bg-emerald-400/20 rounded-full blur-3xl -z-10" />
+      <div className="absolute top-20 left-10 w-72 h-72 bg-forest-accent/20 rounded-full blur-3xl -z-10" />
       <div className="absolute top-40 right-10 w-96 h-96 bg-blue-400/20 rounded-full blur-3xl -z-10" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -56,7 +56,7 @@ export default function ImpactPage() {
         >
           {[
             { label: "Total Volunteers", value: "24,500+", icon: Users, color: "text-blue-600", bg: "bg-blue-100", border: "border-blue-100" },
-            { label: "Projects Completed", value: "1,240", icon: Award, color: "text-[#829661]", bg: "bg-[#2C3322]", border: "border-emerald-100" },
+            { label: "Projects Completed", value: "1,240", icon: Award, color: "text-[#829661]", bg: "bg-[#2C3322]", border: "border-[#2C3322]" },
             { label: "Communities Served", value: "350+", icon: Globe, color: "text-amber-600", bg: "bg-amber-100", border: "border-amber-100" },
             { label: "Total Impact Hours", value: "1.2M", icon: Activity, color: "text-purple-600", bg: "bg-purple-100", border: "border-purple-100" }
           ].map((stat, i) => (
@@ -157,7 +157,7 @@ export default function ImpactPage() {
           </p>
           <div className="pt-4">
             <Link href="/register">
-              <Button className="h-14 px-8 rounded-full bg-blue-600 hover:bg-blue-700 text-white text-lg font-semibold shadow-lg shadow-blue-500/20 transition-all">
+              <Button className="h-14 px-8 rounded-full bg-blue-600 hover:bg-blue-700 text-forest-beige text-lg font-semibold shadow-lg shadow-blue-500/20 transition-all">
                 Start Volunteering Today
               </Button>
             </Link>
