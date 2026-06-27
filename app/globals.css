@@ -6,43 +6,42 @@
 
 @layer base {
     :root {
-        /* JALA VIVE Design System */
-        --primary: 160 84% 39%;
-        --primary-hover: 160 84% 34%;
-        --primary-light: 160 60% 52%;
-        --primary-dark: 160 84% 25%;
+        /* JALA VIVE Design System - Dark Forest Theme */
+        --primary: 84 22% 35%;
+        --primary-foreground: 0 0% 100%;
+        --primary-hover: 84 22% 30%;
 
-        --secondary: 217 91% 60%;
-        --secondary-hover: 218 96% 53%;
-        --secondary-light: 217 91% 72%;
-        --secondary-dark: 217 91% 45%;
+        --secondary: 83 16% 16%;
+        --secondary-foreground: 38 31% 87%;
 
-        --accent: 38 92% 50%;
-        --accent-hover: 32 95% 44%;
+        --accent: 83 16% 16%;
+        --accent-foreground: 38 31% 87%;
 
         --success: 142 76% 36%;
         --warning: 38 92% 50%;
         --danger: 0 84% 60%;
         --info: 217 91% 60%;
 
-        --background: 0 0% 100%;
-        --background-secondary: 210 40% 98%;
-        --foreground: 222 47% 11%;
+        --background: 80 11% 8%;
+        --foreground: 38 31% 87%;
 
-        --card: 0 0% 100%;
-        --card-foreground: 222 47% 11%;
-        --card-hover: 210 40% 96%;
+        --card: 82 15% 10%;
+        --card-foreground: 38 31% 87%;
+        --card-hover: 83 16% 14%;
 
-        --popover: 0 0% 100%;
-        --popover-foreground: 222 47% 11%;
+        --popover: 82 15% 10%;
+        --popover-foreground: 38 31% 87%;
 
-        --text-primary: 222 47% 11%;
-        --text-secondary: 215 16% 47%;
-        --text-muted: 215 20% 73%;
+        --text-primary: 38 31% 87%;
+        --text-secondary: 87 7% 64%;
+        --text-muted: 87 7% 64%;
 
-        --border: 214 32% 91%;
-        --input: 214 32% 91%;
-        --ring: 160 84% 39%;
+        --muted: 83 16% 16%;
+        --muted-foreground: 87 7% 64%;
+
+        --border: 83 16% 16%;
+        --input: 83 16% 16%;
+        --ring: 84 22% 35%;
 
         --radius: 0.75rem;
     }

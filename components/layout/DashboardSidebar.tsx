@@ -141,7 +141,7 @@ export default function DashboardSidebar({
 
       <div className="p-4 border-t border-forest-border">
         <button
-          className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-red-600 transition-colors hover:bg-red-50 ${
+          className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-red-500 transition-colors hover:bg-red-500/10 ${
             isCollapsed ? "justify-center" : ""
           }`}
           title={isCollapsed ? "Logout" : undefined}

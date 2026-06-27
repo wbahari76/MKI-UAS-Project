@@ -65,7 +65,7 @@ export default function DashboardHeader({
             placeholder="Search projects, communities..."
             className="w-full bg-transparent text-sm text-forest-beige outline-none placeholder:text-[#7A8072]"
           />
-          <div className="hidden lg:flex items-center gap-1 rounded bg-slate-200 px-1.5 text-[10px] font-medium text-forest-muted">
+          <div className="hidden lg:flex items-center gap-1 rounded bg-[#2A2F22] px-1.5 text-[10px] font-medium text-forest-muted">
             <span>⌘</span>
             <span>K</span>
           </div>
@@ -76,14 +76,14 @@ export default function DashboardHeader({
         <Link href={`${basePath}/messages`}>
           <button className="relative rounded-full p-2 text-forest-muted hover:bg-[#1E211A] transition-colors">
             <MessageSquare size={20} />
-            <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-forest-accent ring-2 ring-white"></span>
+            <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-forest-accent ring-2 ring-[#1B1E16]"></span>
           </button>
         </Link>
         <button onClick={handleNotification} className="relative rounded-full p-2 text-forest-muted hover:bg-[#1E211A] transition-colors">
           <Bell size={20} />
-          <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-red-500 ring-2 ring-white"></span>
+          <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-red-500 ring-2 ring-[#1B1E16]"></span>
         </button>
-        <div className="h-8 w-px bg-slate-200 mx-1 hidden sm:block"></div>
+        <div className="h-8 w-px bg-forest-border mx-1 hidden sm:block"></div>
         
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -112,7 +112,7 @@ export default function DashboardHeader({
                 <span>Settings</span>
               </DropdownMenuItem>
             </Link>
-            <DropdownMenuItem onClick={handleLogout} className="cursor-pointer text-red-600 focus:text-red-700 focus:bg-red-50 rounded-lg px-3 py-2 mt-1">
+            <DropdownMenuItem onClick={handleLogout} className="cursor-pointer text-red-500 focus:text-red-400 focus:bg-red-500/10 rounded-lg px-3 py-2 mt-1">
               <LogOut className="mr-2 h-4 w-4" />
               <span>Log out</span>
             </DropdownMenuItem>
