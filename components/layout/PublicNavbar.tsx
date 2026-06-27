@@ -126,22 +126,32 @@ export function PublicNavbar() {
                         </span>
                     </Link>
 
-                    {/* Desktop Navigation */}
+                    {/* Navigation Dropdown */}
                     <div className="hidden lg:flex items-center gap-2">
-                        {publicNavItems.map((item) => (
-                            <Link
-                                key={item.name}
-                                href={item.href}
-                                className={cn(
-                                    "px-4 py-2 rounded-full text-sm font-medium transition-all duration-300",
-                                    isActive(item.href)
-                                        ? "text-[#131511] bg-[#829661] shadow-[0_0_15px_rgba(130,150,97,0.3)]"
-                                        : "text-forest-muted hover:text-white hover:bg-white/5"
-                                )}
-                            >
-                                {item.name}
-                            </Link>
-                        ))}
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button variant="ghost" size="icon" className="text-forest-muted hover:text-white hover:bg-white/5 rounded-full">
+                                    <Menu className="w-5 h-5" />
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="start" className="w-56 bg-[#181A15]/95 backdrop-blur-xl border-white/10 rounded-2xl p-2 mt-4 shadow-2xl">
+                                {publicNavItems.map((item) => (
+                                    <DropdownMenuItem key={item.name} asChild className="cursor-pointer">
+                                        <Link
+                                            href={item.href}
+                                            className={cn(
+                                                "w-full flex items-center px-4 py-2.5 text-sm transition-all rounded-xl outline-none focus:bg-white/5 focus:text-white",
+                                                isActive(item.href)
+                                                    ? "text-[#131511] bg-[#829661] font-medium focus:bg-[#829661] focus:text-[#131511]"
+                                                    : "text-forest-muted hover:text-white"
+                                            )}
+                                        >
+                                            {item.name}
+                                        </Link>
+                                    </DropdownMenuItem>
+                                ))}
+                            </DropdownMenuContent>
+                        </DropdownMenu>
                     </div>
 
                     {/* Desktop Actions */}
