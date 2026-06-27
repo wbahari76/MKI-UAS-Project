@@ -65,8 +65,8 @@ function HeroSection() {
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-[#22261C] rounded-full mix-blend-multiply filter blur-3xl animate-pulse" style={{ animationDelay: '300ms' }} />
             </div>
 
-            <div className="container-custom relative z-10 py-20 md:py-32">
-                <div className="max-w-4xl mx-auto text-center">
+            <div className="container-custom relative z-10">
+                <div className="max-w-4xl mx-auto text-center -translate-y-10 md:-translate-y-16">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
