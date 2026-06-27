@@ -28,6 +28,7 @@ const publicNavItems = [
     { name: 'Events', href: '/events' },
     { name: 'Impact', href: '/impact' },
     { name: 'About', href: '/about' },
+    { name: 'Partnership', href: '/partnership' },
 ];
 
 export function PublicNavbar() {

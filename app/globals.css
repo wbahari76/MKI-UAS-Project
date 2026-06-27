@@ -219,7 +219,7 @@
     }
 
     .bg-gradient-hero {
-        @apply bg-gradient-to-br from-emerald-50 via-blue-50 to-white;
+        @apply bg-gradient-to-br from-[#131511] via-[#181A15] to-[#131511];
     }
 
     /* Text gradient */
