@@ -83,10 +83,10 @@ function ExploreContent() {
       {/* Header Section */}
       <div className="flex flex-col space-y-4 md:flex-row md:items-center md:justify-between md:space-y-0">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900 tracking-tight">
+          <h1 className="text-3xl font-bold text-forest-beige tracking-tight">
             Explore Projects
           </h1>
-          <p className="text-slate-500 mt-1">
+          <p className="text-forest-muted mt-1">
             Find the perfect cause to contribute your skills and time.
           </p>
         </div>
@@ -95,7 +95,7 @@ function ExploreContent() {
       {/* Search & Filter */}
       <div className="flex flex-col sm:flex-row gap-4">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#7A8072]" />
           <Input 
             placeholder="Search projects or organizations..." 
             className="pl-10 h-12 rounded-xl focus-ring"
@@ -103,8 +103,8 @@ function ExploreContent() {
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
-        <Button variant="outline" className="h-12 px-6 rounded-xl border-slate-200">
-          <Filter className="w-5 h-5 mr-2 text-slate-500" />
+        <Button variant="outline" className="h-12 px-6 rounded-xl border-forest-border">
+          <Filter className="w-5 h-5 mr-2 text-forest-muted" />
           Advanced Filter
         </Button>
       </div>
@@ -117,8 +117,8 @@ function ExploreContent() {
             onClick={() => setActiveCategory(category)}
             className={`px-4 py-2 rounded-full whitespace-nowrap text-sm font-medium transition-colors ${
               activeCategory === category 
-                ? "bg-slate-900 text-white" 
-                : "bg-white text-slate-600 border border-slate-200 hover:bg-slate-50"
+                ? "bg-forest text-white" 
+                : "bg-forest-card text-forest-muted border border-forest-border hover:bg-[#181A15]"
             }`}
           >
             {category}
@@ -143,44 +143,44 @@ function ExploreContent() {
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
                 <div className="absolute top-4 left-4">
-                  <Badge className="bg-white/90 text-slate-900 backdrop-blur-sm hover:bg-white">
+                  <Badge className="bg-forest-card/90 text-forest-beige backdrop-blur-sm hover:bg-forest-card">
                     {project.category}
                   </Badge>
                 </div>
-                <button className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-white/90 backdrop-blur-sm text-slate-600 hover:text-red-500 transition-colors">
+                <button className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-forest-card/90 backdrop-blur-sm text-forest-muted hover:text-red-500 transition-colors">
                   <Heart className={`w-4 h-4 ${project.isSaved ? 'fill-red-500 text-red-500' : ''}`} />
                 </button>
               </div>
               
               <CardContent className="p-5">
-                <div className="flex items-center gap-2 text-sm text-slate-500 mb-2">
+                <div className="flex items-center gap-2 text-sm text-forest-muted mb-2">
                   <Building2 className="w-4 h-4" />
                   {project.org}
                 </div>
                 
-                <h3 className="font-bold text-lg text-slate-900 mb-4 line-clamp-2 group-hover:text-emerald-600 transition-colors">
+                <h3 className="font-bold text-lg text-forest-beige mb-4 line-clamp-2 group-hover:text-[#829661] transition-colors">
                   {project.title}
                 </h3>
                 
                 <div className="space-y-2 mb-6">
-                  <div className="flex items-center gap-2 text-sm text-slate-600">
-                    <MapPin className="w-4 h-4 text-slate-400" />
+                  <div className="flex items-center gap-2 text-sm text-forest-muted">
+                    <MapPin className="w-4 h-4 text-[#7A8072]" />
                     {project.location}
                   </div>
-                  <div className="flex items-center gap-2 text-sm text-slate-600">
-                    <Clock className="w-4 h-4 text-slate-400" />
+                  <div className="flex items-center gap-2 text-sm text-forest-muted">
+                    <Clock className="w-4 h-4 text-[#7A8072]" />
                     Apply by {new Date(project.deadline).toLocaleDateString()}
                   </div>
                 </div>
 
                 <div className="flex flex-col gap-1 mb-6">
                   <div className="flex items-center justify-between text-xs font-medium">
-                    <span className="text-slate-500">Volunteers</span>
-                    <span className="text-slate-900">{project.volunteersApplied} / {project.volunteersNeeded}</span>
+                    <span className="text-forest-muted">Volunteers</span>
+                    <span className="text-forest-beige">{project.volunteersApplied} / {project.volunteersNeeded}</span>
                   </div>
-                  <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
+                  <div className="h-1.5 w-full bg-[#1E211A] rounded-full overflow-hidden">
                     <div 
-                      className={`h-full rounded-full ${project.volunteersApplied >= project.volunteersNeeded ? 'bg-amber-500' : 'bg-emerald-500'}`} 
+                      className={`h-full rounded-full ${project.volunteersApplied >= project.volunteersNeeded ? 'bg-amber-500' : 'bg-forest-accent'}`} 
                       style={{ width: `${Math.min((project.volunteersApplied / project.volunteersNeeded) * 100, 100)}%` }} 
                     />
                   </div>
@@ -202,11 +202,11 @@ function ExploreContent() {
       
       {filteredProjects.length === 0 && (
         <div className="text-center py-20">
-          <div className="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <Search className="w-10 h-10 text-slate-400" />
+          <div className="w-20 h-20 bg-[#1E211A] rounded-full flex items-center justify-center mx-auto mb-4">
+            <Search className="w-10 h-10 text-[#7A8072]" />
           </div>
-          <h3 className="text-xl font-bold text-slate-900 mb-2">No projects found</h3>
-          <p className="text-slate-500">
+          <h3 className="text-xl font-bold text-forest-beige mb-2">No projects found</h3>
+          <p className="text-forest-muted">
             Try adjusting your search or filters to find what you're looking for.
           </p>
         </div>

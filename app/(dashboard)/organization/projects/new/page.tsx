@@ -47,15 +47,15 @@ export default function CreateProjectPage() {
         <div>
           <button 
             onClick={() => router.back()}
-            className="flex items-center text-sm font-medium text-slate-500 hover:text-emerald-600 transition-colors mb-2"
+            className="flex items-center text-sm font-medium text-forest-muted hover:text-[#829661] transition-colors mb-2"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Dashboard
           </button>
-          <h1 className="text-3xl font-bold text-slate-900 tracking-tight">
+          <h1 className="text-3xl font-bold text-forest-beige tracking-tight">
             Create New Project
           </h1>
-          <p className="text-slate-500 mt-1">
+          <p className="text-forest-muted mt-1">
             Fill in the details below to start recruiting volunteers.
           </p>
         </div>
@@ -71,8 +71,8 @@ export default function CreateProjectPage() {
         <Card className="border-0 shadow-sm shadow-slate-200">
           <CardContent className="p-6 md:p-8 space-y-6">
             <div className="space-y-4">
-              <h3 className="text-lg font-bold text-slate-900">1. Basic Information</h3>
-              <div className="h-px bg-slate-100" />
+              <h3 className="text-lg font-bold text-forest-beige">1. Basic Information</h3>
+              <div className="h-px bg-[#1E211A]" />
             </div>
 
             <div className="space-y-4">
@@ -120,8 +120,8 @@ export default function CreateProjectPage() {
         <Card className="border-0 shadow-sm shadow-slate-200">
           <CardContent className="p-6 md:p-8 space-y-6">
             <div className="space-y-4">
-              <h3 className="text-lg font-bold text-slate-900">2. Requirements & Benefits</h3>
-              <div className="h-px bg-slate-100" />
+              <h3 className="text-lg font-bold text-forest-beige">2. Requirements & Benefits</h3>
+              <div className="h-px bg-[#1E211A]" />
             </div>
 
             <div className="space-y-6">
@@ -150,8 +150,8 @@ export default function CreateProjectPage() {
         <Card className="border-0 shadow-sm shadow-slate-200">
           <CardContent className="p-6 md:p-8 space-y-6">
             <div className="space-y-4">
-              <h3 className="text-lg font-bold text-slate-900">3. Timeline & Capacity</h3>
-              <div className="h-px bg-slate-100" />
+              <h3 className="text-lg font-bold text-forest-beige">3. Timeline & Capacity</h3>
+              <div className="h-px bg-[#1E211A]" />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -162,7 +162,7 @@ export default function CreateProjectPage() {
               <div className="space-y-2">
                 <Label htmlFor="deadline">Application Deadline <span className="text-red-500">*</span></Label>
                 <div className="relative">
-                  <CalendarIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                  <CalendarIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#7A8072]" />
                   <Input id="deadline" type="date" required className="pl-10 focus-ring" />
                 </div>
               </div>
@@ -178,11 +178,11 @@ export default function CreateProjectPage() {
         <Card className="border-0 shadow-sm shadow-slate-200">
           <CardContent className="p-6 md:p-8 space-y-6">
             <div className="space-y-4">
-              <h3 className="text-lg font-bold text-slate-900">4. Project Banner</h3>
-              <div className="h-px bg-slate-100" />
+              <h3 className="text-lg font-bold text-forest-beige">4. Project Banner</h3>
+              <div className="h-px bg-[#1E211A]" />
             </div>
 
-            <div className="relative border-2 border-dashed border-slate-200 rounded-xl p-10 text-center hover:bg-slate-50 hover:border-emerald-300 transition-colors cursor-pointer group overflow-hidden">
+            <div className="relative border-2 border-dashed border-forest-border rounded-xl p-10 text-center hover:bg-[#181A15] hover:border-emerald-300 transition-colors cursor-pointer group overflow-hidden">
               <input 
                 type="file" 
                 accept="image/png, image/jpeg, image/webp" 
@@ -200,11 +200,11 @@ export default function CreateProjectPage() {
                 </div>
               ) : (
                 <>
-                  <div className="w-16 h-16 bg-emerald-50 text-emerald-500 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                  <div className="w-16 h-16 bg-[#21261B] text-forest-accent rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
                     <Upload className="w-8 h-8" />
                   </div>
-                  <h4 className="text-slate-900 font-medium mb-1">Upload a cover image</h4>
-                  <p className="text-slate-500 text-sm mb-4">PNG, JPG, WEBP up to 5MB. Recommended size 1200x600px.</p>
+                  <h4 className="text-forest-beige font-medium mb-1">Upload a cover image</h4>
+                  <p className="text-forest-muted text-sm mb-4">PNG, JPG, WEBP up to 5MB. Recommended size 1200x600px.</p>
                   <Button type="button" variant="outline" size="sm">Browse Files</Button>
                 </>
               )}
@@ -213,7 +213,7 @@ export default function CreateProjectPage() {
         </Card>
 
         {/* Form Actions */}
-        <div className="flex flex-col sm:flex-row justify-end gap-4 pt-4 border-t border-slate-200">
+        <div className="flex flex-col sm:flex-row justify-end gap-4 pt-4 border-t border-forest-border">
           <Button 
             type="button" 
             variant="outline" 

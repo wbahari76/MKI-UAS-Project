@@ -85,26 +85,26 @@ export default function DashboardSidebar({
   }, []);
 
   const SidebarContent = (
-    <div className="flex h-full flex-col bg-white border-r border-slate-200">
-      <div className="flex h-16 items-center justify-between px-4 border-b border-slate-100">
+    <div className="flex h-full flex-col bg-forest-card border-r border-forest-border">
+      <div className="flex h-16 items-center justify-between px-4 border-b border-forest-border">
         {!isCollapsed && (
           <Link href="/" className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500 text-white font-bold text-lg">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-forest-accent text-white font-bold text-lg">
               J
             </div>
-            <span className="font-bold text-xl tracking-tight text-slate-900">
-              JALA <span className="text-emerald-500">VIVE</span>
+            <span className="font-bold text-xl tracking-tight text-forest-beige">
+              JALA <span className="text-forest-accent">VIVE</span>
             </span>
           </Link>
         )}
         {isCollapsed && (
-          <div className="mx-auto flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500 text-white font-bold text-lg">
+          <div className="mx-auto flex h-8 w-8 items-center justify-center rounded-lg bg-forest-accent text-white font-bold text-lg">
             J
           </div>
         )}
         <button
           onClick={() => setIsCollapsed(!isCollapsed)}
-          className="hidden lg:flex p-1 rounded-md text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors"
+          className="hidden lg:flex p-1 rounded-md text-[#7A8072] hover:text-forest-muted hover:bg-[#1E211A] transition-colors"
         >
           {isCollapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
         </button>
@@ -121,15 +121,15 @@ export default function DashboardSidebar({
                 onClick={() => setMobileOpen(false)}
                 className={`flex items-center gap-3 rounded-xl px-3 py-2.5 transition-all duration-200 group ${
                   isActive
-                    ? "bg-emerald-50 text-emerald-600 font-medium"
-                    : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                    ? "bg-[#21261B] text-[#829661] font-medium"
+                    : "text-forest-muted hover:bg-[#181A15] hover:text-forest-beige"
                 }`}
                 title={isCollapsed ? link.name : undefined}
               >
                 <link.icon
                   size={20}
                   className={`flex-shrink-0 ${
-                    isActive ? "text-emerald-600" : "text-slate-400 group-hover:text-slate-600"
+                    isActive ? "text-[#829661]" : "text-[#7A8072] group-hover:text-forest-muted"
                   }`}
                 />
                 {!isCollapsed && <span>{link.name}</span>}
@@ -139,7 +139,7 @@ export default function DashboardSidebar({
         </nav>
       </div>
 
-      <div className="p-4 border-t border-slate-100">
+      <div className="p-4 border-t border-forest-border">
         <button
           className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-red-600 transition-colors hover:bg-red-50 ${
             isCollapsed ? "justify-center" : ""
@@ -159,7 +159,7 @@ export default function DashboardSidebar({
       <motion.aside
         initial={false}
         animate={{ width: isCollapsed ? 80 : 260 }}
-        className="hidden lg:block h-screen sticky top-0 z-40 bg-white"
+        className="hidden lg:block h-screen sticky top-0 z-40 bg-forest-card"
         transition={{ duration: 0.3, ease: "easeInOut" }}
       >
         {SidebarContent}
@@ -174,14 +174,14 @@ export default function DashboardSidebar({
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setMobileOpen(false)}
-              className="fixed inset-0 z-40 bg-slate-900/50 backdrop-blur-sm lg:hidden"
+              className="fixed inset-0 z-40 bg-forest/50 backdrop-blur-sm lg:hidden"
             />
             <motion.aside
               initial={{ x: "-100%" }}
               animate={{ x: 0 }}
               exit={{ x: "-100%" }}
               transition={{ type: "spring", bounce: 0, duration: 0.3 }}
-              className="fixed inset-y-0 left-0 z-50 w-72 bg-white shadow-xl lg:hidden"
+              className="fixed inset-y-0 left-0 z-50 w-72 bg-forest-card shadow-xl lg:hidden"
             >
               {SidebarContent}
             </motion.aside>

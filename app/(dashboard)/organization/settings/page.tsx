@@ -58,8 +58,8 @@ export default function OrganizationSettingsPage() {
   return (
     <div className="max-w-4xl mx-auto space-y-8 pb-20">
       <div>
-        <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Organization Settings</h1>
-        <p className="text-slate-500 mt-1">Manage your organization's preferences, visibility, and security.</p>
+        <h1 className="text-3xl font-bold text-forest-beige tracking-tight">Organization Settings</h1>
+        <p className="text-forest-muted mt-1">Manage your organization's preferences, visibility, and security.</p>
       </div>
 
       <div className="grid gap-6">
@@ -68,7 +68,7 @@ export default function OrganizationSettingsPage() {
         <Card className="border-0 shadow-sm shadow-slate-200">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Building2 className="w-5 h-5 text-emerald-600" />
+              <Building2 className="w-5 h-5 text-[#829661]" />
               Organization Profile
             </CardTitle>
             <CardDescription>Update your public facing organization details.</CardDescription>
@@ -76,12 +76,12 @@ export default function OrganizationSettingsPage() {
           <CardContent className="space-y-4">
             <div className="space-y-2">
               <Label>Organization Name</Label>
-              <Input disabled value={profile?.full_name || "Organization Name"} className="bg-slate-50" />
+              <Input disabled value={profile?.full_name || "Organization Name"} className="bg-[#181A15]" />
             </div>
             <div className="space-y-2">
               <Label>Contact Email Address</Label>
-              <Input disabled value={user?.email || ""} className="bg-slate-50" />
-              <p className="text-xs text-slate-500">Your email is managed by your authentication provider.</p>
+              <Input disabled value={user?.email || ""} className="bg-[#181A15]" />
+              <p className="text-xs text-forest-muted">Your email is managed by your authentication provider.</p>
             </div>
           </CardContent>
         </Card>
@@ -90,7 +90,7 @@ export default function OrganizationSettingsPage() {
         <Card className="border-0 shadow-sm shadow-slate-200">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Shield className="w-5 h-5 text-emerald-600" />
+              <Shield className="w-5 h-5 text-[#829661]" />
               Account Security
             </CardTitle>
             <CardDescription>Update your password and secure your account.</CardDescription>
@@ -113,7 +113,7 @@ export default function OrganizationSettingsPage() {
         <Card className="border-0 shadow-sm shadow-slate-200">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Bell className="w-5 h-5 text-emerald-600" />
+              <Bell className="w-5 h-5 text-[#829661]" />
               Notifications
             </CardTitle>
             <CardDescription>Choose what updates your organization receives.</CardDescription>
@@ -122,7 +122,7 @@ export default function OrganizationSettingsPage() {
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
                 <Label className="text-base">Email Notifications</Label>
-                <p className="text-sm text-slate-500">Receive general platform updates and digests.</p>
+                <p className="text-sm text-forest-muted">Receive general platform updates and digests.</p>
               </div>
               <Switch 
                 checked={settings.emailNotifs} 
@@ -132,7 +132,7 @@ export default function OrganizationSettingsPage() {
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
                 <Label className="text-base">New Applications</Label>
-                <p className="text-sm text-slate-500">Get notified when a volunteer applies to your projects.</p>
+                <p className="text-sm text-forest-muted">Get notified when a volunteer applies to your projects.</p>
               </div>
               <Switch 
                 checked={settings.newApplications} 
@@ -142,7 +142,7 @@ export default function OrganizationSettingsPage() {
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
                 <Label className="text-base">Messages</Label>
-                <p className="text-sm text-slate-500">Receive notifications for new direct messages.</p>
+                <p className="text-sm text-forest-muted">Receive notifications for new direct messages.</p>
               </div>
               <Switch 
                 checked={settings.messages} 
@@ -156,7 +156,7 @@ export default function OrganizationSettingsPage() {
         <Card className="border-0 shadow-sm shadow-slate-200">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Eye className="w-5 h-5 text-emerald-600" />
+              <Eye className="w-5 h-5 text-[#829661]" />
               Privacy & Visibility
             </CardTitle>
             <CardDescription>Control how your organization appears to others.</CardDescription>
@@ -165,7 +165,7 @@ export default function OrganizationSettingsPage() {
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
                 <Label className="text-base">Public Directory</Label>
-                <p className="text-sm text-slate-500">Allow volunteers to find your organization in the directory.</p>
+                <p className="text-sm text-forest-muted">Allow volunteers to find your organization in the directory.</p>
               </div>
               <Switch 
                 checked={settings.publicProfile} 
@@ -175,7 +175,7 @@ export default function OrganizationSettingsPage() {
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
                 <Label className="text-base">Show Volunteer Count</Label>
-                <p className="text-sm text-slate-500">Display the total number of volunteers you've worked with publicly.</p>
+                <p className="text-sm text-forest-muted">Display the total number of volunteers you've worked with publicly.</p>
               </div>
               <Switch 
                 checked={settings.showVolunteers} 

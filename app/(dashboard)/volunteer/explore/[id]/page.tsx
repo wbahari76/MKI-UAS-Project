@@ -74,7 +74,7 @@ export default function ProjectDetailsPage() {
       {/* Back Button */}
       <button
         onClick={() => router.back()}
-        className="flex items-center text-sm font-medium text-slate-500 hover:text-emerald-600 transition-colors"
+        className="flex items-center text-sm font-medium text-forest-muted hover:text-[#829661] transition-colors"
       >
         <ArrowLeft className="w-4 h-4 mr-2" />
         Back to Explore
@@ -94,7 +94,7 @@ export default function ProjectDetailsPage() {
         <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/20 to-transparent" />
 
         <div className="absolute bottom-0 left-0 w-full p-6 md:p-10">
-          <Badge className="mb-4 bg-emerald-500 text-white border-0 hover:bg-emerald-600">
+          <Badge className="mb-4 bg-forest-accent text-white border-0 hover:bg-[#4A5D23]">
             {PROJECT.category}
           </Badge>
           <h1 className="text-3xl md:text-5xl font-bold text-white mb-2 leading-tight">
@@ -105,7 +105,7 @@ export default function ProjectDetailsPage() {
               <Building2 className="w-5 h-5" />
               <span className="font-medium">{PROJECT.org}</span>
             </div>
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+            <span className="w-1.5 h-1.5 rounded-full bg-forest-accent" />
             <div className="flex items-center gap-2">
               <MapPin className="w-5 h-5" />
               <span>{PROJECT.location}</span>
@@ -116,13 +116,13 @@ export default function ProjectDetailsPage() {
         {/* Action Buttons */}
         <div className="absolute top-6 right-6 flex items-center gap-3">
           <button
-            className="w-10 h-10 flex items-center justify-center rounded-full bg-white/20 backdrop-blur-md text-white hover:bg-white/30 transition-colors"
+            className="w-10 h-10 flex items-center justify-center rounded-full bg-forest-card/20 backdrop-blur-md text-white hover:bg-forest-card/30 transition-colors"
           >
             <Share2 className="w-5 h-5" />
           </button>
           <button
             onClick={() => setIsSaved(!isSaved)}
-            className="w-10 h-10 flex items-center justify-center rounded-full bg-white/20 backdrop-blur-md text-white hover:bg-white/30 transition-colors"
+            className="w-10 h-10 flex items-center justify-center rounded-full bg-forest-card/20 backdrop-blur-md text-white hover:bg-forest-card/30 transition-colors"
           >
             <Heart className={`w-5 h-5 ${isSaved ? 'fill-red-500 text-red-500' : ''}`} />
           </button>
@@ -141,19 +141,19 @@ export default function ProjectDetailsPage() {
         >
           {/* About */}
           <section>
-            <h3 className="text-xl font-bold text-slate-900 mb-4">About the Project</h3>
-            <p className="text-slate-600 leading-relaxed">
+            <h3 className="text-xl font-bold text-forest-beige mb-4">About the Project</h3>
+            <p className="text-forest-muted leading-relaxed">
               {PROJECT.description}
             </p>
           </section>
 
           {/* Requirements */}
           <section>
-            <h3 className="text-xl font-bold text-slate-900 mb-4">Requirements</h3>
+            <h3 className="text-xl font-bold text-forest-beige mb-4">Requirements</h3>
             <ul className="space-y-3">
               {PROJECT.requirements.map((req, index) => (
-                <li key={index} className="flex items-start gap-3 text-slate-600">
-                  <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
+                <li key={index} className="flex items-start gap-3 text-forest-muted">
+                  <CheckCircle2 className="w-5 h-5 text-forest-accent shrink-0 mt-0.5" />
                   <span>{req}</span>
                 </li>
               ))}
@@ -162,12 +162,12 @@ export default function ProjectDetailsPage() {
 
           {/* Benefits */}
           <section>
-            <h3 className="text-xl font-bold text-slate-900 mb-4">What you will get</h3>
+            <h3 className="text-xl font-bold text-forest-beige mb-4">What you will get</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {PROJECT.benefits.map((benefit, index) => (
-                <div key={index} className="flex items-center gap-3 p-4 rounded-xl bg-slate-50 border border-slate-100">
-                  <Award className="w-5 h-5 text-emerald-500 shrink-0" />
-                  <span className="text-sm font-medium text-slate-700">{benefit}</span>
+                <div key={index} className="flex items-center gap-3 p-4 rounded-xl bg-[#181A15] border border-forest-border">
+                  <Award className="w-5 h-5 text-forest-accent shrink-0" />
+                  <span className="text-sm font-medium text-[#DFD5C2]">{benefit}</span>
                 </div>
               ))}
             </div>
@@ -191,8 +191,8 @@ export default function ProjectDetailsPage() {
                     <CalendarDays className="w-5 h-5" />
                   </div>
                   <div>
-                    <p className="text-sm text-slate-500 font-medium mb-1">Event Date</p>
-                    <p className="font-semibold text-slate-900">{PROJECT.date}</p>
+                    <p className="text-sm text-forest-muted font-medium mb-1">Event Date</p>
+                    <p className="font-semibold text-forest-beige">{PROJECT.date}</p>
                   </div>
                 </div>
 
@@ -201,34 +201,34 @@ export default function ProjectDetailsPage() {
                     <Clock className="w-5 h-5" />
                   </div>
                   <div>
-                    <p className="text-sm text-slate-500 font-medium mb-1">Application Deadline</p>
-                    <p className="font-semibold text-slate-900">{new Date(PROJECT.deadline).toLocaleDateString()}</p>
+                    <p className="text-sm text-forest-muted font-medium mb-1">Application Deadline</p>
+                    <p className="font-semibold text-forest-beige">{new Date(PROJECT.deadline).toLocaleDateString()}</p>
                   </div>
                 </div>
 
-                <div className="h-px bg-slate-100 my-2" />
+                <div className="h-px bg-[#1E211A] my-2" />
 
                 {/* Capacity */}
                 <div>
                   <div className="flex items-center justify-between text-sm font-medium mb-2">
-                    <span className="text-slate-500">Volunteers Needed</span>
-                    <span className="text-slate-900">{PROJECT.volunteersApplied} / {PROJECT.volunteersNeeded}</span>
+                    <span className="text-forest-muted">Volunteers Needed</span>
+                    <span className="text-forest-beige">{PROJECT.volunteersApplied} / {PROJECT.volunteersNeeded}</span>
                   </div>
-                  <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden mb-2">
+                  <div className="h-2 w-full bg-[#1E211A] rounded-full overflow-hidden mb-2">
                     <div
-                      className="h-full bg-emerald-500 rounded-full"
+                      className="h-full bg-forest-accent rounded-full"
                       style={{ width: `${(PROJECT.volunteersApplied / PROJECT.volunteersNeeded) * 100}%` }}
                     />
                   </div>
-                  <p className="text-xs text-slate-500 text-right">
+                  <p className="text-xs text-forest-muted text-right">
                     {PROJECT.volunteersNeeded - PROJECT.volunteersApplied} spots remaining
                   </p>
                 </div>
 
                 {/* CTA */}
                 {hasApplied ? (
-                  <Button disabled className="w-full h-12 bg-slate-100 text-slate-500 border-0">
-                    <CheckCircle2 className="w-5 h-5 mr-2 text-emerald-500" />
+                  <Button disabled className="w-full h-12 bg-[#1E211A] text-forest-muted border-0">
+                    <CheckCircle2 className="w-5 h-5 mr-2 text-forest-accent" />
                     Application Submitted
                   </Button>
                 ) : (
@@ -257,7 +257,7 @@ export default function ProjectDetailsPage() {
                         <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
                           Cancel
                         </Button>
-                        <Button className="bg-emerald-500 hover:bg-emerald-600 text-white" onClick={handleApply} disabled={isApplying}>
+                        <Button className="bg-forest-accent hover:bg-[#4A5D23] text-white" onClick={handleApply} disabled={isApplying}>
                           {isApplying ? "Submitting..." : "Confirm Application"}
                         </Button>
                       </DialogFooter>

@@ -35,8 +35,8 @@ export default function AdminDashboardPage() {
   return (
     <div className="space-y-8 pb-20">
       <div>
-        <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Platform Overview</h1>
-        <p className="text-slate-500 mt-1">Monitor platform activity and manage system-wide settings.</p>
+        <h1 className="text-3xl font-bold text-forest-beige tracking-tight">Platform Overview</h1>
+        <p className="text-forest-muted mt-1">Monitor platform activity and manage system-wide settings.</p>
       </div>
 
       {/* Stats Overview */}
@@ -52,7 +52,7 @@ export default function AdminDashboardPage() {
         {/* Broadcast System */}
         <div className="lg:col-span-2">
           <Card className="border-0 shadow-sm shadow-slate-200">
-            <CardHeader className="border-b border-slate-50 bg-slate-900 text-white rounded-t-xl">
+            <CardHeader className="border-b border-slate-50 bg-forest text-white rounded-t-xl">
               <CardTitle className="flex items-center gap-2 text-lg">
                 <Megaphone className="w-5 h-5 text-emerald-400" />
                 Broadcast Announcement
@@ -60,19 +60,19 @@ export default function AdminDashboardPage() {
             </CardHeader>
             <CardContent className="p-6">
               <form onSubmit={handleBroadcast} className="space-y-4">
-                <p className="text-sm text-slate-500">
+                <p className="text-sm text-forest-muted">
                   Send a realtime notification to all currently connected users across the platform.
                 </p>
                 <Textarea 
                   placeholder="Type your announcement here..."
-                  className="min-h-[120px] bg-slate-50 border-0 focus-visible:ring-slate-900"
+                  className="min-h-[120px] bg-[#181A15] border-0 focus-visible:ring-slate-900"
                   value={announcement}
                   onChange={(e) => setAnnouncement(e.target.value)}
                 />
                 <div className="flex justify-end">
                   <Button 
                     type="submit" 
-                    className="bg-slate-900 text-white hover:bg-slate-800 px-6"
+                    className="bg-forest text-white hover:bg-forest-card px-6"
                     disabled={!announcement.trim() || isSending}
                   >
                     {isSending ? "Broadcasting..." : (
@@ -93,7 +93,7 @@ export default function AdminDashboardPage() {
           <Card className="border-0 shadow-sm shadow-slate-200 h-full">
             <CardHeader className="border-b border-slate-50">
               <CardTitle className="text-lg flex items-center gap-2">
-                <Server className="w-5 h-5 text-slate-400" />
+                <Server className="w-5 h-5 text-[#7A8072]" />
                 Live Activity
               </CardTitle>
             </CardHeader>
@@ -105,13 +105,13 @@ export default function AdminDashboardPage() {
                   { user: "Tech for All", action: "updated their profile", time: "1h ago" },
                   { user: "System", action: "daily backup completed", time: "3h ago" },
                 ].map((log, i) => (
-                  <div key={i} className="p-4 flex items-start gap-3 hover:bg-slate-50 transition-colors">
-                    <div className="w-2 h-2 rounded-full bg-emerald-500 mt-2 shrink-0" />
+                  <div key={i} className="p-4 flex items-start gap-3 hover:bg-[#181A15] transition-colors">
+                    <div className="w-2 h-2 rounded-full bg-forest-accent mt-2 shrink-0" />
                     <div>
-                      <p className="text-sm text-slate-800">
+                      <p className="text-sm text-forest-beige">
                         <span className="font-semibold">{log.user}</span> {log.action}
                       </p>
-                      <span className="text-xs text-slate-400">{log.time}</span>
+                      <span className="text-xs text-[#7A8072]">{log.time}</span>
                     </div>
                   </div>
                 ))}

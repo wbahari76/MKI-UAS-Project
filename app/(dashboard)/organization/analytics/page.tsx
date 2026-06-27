@@ -53,11 +53,11 @@ export default function OrganizationAnalyticsPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Analytics & Reports</h1>
-          <p className="text-slate-500 mt-1">Track your organization's impact and volunteer engagement.</p>
+          <h1 className="text-3xl font-bold text-forest-beige tracking-tight">Analytics & Reports</h1>
+          <p className="text-forest-muted mt-1">Track your organization's impact and volunteer engagement.</p>
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="outline" className="bg-white border-slate-200">
+          <Button variant="outline" className="bg-forest-card border-forest-border">
             <Filter className="w-4 h-4 mr-2" />
             Filter
           </Button>
@@ -69,13 +69,13 @@ export default function OrganizationAnalyticsPage() {
       </div>
 
       {/* Time Range Selector */}
-      <div className="bg-white p-2 rounded-xl border border-slate-100 shadow-sm inline-block">
+      <div className="bg-forest-card p-2 rounded-xl border border-forest-border shadow-sm inline-block">
         <Tabs value={timeRange} onValueChange={setTimeRange}>
           <TabsList className="bg-transparent">
-            <TabsTrigger value="1m" className="data-[state=active]:bg-emerald-50 data-[state=active]:text-emerald-700">1 Month</TabsTrigger>
-            <TabsTrigger value="3m" className="data-[state=active]:bg-emerald-50 data-[state=active]:text-emerald-700">3 Months</TabsTrigger>
-            <TabsTrigger value="6m" className="data-[state=active]:bg-emerald-50 data-[state=active]:text-emerald-700">6 Months</TabsTrigger>
-            <TabsTrigger value="1y" className="data-[state=active]:bg-emerald-50 data-[state=active]:text-emerald-700">1 Year</TabsTrigger>
+            <TabsTrigger value="1m" className="data-[state=active]:bg-[#21261B] data-[state=active]:text-[#829661]">1 Month</TabsTrigger>
+            <TabsTrigger value="3m" className="data-[state=active]:bg-[#21261B] data-[state=active]:text-[#829661]">3 Months</TabsTrigger>
+            <TabsTrigger value="6m" className="data-[state=active]:bg-[#21261B] data-[state=active]:text-[#829661]">6 Months</TabsTrigger>
+            <TabsTrigger value="1y" className="data-[state=active]:bg-[#21261B] data-[state=active]:text-[#829661]">1 Year</TabsTrigger>
           </TabsList>
         </Tabs>
       </div>
@@ -98,7 +98,7 @@ export default function OrganizationAnalyticsPage() {
           title="Total Impact Hours"
           value="1,450"
           icon={Clock}
-          iconClassName="bg-emerald-100 text-emerald-600"
+          iconClassName="bg-[#2C3322] text-[#829661]"
           trend={{ value: 12, isPositive: true }}
         />
         <StatsCard
@@ -199,7 +199,7 @@ export default function OrganizationAnalyticsPage() {
                 <CardTitle className="text-lg">Retention Rate (%)</CardTitle>
                 <CardDescription>Percentage of volunteers who returned for a second project</CardDescription>
               </div>
-              <Badge className="bg-emerald-100 text-emerald-700 border-0">+4% this month</Badge>
+              <Badge className="bg-[#2C3322] text-[#829661] border-0">+4% this month</Badge>
             </CardHeader>
             <CardContent>
               <div className="h-[300px] mt-4 w-full">

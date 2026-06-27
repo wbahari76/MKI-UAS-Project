@@ -57,12 +57,12 @@ function AnimatedCounter({ value, suffix = '' }: { value: number; suffix?: strin
 // Section Components
 function HeroSection() {
     return (
-        <section className="relative min-h-screen flex items-center bg-gradient-to-br from-emerald-50 via-blue-50 to-white overflow-hidden">
+        <section className="relative min-h-screen flex items-center bg-forest overflow-hidden">
             {/* Background Pattern */}
             <div className="absolute inset-0 opacity-30">
-                <div className="absolute top-20 left-10 w-72 h-72 bg-emerald-200 rounded-full mix-blend-multiply filter blur-3xl animate-pulse" />
+                <div className="absolute top-20 left-10 w-72 h-72 bg-[#1B1E16] rounded-full mix-blend-multiply filter blur-3xl animate-pulse" />
                 <div className="absolute bottom-20 right-10 w-72 h-72 bg-blue-200 rounded-full mix-blend-multiply filter blur-3xl animate-pulse" style={{ animationDelay: '500ms' }} />
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-amber-100 rounded-full mix-blend-multiply filter blur-3xl animate-pulse" style={{ animationDelay: '300ms' }} />
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-[#22261C] rounded-full mix-blend-multiply filter blur-3xl animate-pulse" style={{ animationDelay: '300ms' }} />
             </div>
 
             <div className="container-custom relative z-10 py-20 md:py-32">
@@ -72,18 +72,18 @@ function HeroSection() {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.6 }}
                     >
-                        <Badge className="mb-6 bg-emerald-100 text-emerald-700 border-emerald-200">
+                        <Badge className="mb-6 bg-[#2C3322] text-[#829661] border-[#4A5D23]">
                             <Sparkles className="w-3.5 h-3.5 mr-1.5" />
                             Social Impact Platform
                         </Badge>
 
-                        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-slate-900 mb-6 leading-tight">
+                        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-forest-beige mb-6 leading-tight">
                             Connected Communities.
                             <br />
                             <span className="text-gradient">Sustained Lives.</span>
                         </h1>
 
-                        <p className="text-lg md:text-xl text-slate-600 mb-10 max-w-2xl mx-auto">
+                        <p className="text-lg md:text-xl text-forest-muted mb-10 max-w-2xl mx-auto">
                             JALA VIVE bridges organizations with volunteers in one collaborative ecosystem.
                             Create impact, join causes, and transform communities together.
                         </p>
@@ -96,14 +96,14 @@ function HeroSection() {
                         className="flex flex-col sm:flex-row items-center justify-center gap-4"
                     >
                         <Link href="/register?role=volunteer">
-                            <Button size="lg" className="bg-emerald-500 hover:bg-emerald-600 text-white shadow-lg shadow-emerald-500/25 h-14 px-8 text-base rounded-xl group">
+                            <Button size="lg" className="bg-forest-accent hover:bg-[#4A5D23] text-white shadow-lg shadow-emerald-500/25 h-14 px-8 text-base rounded-xl group">
                                 <HandHelping className="w-5 h-5 mr-2" />
                                 Become a Volunteer
                                 <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                             </Button>
                         </Link>
                         <Link href="/register?role=organization">
-                            <Button size="lg" variant="outline" className="h-14 px-8 text-base rounded-xl border-2 border-slate-200 hover:border-emerald-500 hover:text-emerald-600">
+                            <Button size="lg" variant="outline" className="h-14 px-8 text-base rounded-xl border-2 border-forest-border hover:border-forest-accent hover:text-[#829661]">
                                 <Building2 className="w-5 h-5 mr-2" />
                                 Create a Project
                             </Button>
@@ -119,11 +119,11 @@ function HeroSection() {
                 transition={{ delay: 1, duration: 0.5 }}
                 className="absolute bottom-8 left-1/2 -translate-x-1/2"
             >
-                <div className="w-6 h-10 rounded-full border-2 border-slate-300 flex items-start justify-center p-1.5">
+                <div className="w-6 h-10 rounded-full border-2 border-forest-border flex items-start justify-center p-1.5">
                     <motion.div
                         animate={{ y: [0, 8, 0] }}
                         transition={{ duration: 1.5, repeat: Infinity }}
-                        className="w-1.5 h-1.5 bg-slate-400 rounded-full"
+                        className="w-1.5 h-1.5 bg-forest-muted rounded-full"
                     />
                 </div>
             </motion.div>
@@ -140,7 +140,7 @@ function StatsSection() {
     ];
 
     return (
-        <section className="py-16 md:py-20 bg-white border-y border-slate-100">
+        <section className="py-16 md:py-20 bg-forest-card border-y border-forest-border">
             <div className="container-custom">
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
                     {stats.map((stat, index) => {
@@ -152,27 +152,27 @@ function StatsSection() {
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
                                 transition={{ delay: index * 0.1 }}
-                                className="text-center p-6 rounded-2xl bg-slate-50 border border-slate-100"
+                                className="text-center p-6 rounded-2xl bg-[#181A15] border border-forest-border"
                             >
                                 <div className={cn(
                                     "w-12 h-12 rounded-xl mx-auto mb-4 flex items-center justify-center",
-                                    stat.color === 'emerald' && "bg-emerald-100",
+                                    stat.color === 'emerald' && "bg-[#2C3322]",
                                     stat.color === 'blue' && "bg-blue-100",
                                     stat.color === 'amber' && "bg-amber-100",
                                     stat.color === 'purple' && "bg-purple-100"
                                 )}>
                                     <Icon className={cn(
                                         "w-6 h-6",
-                                        stat.color === 'emerald' && "text-emerald-600",
+                                        stat.color === 'emerald' && "text-[#829661]",
                                         stat.color === 'blue' && "text-blue-600",
                                         stat.color === 'amber' && "text-amber-600",
                                         stat.color === 'purple' && "text-purple-600"
                                     )} />
                                 </div>
-                                <p className="text-3xl md:text-4xl font-bold text-slate-900 mb-1">
+                                <p className="text-3xl md:text-4xl font-bold text-forest-beige mb-1">
                                     <AnimatedCounter value={stat.value} suffix={stat.suffix} />
                                 </p>
-                                <p className="text-sm text-slate-500">{stat.label}</p>
+                                <p className="text-sm text-forest-muted">{stat.label}</p>
                             </motion.div>
                         );
                     })}
@@ -217,7 +217,7 @@ function FeaturedProjectsSection() {
     ];
 
     return (
-        <section className="py-16 md:py-24 bg-slate-50">
+        <section className="py-16 md:py-24 bg-[#181A15]">
             <div className="container-custom">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -225,11 +225,11 @@ function FeaturedProjectsSection() {
                     viewport={{ once: true }}
                     className="text-center max-w-2xl mx-auto mb-12"
                 >
-                    <Badge className="mb-4 bg-emerald-100 text-emerald-700">Featured Projects</Badge>
-                    <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
+                    <Badge className="mb-4 bg-[#2C3322] text-[#829661]">Featured Projects</Badge>
+                    <h2 className="text-3xl md:text-4xl font-bold text-forest-beige mb-4">
                         Make an Impact Today
                     </h2>
-                    <p className="text-slate-600">
+                    <p className="text-forest-muted">
                         Discover meaningful volunteer opportunities and start your journey to create lasting change.
                     </p>
                 </motion.div>
@@ -243,7 +243,7 @@ function FeaturedProjectsSection() {
                             viewport={{ once: true }}
                             transition={{ delay: index * 0.1 }}
                             whileHover={{ y: -4 }}
-                            className="group bg-white rounded-2xl overflow-hidden border border-slate-100 shadow-sm hover:shadow-xl hover:shadow-emerald-500/10 transition-all duration-300"
+                            className="group bg-forest-card rounded-2xl overflow-hidden border border-forest-border shadow-sm hover:shadow-xl hover:shadow-forest-accent/10 transition-all duration-300"
                         >
                             <div className="relative h-48 overflow-hidden">
                                 <img
@@ -252,18 +252,18 @@ function FeaturedProjectsSection() {
                                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-                                <Badge className="absolute top-3 left-3 bg-emerald-500 text-white">
+                                <Badge className="absolute top-3 left-3 bg-forest-accent text-white">
                                     {project.category}
                                 </Badge>
                             </div>
 
                             <div className="p-5">
-                                <p className="text-sm text-slate-500 mb-1">{project.organization}</p>
-                                <h3 className="font-semibold text-slate-900 mb-3 line-clamp-2 group-hover:text-emerald-600 transition-colors">
+                                <p className="text-sm text-forest-muted mb-1">{project.organization}</p>
+                                <h3 className="font-semibold text-forest-beige mb-3 line-clamp-2 group-hover:text-[#829661] transition-colors">
                                     {project.title}
                                 </h3>
 
-                                <div className="flex items-center gap-4 text-sm text-slate-500 mb-4">
+                                <div className="flex items-center gap-4 text-sm text-forest-muted mb-4">
                                     <span className="flex items-center gap-1">
                                         <MapPin className="w-4 h-4" />
                                         {project.location}
@@ -276,24 +276,24 @@ function FeaturedProjectsSection() {
 
                                 <div className="mb-4">
                                     <div className="flex items-center justify-between text-sm mb-1">
-                                        <span className="text-slate-500">Volunteers</span>
-                                        <span className="font-medium text-slate-900">
+                                        <span className="text-forest-muted">Volunteers</span>
+                                        <span className="font-medium text-forest-beige">
                                             {project.volunteers.current}/{project.volunteers.needed}
                                         </span>
                                     </div>
-                                    <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
+                                    <div className="h-2 bg-[#1E211A] rounded-full overflow-hidden">
                                         <motion.div
                                             initial={{ width: 0 }}
                                             whileInView={{ width: `${(project.volunteers.current / project.volunteers.needed) * 100}%` }}
                                             viewport={{ once: true }}
                                             transition={{ duration: 0.5 }}
-                                            className="h-full bg-emerald-500 rounded-full"
+                                            className="h-full bg-forest-accent rounded-full"
                                         />
                                     </div>
                                 </div>
 
                                 <Link href={`/explore/${project.id}`}>
-                                    <Button className="w-full bg-emerald-500 hover:bg-emerald-600 group/btn">
+                                    <Button className="w-full bg-forest-accent hover:bg-[#4A5D23] group/btn">
                                         View Details
                                         <ChevronRight className="w-4 h-4 ml-1 group-hover/btn:translate-x-1 transition-transform" />
                                     </Button>
@@ -327,7 +327,7 @@ function CategoriesSection() {
     ];
 
     return (
-        <section className="py-16 md:py-24 bg-white">
+        <section className="py-16 md:py-24 bg-forest-card">
             <div className="container-custom">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -335,10 +335,10 @@ function CategoriesSection() {
                     viewport={{ once: true }}
                     className="text-center max-w-2xl mx-auto mb-12"
                 >
-                    <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
+                    <h2 className="text-3xl md:text-4xl font-bold text-forest-beige mb-4">
                         Explore by Category
                     </h2>
-                    <p className="text-slate-600">
+                    <p className="text-forest-muted">
                         Find volunteer opportunities that match your passion and skills.
                     </p>
                 </motion.div>
@@ -355,12 +355,12 @@ function CategoriesSection() {
                                 transition={{ delay: index * 0.05 }}
                             >
                                 <Link href={`/explore?category=${category.name.toLowerCase()}`}>
-                                    <Card className="group cursor-pointer border-slate-100 hover:border-emerald-200 hover:shadow-lg transition-all duration-200">
+                                    <Card className="group cursor-pointer border-forest-border hover:border-[#4A5D23] hover:shadow-lg transition-all duration-200">
                                         <CardContent className="p-6 text-center">
                                             <div className={cn(
                                                 "w-14 h-14 rounded-xl mx-auto mb-3 flex items-center justify-center transition-colors",
                                                 category.color === 'blue' && "bg-blue-100 text-blue-600",
-                                                category.color === 'emerald' && "bg-emerald-100 text-emerald-600",
+                                                category.color === 'emerald' && "bg-[#2C3322] text-[#829661]",
                                                 category.color === 'red' && "bg-red-100 text-red-600",
                                                 category.color === 'amber' && "bg-amber-100 text-amber-600",
                                                 category.color === 'purple' && "bg-purple-100 text-purple-600",
@@ -368,10 +368,10 @@ function CategoriesSection() {
                                             )}>
                                                 <Icon className="w-7 h-7" />
                                             </div>
-                                            <h3 className="font-semibold text-slate-900 mb-1 group-hover:text-emerald-600 transition-colors">
+                                            <h3 className="font-semibold text-forest-beige mb-1 group-hover:text-[#829661] transition-colors">
                                                 {category.name}
                                             </h3>
-                                            <p className="text-sm text-slate-500">{category.count} projects</p>
+                                            <p className="text-sm text-forest-muted">{category.count} projects</p>
                                         </CardContent>
                                     </Card>
                                 </Link>
@@ -413,7 +413,7 @@ function HowItWorksSection() {
     ];
 
     return (
-        <section className="py-16 md:py-24 bg-slate-50">
+        <section className="py-16 md:py-24 bg-[#181A15]">
             <div className="container-custom">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -422,10 +422,10 @@ function HowItWorksSection() {
                     className="text-center max-w-2xl mx-auto mb-12"
                 >
                     <Badge className="mb-4 bg-blue-100 text-blue-700">How It Works</Badge>
-                    <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
+                    <h2 className="text-3xl md:text-4xl font-bold text-forest-beige mb-4">
                         Your Journey Starts Here
                     </h2>
-                    <p className="text-slate-600">
+                    <p className="text-forest-muted">
                         Get started in minutes and begin making an impact today.
                     </p>
                 </motion.div>
@@ -442,23 +442,23 @@ function HowItWorksSection() {
                                 transition={{ delay: index * 0.1 }}
                                 className="relative"
                             >
-                                <Card className="border-slate-100 bg-white">
+                                <Card className="border-forest-border bg-forest-card">
                                     <CardContent className="p-6 text-center">
                                         <div className="relative">
-                                            <div className="w-16 h-16 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto mb-4">
+                                            <div className="w-16 h-16 rounded-2xl bg-[#2C3322] text-[#829661] flex items-center justify-center mx-auto mb-4">
                                                 <Icon className="w-8 h-8" />
                                             </div>
-                                            <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-7 h-7 bg-emerald-500 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-lg shadow-emerald-500/25">
+                                            <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-7 h-7 bg-forest-accent rounded-full flex items-center justify-center text-white font-bold text-sm shadow-lg shadow-forest-accent/25">
                                                 {step.step}
                                             </div>
                                         </div>
-                                        <h3 className="font-semibold text-slate-900 text-lg mb-2">{step.title}</h3>
-                                        <p className="text-slate-500 text-sm">{step.description}</p>
+                                        <h3 className="font-semibold text-forest-beige text-lg mb-2">{step.title}</h3>
+                                        <p className="text-forest-muted text-sm">{step.description}</p>
                                     </CardContent>
                                 </Card>
 
                                 {index < steps.length - 1 && (
-                                    <div className="hidden lg:block absolute top-1/2 -right-3 w-6 text-slate-200">
+                                    <div className="hidden lg:block absolute top-1/2 -right-3 w-6 text-forest-border">
                                         <ChevronRight className="w-6 h-6" />
                                     </div>
                                 )}
@@ -494,7 +494,7 @@ function TestimonialsSection() {
     ];
 
     return (
-        <section className="py-16 md:py-24 bg-white">
+        <section className="py-16 md:py-24 bg-forest-card">
             <div className="container-custom">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -502,10 +502,10 @@ function TestimonialsSection() {
                     viewport={{ once: true }}
                     className="text-center max-w-2xl mx-auto mb-12"
                 >
-                    <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
+                    <h2 className="text-3xl md:text-4xl font-bold text-forest-beige mb-4">
                         Stories from Our Community
                     </h2>
-                    <p className="text-slate-600">
+                    <p className="text-forest-muted">
                         Hear from volunteers and organizations who are making a difference.
                     </p>
                 </motion.div>
@@ -519,17 +519,17 @@ function TestimonialsSection() {
                             viewport={{ once: true }}
                             transition={{ delay: index * 0.1 }}
                         >
-                            <Card className="border-slate-100 h-full">
+                            <Card className="border-forest-border h-full">
                                 <CardContent className="p-6">
                                     <div className="flex items-center gap-4 mb-4">
                                         <img
                                             src={testimonial.avatar}
                                             alt={testimonial.name}
-                                            className="w-14 h-14 rounded-full object-cover border-2 border-emerald-100"
+                                            className="w-14 h-14 rounded-full object-cover border-2 border-forest-border"
                                         />
                                         <div>
-                                            <h4 className="font-semibold text-slate-900">{testimonial.name}</h4>
-                                            <p className="text-sm text-slate-500">{testimonial.role}</p>
+                                            <h4 className="font-semibold text-forest-beige">{testimonial.name}</h4>
+                                            <p className="text-sm text-forest-muted">{testimonial.role}</p>
                                         </div>
                                     </div>
                                     <div className="flex gap-0.5 mb-4">
@@ -537,7 +537,7 @@ function TestimonialsSection() {
                                             <span key={i} className="text-amber-400 text-lg">★</span>
                                         ))}
                                     </div>
-                                    <p className="text-slate-600 leading-relaxed">&ldquo;{testimonial.content}&rdquo;</p>
+                                    <p className="text-forest-muted leading-relaxed">&ldquo;{testimonial.content}&rdquo;</p>
                                 </CardContent>
                             </Card>
                         </motion.div>
@@ -577,7 +577,7 @@ function FAQSection() {
     ];
 
     return (
-        <section className="py-16 md:py-24 bg-slate-50">
+        <section className="py-16 md:py-24 bg-[#181A15]">
             <div className="container-custom">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -586,10 +586,10 @@ function FAQSection() {
                     className="text-center max-w-2xl mx-auto mb-12"
                 >
                     <Badge className="mb-4 bg-amber-100 text-amber-700">FAQ</Badge>
-                    <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
+                    <h2 className="text-3xl md:text-4xl font-bold text-forest-beige mb-4">
                         Frequently Asked Questions
                     </h2>
-                    <p className="text-slate-600">
+                    <p className="text-forest-muted">
                         Everything you need to know about JALA VIVE.
                     </p>
                 </motion.div>
@@ -606,12 +606,12 @@ function FAQSection() {
                             >
                                 <AccordionItem
                                     value={`item-${index}`}
-                                    className="bg-white rounded-2xl border border-slate-100 px-6"
+                                    className="bg-forest-card rounded-2xl border border-forest-border px-6"
                                 >
-                                    <AccordionTrigger className="text-left font-semibold text-slate-900 hover:text-emerald-600 hover:no-underline">
+                                    <AccordionTrigger className="text-left font-semibold text-forest-beige hover:text-[#829661] hover:no-underline">
                                         {faq.question}
                                     </AccordionTrigger>
-                                    <AccordionContent className="text-slate-600 pb-4">
+                                    <AccordionContent className="text-forest-muted pb-4">
                                         {faq.answer}
                                     </AccordionContent>
                                 </AccordionItem>
@@ -626,7 +626,7 @@ function FAQSection() {
 
 function CTASection() {
     return (
-        <section className="py-16 md:py-24 bg-gradient-to-br from-emerald-500 to-emerald-600">
+        <section className="py-16 md:py-24 bg-forest-card border-y border-forest-border">
             <div className="container-custom">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -637,18 +637,18 @@ function CTASection() {
                     <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
                         Ready to Make an Impact?
                     </h2>
-                    <p className="text-emerald-100 text-lg mb-8">
+                    <p className="text-forest-muted text-lg mb-8">
                         Join thousands of volunteers and organizations creating positive change in communities across Indonesia.
                     </p>
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                         <Link href="/register">
-                            <Button size="lg" className="bg-white text-emerald-600 hover:bg-emerald-50 h-14 px-8 text-base rounded-xl shadow-lg">
+                            <Button size="lg" className="bg-forest-card text-[#829661] hover:bg-[#21261B] h-14 px-8 text-base rounded-xl shadow-lg">
                                 Get Started for Free
                                 <ArrowRight className="w-4 h-4 ml-2" />
                             </Button>
                         </Link>
                         <Link href="/explore">
-                            <Button size="lg" variant="outline" className="h-14 px-8 text-base rounded-xl border-2 border-white text-white hover:bg-white/10">
+                            <Button size="lg" variant="outline" className="h-14 px-8 text-base rounded-xl border-2 border-white text-white hover:bg-forest-card/10">
                                 Browse Projects
                             </Button>
                         </Link>

@@ -71,7 +71,7 @@ const PUBLIC_EVENTS = [
 
 export default function PublicEventsPage() {
   return (
-    <div className="min-h-screen bg-slate-50 pt-24 pb-20">
+    <div className="min-h-screen bg-[#181A15] pt-24 pb-20">
       
       {/* Background Decor */}
       <div className="absolute top-0 inset-x-0 h-[500px] bg-gradient-to-b from-emerald-500/10 to-transparent -z-10" />
@@ -80,13 +80,13 @@ export default function PublicEventsPage() {
         {/* Header Section */}
         <div className="text-center max-w-3xl mx-auto mb-16 space-y-6">
           <motion.div initial="initial" animate="animate" variants={fadeInUp}>
-            <span className="inline-block py-1 px-3 rounded-full bg-emerald-100 text-emerald-700 text-sm font-semibold tracking-wider uppercase mb-4">
+            <span className="inline-block py-1 px-3 rounded-full bg-[#2C3322] text-[#829661] text-sm font-semibold tracking-wider uppercase mb-4">
               Upcoming Events
             </span>
-            <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">
+            <h1 className="text-4xl md:text-5xl font-extrabold text-forest-beige tracking-tight leading-tight">
               Find Meaningful <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-500">Opportunities</span>
             </h1>
-            <p className="text-lg text-slate-600 mt-4">
+            <p className="text-lg text-forest-muted mt-4">
               Discover and join community events, workshops, and volunteering activities happening around you or online.
             </p>
           </motion.div>
@@ -97,20 +97,20 @@ export default function PublicEventsPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 mb-12 flex flex-col md:flex-row gap-4"
+          className="bg-forest-card p-4 rounded-2xl shadow-sm border border-forest-border mb-12 flex flex-col md:flex-row gap-4"
         >
           <div className="relative flex-1">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#7A8072]" />
             <Input 
               placeholder="Search for events, organizations, or causes..." 
-              className="pl-12 h-12 bg-slate-50 border-0 focus-visible:ring-emerald-500 rounded-xl text-base"
+              className="pl-12 h-12 bg-[#181A15] border-0 focus-visible:ring-emerald-500 rounded-xl text-base"
             />
           </div>
           <div className="flex gap-4">
-            <Button variant="outline" className="h-12 px-6 rounded-xl border-slate-200 text-slate-600 hover:bg-slate-50">
+            <Button variant="outline" className="h-12 px-6 rounded-xl border-forest-border text-forest-muted hover:bg-[#181A15]">
               <Filter className="w-5 h-5 mr-2" /> Filters
             </Button>
-            <Button className="h-12 px-8 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-medium">
+            <Button className="h-12 px-8 rounded-xl bg-[#4A5D23] hover:bg-emerald-700 text-white font-medium">
               Search
             </Button>
           </div>
@@ -127,7 +127,7 @@ export default function PublicEventsPage() {
             <motion.div 
               key={event.id} 
               variants={fadeInUp}
-              className="group bg-white rounded-3xl overflow-hidden border border-slate-100 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col sm:flex-row"
+              className="group bg-forest-card rounded-3xl overflow-hidden border border-forest-border shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col sm:flex-row"
             >
               {/* Event Image */}
               <div className="sm:w-2/5 relative overflow-hidden h-64 sm:h-auto">
@@ -137,7 +137,7 @@ export default function PublicEventsPage() {
                   className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 />
                 <div className="absolute top-4 left-4">
-                  <Badge className="bg-white/90 backdrop-blur-sm text-slate-800 border-0 font-medium">
+                  <Badge className="bg-forest-card/90 backdrop-blur-sm text-forest-beige border-0 font-medium">
                     {event.category}
                   </Badge>
                 </div>
@@ -146,35 +146,35 @@ export default function PublicEventsPage() {
               {/* Event Details */}
               <div className="p-6 sm:w-3/5 flex flex-col justify-between">
                 <div>
-                  <div className="text-sm font-semibold text-emerald-600 mb-2">
+                  <div className="text-sm font-semibold text-[#829661] mb-2">
                     {event.organization}
                   </div>
-                  <h3 className="text-xl font-bold text-slate-900 mb-4 line-clamp-2 group-hover:text-emerald-600 transition-colors">
+                  <h3 className="text-xl font-bold text-forest-beige mb-4 line-clamp-2 group-hover:text-[#829661] transition-colors">
                     {event.title}
                   </h3>
                   
                   <div className="space-y-2 mb-6">
-                    <div className="flex items-center text-sm text-slate-600">
-                      <Calendar className="w-4 h-4 mr-3 text-slate-400" />
+                    <div className="flex items-center text-sm text-forest-muted">
+                      <Calendar className="w-4 h-4 mr-3 text-[#7A8072]" />
                       {event.date}
                     </div>
-                    <div className="flex items-center text-sm text-slate-600">
-                      <Clock className="w-4 h-4 mr-3 text-slate-400" />
+                    <div className="flex items-center text-sm text-forest-muted">
+                      <Clock className="w-4 h-4 mr-3 text-[#7A8072]" />
                       {event.time}
                     </div>
-                    <div className="flex items-center text-sm text-slate-600">
-                      <MapPin className="w-4 h-4 mr-3 text-slate-400" />
+                    <div className="flex items-center text-sm text-forest-muted">
+                      <MapPin className="w-4 h-4 mr-3 text-[#7A8072]" />
                       <span className="line-clamp-1">{event.location}</span>
                     </div>
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between pt-4 border-t border-slate-100">
+                <div className="flex items-center justify-between pt-4 border-t border-forest-border">
                   <span className="text-sm font-medium text-amber-600 bg-amber-50 px-3 py-1 rounded-full">
                     {event.spotsLeft} spots left
                   </span>
                   <Link href="/register">
-                    <Button variant="ghost" className="text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 rounded-full px-4">
+                    <Button variant="ghost" className="text-[#829661] hover:text-[#829661] hover:bg-[#21261B] rounded-full px-4">
                       Join Event <ArrowRight className="w-4 h-4 ml-2" />
                     </Button>
                   </Link>
@@ -186,7 +186,7 @@ export default function PublicEventsPage() {
 
         {/* Load More */}
         <div className="mt-16 text-center">
-          <Button variant="outline" className="rounded-full h-12 px-8 border-slate-200 text-slate-600 hover:bg-slate-50">
+          <Button variant="outline" className="rounded-full h-12 px-8 border-forest-border text-forest-muted hover:bg-[#181A15]">
             Load More Events
           </Button>
         </div>

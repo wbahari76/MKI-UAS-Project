@@ -63,8 +63,8 @@ export default function OrganizationEventsPage() {
     <div className="space-y-8 pb-20">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Manage Events</h1>
-          <p className="text-slate-500 mt-1">Organize and track your upcoming and past events.</p>
+          <h1 className="text-3xl font-bold text-forest-beige tracking-tight">Manage Events</h1>
+          <p className="text-forest-muted mt-1">Organize and track your upcoming and past events.</p>
         </div>
         <Link href="/organization/projects/new">
           <Button className="btn-primary">
@@ -74,7 +74,7 @@ export default function OrganizationEventsPage() {
         </Link>
       </div>
 
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-4 rounded-2xl border border-slate-100 shadow-sm">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-forest-card p-4 rounded-2xl border border-forest-border shadow-sm">
         <Tabs defaultValue="upcoming" className="w-full sm:w-[400px]" onValueChange={setActiveTab}>
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="upcoming">Upcoming</TabsTrigger>
@@ -83,10 +83,10 @@ export default function OrganizationEventsPage() {
         </Tabs>
         
         <div className="relative w-full sm:w-auto flex-1 max-w-sm">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#7A8072]" />
           <Input 
             placeholder="Search events..." 
-            className="pl-9 bg-slate-50 border-0 focus-visible:ring-emerald-500"
+            className="pl-9 bg-[#181A15] border-0 focus-visible:ring-emerald-500"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
@@ -101,18 +101,18 @@ export default function OrganizationEventsPage() {
             exit={{ opacity: 0, scale: 0.95 }}
             className="flex flex-col items-center justify-center py-20 text-center"
           >
-            <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mb-4">
-              <CalendarDays className="w-8 h-8 text-slate-400" />
+            <div className="w-16 h-16 bg-[#181A15] rounded-full flex items-center justify-center mb-4">
+              <CalendarDays className="w-8 h-8 text-[#7A8072]" />
             </div>
-            <h3 className="text-xl font-bold text-slate-900 mb-2">No {activeTab} events found</h3>
-            <p className="text-slate-500 max-w-md mx-auto mb-6">
+            <h3 className="text-xl font-bold text-forest-beige mb-2">No {activeTab} events found</h3>
+            <p className="text-forest-muted max-w-md mx-auto mb-6">
               {activeTab === 'upcoming' 
                 ? "You don't have any upcoming events scheduled. Create one to start engaging volunteers!"
                 : "You don't have any completed events yet."}
             </p>
             {activeTab === 'upcoming' && (
               <Link href="/organization/projects/new">
-                <Button variant="outline" className="border-emerald-200 text-emerald-600 hover:bg-emerald-50">
+                <Button variant="outline" className="border-[#4A5D23] text-[#829661] hover:bg-[#21261B]">
                   Create Event
                 </Button>
               </Link>
@@ -136,13 +136,13 @@ export default function OrganizationEventsPage() {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent" />
                     <div className="absolute top-4 left-4">
-                      <Badge className="bg-white/90 text-slate-900 border-0 hover:bg-white backdrop-blur-sm">
+                      <Badge className="bg-forest-card/90 text-forest-beige border-0 hover:bg-forest-card backdrop-blur-sm">
                         {event.category}
                       </Badge>
                     </div>
                     {event.status === 'completed' && (
                       <div className="absolute top-4 right-4">
-                        <Badge className="bg-emerald-500 text-white border-0">
+                        <Badge className="bg-forest-accent text-white border-0">
                           <CheckCircle2 className="w-3 h-3 mr-1" />
                           Completed
                         </Badge>
@@ -150,36 +150,36 @@ export default function OrganizationEventsPage() {
                     )}
                   </div>
                   <CardContent className="p-6">
-                    <h3 className="text-xl font-bold text-slate-900 mb-4 group-hover:text-emerald-600 transition-colors">
+                    <h3 className="text-xl font-bold text-forest-beige mb-4 group-hover:text-[#829661] transition-colors">
                       {event.title}
                     </h3>
                     
                     <div className="space-y-2 mb-6">
-                      <div className="flex items-center text-sm text-slate-600">
-                        <CalendarDays className="w-4 h-4 mr-2 text-emerald-500" />
+                      <div className="flex items-center text-sm text-forest-muted">
+                        <CalendarDays className="w-4 h-4 mr-2 text-forest-accent" />
                         {new Date(event.date).toLocaleDateString('en-US', { 
                           weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' 
                         })}
                       </div>
-                      <div className="flex items-center text-sm text-slate-600">
-                        <Clock className="w-4 h-4 mr-2 text-emerald-500" />
+                      <div className="flex items-center text-sm text-forest-muted">
+                        <Clock className="w-4 h-4 mr-2 text-forest-accent" />
                         {event.time}
                       </div>
-                      <div className="flex items-center text-sm text-slate-600">
-                        <MapPin className="w-4 h-4 mr-2 text-emerald-500" />
+                      <div className="flex items-center text-sm text-forest-muted">
+                        <MapPin className="w-4 h-4 mr-2 text-forest-accent" />
                         {event.location}
                       </div>
                     </div>
                     
-                    <div className="flex items-center justify-between border-t border-slate-100 pt-4 mb-4">
+                    <div className="flex items-center justify-between border-t border-forest-border pt-4 mb-4">
                       <div className="text-sm">
-                        <span className="font-semibold text-slate-900">{event.registeredVolunteers}</span>
-                        <span className="text-slate-500 ml-1">Volunteers</span>
+                        <span className="font-semibold text-forest-beige">{event.registeredVolunteers}</span>
+                        <span className="text-forest-muted ml-1">Volunteers</span>
                       </div>
                     </div>
 
                     <Link href={`/organization/projects`}>
-                      <Button className="w-full bg-slate-50 text-slate-700 hover:bg-emerald-50 hover:text-emerald-600 transition-colors">
+                      <Button className="w-full bg-[#181A15] text-[#DFD5C2] hover:bg-[#21261B] hover:text-[#829661] transition-colors">
                         Manage Event
                         <ArrowUpRight className="w-4 h-4 ml-2" />
                       </Button>

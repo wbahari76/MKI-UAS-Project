@@ -76,11 +76,11 @@ export default function RegisterPage() {
         <div className="min-h-screen flex items-center justify-center bg-gradient-hero p-4">
             <div className="w-full max-w-md">
                 <div className="text-center mb-8">
-                    <Link href="/" className="inline-flex items-center gap-2 text-2xl font-bold text-slate-900 mb-2">
-                        <Sparkles className="w-6 h-6 text-emerald-500" />
+                    <Link href="/" className="inline-flex items-center gap-2 text-2xl font-bold text-forest-beige mb-2">
+                        <Sparkles className="w-6 h-6 text-forest-accent" />
                         JALA VIVE
                     </Link>
-                    <p className="text-slate-600">Join our collaborative ecosystem</p>
+                    <p className="text-forest-muted">Join our collaborative ecosystem</p>
                 </div>
 
                 <AnimatePresence mode="wait">
@@ -103,16 +103,16 @@ export default function RegisterPage() {
                                     <button
                                         onClick={() => handleRoleSelect('volunteer')}
                                         className={`w-full flex items-start gap-4 p-4 rounded-xl border-2 transition-all duration-200 text-left ${role === 'volunteer'
-                                                ? 'border-emerald-500 bg-emerald-50'
-                                                : 'border-slate-200 hover:border-emerald-300 hover:bg-slate-50'
+                                                ? 'border-forest-accent bg-[#21261B]'
+                                                : 'border-forest-border hover:border-emerald-300 hover:bg-[#181A15]'
                                             }`}
                                     >
-                                        <div className={`p-2 rounded-lg ${role === 'volunteer' ? 'bg-emerald-500 text-white' : 'bg-slate-100 text-slate-600'}`}>
+                                        <div className={`p-2 rounded-lg ${role === 'volunteer' ? 'bg-forest-accent text-white' : 'bg-[#1E211A] text-forest-muted'}`}>
                                             <HandHelping className="w-6 h-6" />
                                         </div>
                                         <div>
-                                            <h3 className="font-semibold text-slate-900">Volunteer</h3>
-                                            <p className="text-sm text-slate-500">I want to join projects and create impact</p>
+                                            <h3 className="font-semibold text-forest-beige">Volunteer</h3>
+                                            <p className="text-sm text-forest-muted">I want to join projects and create impact</p>
                                         </div>
                                     </button>
 
@@ -120,22 +120,22 @@ export default function RegisterPage() {
                                         onClick={() => handleRoleSelect('organization')}
                                         className={`w-full flex items-start gap-4 p-4 rounded-xl border-2 transition-all duration-200 text-left ${role === 'organization'
                                                 ? 'border-blue-500 bg-blue-50'
-                                                : 'border-slate-200 hover:border-blue-300 hover:bg-slate-50'
+                                                : 'border-forest-border hover:border-blue-300 hover:bg-[#181A15]'
                                             }`}
                                     >
-                                        <div className={`p-2 rounded-lg ${role === 'organization' ? 'bg-blue-500 text-white' : 'bg-slate-100 text-slate-600'}`}>
+                                        <div className={`p-2 rounded-lg ${role === 'organization' ? 'bg-blue-500 text-white' : 'bg-[#1E211A] text-forest-muted'}`}>
                                             <Building2 className="w-6 h-6" />
                                         </div>
                                         <div>
-                                            <h3 className="font-semibold text-slate-900">Organization</h3>
-                                            <p className="text-sm text-slate-500">We want to create and manage projects</p>
+                                            <h3 className="font-semibold text-forest-beige">Organization</h3>
+                                            <p className="text-sm text-forest-muted">We want to create and manage projects</p>
                                         </div>
                                     </button>
                                 </CardContent>
-                                <CardFooter className="flex justify-center border-t border-slate-100 pt-6">
-                                    <p className="text-sm text-slate-600">
+                                <CardFooter className="flex justify-center border-t border-forest-border pt-6">
+                                    <p className="text-sm text-forest-muted">
                                         Already have an account?{' '}
-                                        <Link href="/login" className="text-emerald-600 hover:text-emerald-700 font-medium">
+                                        <Link href="/login" className="text-[#829661] hover:text-[#829661] font-medium">
                                             Sign In
                                         </Link>
                                     </p>
@@ -157,7 +157,7 @@ export default function RegisterPage() {
                                     <div className="flex items-center gap-2 mb-2">
                                         <button
                                             onClick={() => setStep(1)}
-                                            className="text-slate-400 hover:text-slate-600 transition-colors"
+                                            className="text-[#7A8072] hover:text-forest-muted transition-colors"
                                         >
                                             <ArrowLeft className="w-5 h-5" />
                                         </button>
@@ -254,15 +254,15 @@ export default function RegisterPage() {
                                 initial={{ scale: 0 }}
                                 animate={{ scale: 1 }}
                                 transition={{ type: "spring", delay: 0.2 }}
-                                className="w-20 h-20 bg-emerald-100 text-emerald-500 rounded-full flex items-center justify-center mx-auto mb-6"
+                                className="w-20 h-20 bg-[#2C3322] text-forest-accent rounded-full flex items-center justify-center mx-auto mb-6"
                             >
                                 <CheckCircle2 className="w-10 h-10" />
                             </motion.div>
-                            <h2 className="text-2xl font-bold text-slate-900 mb-2">Registration Complete!</h2>
-                            <p className="text-slate-600 mb-6">
+                            <h2 className="text-2xl font-bold text-forest-beige mb-2">Registration Complete!</h2>
+                            <p className="text-forest-muted mb-6">
                                 Redirecting you to your dashboard...
                             </p>
-                            <Loader2 className="w-6 h-6 animate-spin mx-auto text-emerald-500" />
+                            <Loader2 className="w-6 h-6 animate-spin mx-auto text-forest-accent" />
                         </motion.div>
                     )}
                 </AnimatePresence>

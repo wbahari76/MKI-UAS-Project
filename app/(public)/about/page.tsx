@@ -67,7 +67,7 @@ const TEAM_MEMBERS = [
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-[#181A15]">
       {/* Hero Section */}
       <section className="relative pt-32 pb-20 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-blue-500/5 -z-10" />
@@ -82,28 +82,28 @@ export default function AboutPage() {
             className="max-w-3xl mx-auto space-y-8"
           >
             <motion.div variants={fadeIn}>
-              <span className="inline-block py-1 px-3 rounded-full bg-emerald-100 text-emerald-700 text-sm font-semibold tracking-wider uppercase mb-4">
+              <span className="inline-block py-1 px-3 rounded-full bg-[#2C3322] text-[#829661] text-sm font-semibold tracking-wider uppercase mb-4">
                 Our Story
               </span>
-              <h1 className="text-4xl md:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight">
+              <h1 className="text-4xl md:text-6xl font-extrabold text-forest-beige tracking-tight leading-tight">
                 Connecting Passion with <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-500">Purpose</span>
               </h1>
             </motion.div>
             
             <motion.div variants={fadeIn}>
-              <p className="text-lg md:text-xl text-slate-600 leading-relaxed">
+              <p className="text-lg md:text-xl text-forest-muted leading-relaxed">
                 JALA VIVE is a platform dedicated to bridging the gap between passionate volunteers and organizations driving real impact. We believe that everyone has the power to make a difference.
               </p>
             </motion.div>
             
             <motion.div variants={fadeIn} className="flex flex-col sm:flex-row justify-center gap-4 pt-4">
               <Link href="/register">
-                <Button className="w-full sm:w-auto px-8 h-12 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white text-base shadow-lg shadow-emerald-500/25 transition-all">
+                <Button className="w-full sm:w-auto px-8 h-12 rounded-full bg-[#4A5D23] hover:bg-emerald-700 text-white text-base shadow-lg shadow-emerald-500/25 transition-all">
                   Join as Volunteer
                 </Button>
               </Link>
               <Link href="/register?type=organization">
-                <Button variant="outline" className="w-full sm:w-auto px-8 h-12 rounded-full border-slate-200 hover:bg-slate-50 text-slate-700 text-base transition-all">
+                <Button variant="outline" className="w-full sm:w-auto px-8 h-12 rounded-full border-forest-border hover:bg-[#181A15] text-[#DFD5C2] text-base transition-all">
                   Register Organization
                 </Button>
               </Link>
@@ -113,7 +113,7 @@ export default function AboutPage() {
       </section>
 
       {/* Mission & Vision */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-forest-card">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-2 gap-16 items-center">
             <motion.div 
@@ -123,8 +123,8 @@ export default function AboutPage() {
               transition={{ duration: 0.6 }}
               className="space-y-6"
             >
-              <h2 className="text-3xl font-bold text-slate-900">Our Mission</h2>
-              <p className="text-slate-600 leading-relaxed text-lg">
+              <h2 className="text-3xl font-bold text-forest-beige">Our Mission</h2>
+              <p className="text-forest-muted leading-relaxed text-lg">
                 To empower communities by providing an accessible, transparent, and engaging platform for volunteering. We strive to simplify the process of finding meaningful causes, allowing people to focus on what truly matters: making an impact.
               </p>
               <ul className="space-y-4 pt-4">
@@ -133,8 +133,8 @@ export default function AboutPage() {
                   { icon: Globe, text: "Fostering a global network of changemakers" },
                   { icon: Heart, text: "Celebrating every hour of community service" }
                 ].map((item, i) => (
-                  <li key={i} className="flex items-center gap-4 text-slate-700 font-medium">
-                    <div className="w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center text-emerald-600 shrink-0">
+                  <li key={i} className="flex items-center gap-4 text-[#DFD5C2] font-medium">
+                    <div className="w-10 h-10 rounded-full bg-[#21261B] flex items-center justify-center text-[#829661] shrink-0">
                       <item.icon size={20} />
                     </div>
                     {item.text}
@@ -162,9 +162,9 @@ export default function AboutPage() {
       </section>
 
       {/* Core Values */}
-      <section className="py-24 bg-slate-50">
+      <section className="py-24 bg-[#181A15]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold text-slate-900 mb-16">Our Core Values</h2>
+          <h2 className="text-3xl font-bold text-forest-beige mb-16">Our Core Values</h2>
           
           <div className="grid md:grid-cols-3 gap-8">
             {[
@@ -179,8 +179,8 @@ export default function AboutPage() {
                 title: "Transparency", 
                 desc: "We believe in clear communication and honest reporting to build trust between volunteers and organizations.",
                 icon: Globe,
-                color: "text-emerald-600",
-                bg: "bg-emerald-100"
+                color: "text-[#829661]",
+                bg: "bg-[#2C3322]"
               },
               { 
                 title: "Impact Driven", 
@@ -196,13 +196,13 @@ export default function AboutPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1, duration: 0.5 }}
-                className="bg-white p-8 rounded-3xl shadow-sm shadow-slate-200 border border-slate-100 hover:shadow-lg transition-all"
+                className="bg-forest-card p-8 rounded-3xl shadow-sm shadow-slate-200 border border-forest-border hover:shadow-lg transition-all"
               >
                 <div className={`w-14 h-14 rounded-2xl ${value.bg} ${value.color} flex items-center justify-center mx-auto mb-6`}>
                   <value.icon size={28} />
                 </div>
-                <h3 className="text-xl font-bold text-slate-900 mb-3">{value.title}</h3>
-                <p className="text-slate-600 leading-relaxed">{value.desc}</p>
+                <h3 className="text-xl font-bold text-forest-beige mb-3">{value.title}</h3>
+                <p className="text-forest-muted leading-relaxed">{value.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -210,16 +210,16 @@ export default function AboutPage() {
       </section>
 
       {/* Team Section */}
-      <section className="py-24 bg-slate-50">
+      <section className="py-24 bg-[#181A15]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
-            <span className="inline-block py-1 px-3 rounded-full bg-emerald-100 text-emerald-700 text-sm font-semibold tracking-wider uppercase">
+            <span className="inline-block py-1 px-3 rounded-full bg-[#2C3322] text-[#829661] text-sm font-semibold tracking-wider uppercase">
               Our Team
             </span>
-            <h2 className="text-3xl md:text-5xl font-extrabold text-slate-900 tracking-tight">
-              The People Behind <span className="text-emerald-600">JALA VIVE</span>
+            <h2 className="text-3xl md:text-5xl font-extrabold text-forest-beige tracking-tight">
+              The People Behind <span className="text-[#829661]">JALA VIVE</span>
             </h2>
-            <p className="text-slate-600 text-lg leading-relaxed">
+            <p className="text-forest-muted text-lg leading-relaxed">
               Kami adalah sekelompok individu yang memiliki visi yang sama untuk menciptakan dampak positif melalui teknologi dan kolaborasi.
             </p>
           </div>
@@ -232,25 +232,25 @@ export default function AboutPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1, duration: 0.5 }}
-                className="w-full sm:w-[calc(50%-12px)] lg:w-[calc(25%-24px)] bg-white p-5 rounded-2xl shadow-[0_10px_30px_rgba(2,6,23,0.06)] border border-slate-100 hover:-translate-y-2 transition-all duration-300 flex flex-col"
+                className="w-full sm:w-[calc(50%-12px)] lg:w-[calc(25%-24px)] bg-forest-card p-5 rounded-2xl shadow-[0_10px_30px_rgba(2,6,23,0.06)] border border-forest-border hover:-translate-y-2 transition-all duration-300 flex flex-col"
               >
-                <div className="aspect-square w-full rounded-2xl overflow-hidden mb-5 bg-slate-100 shrink-0">
+                <div className="aspect-square w-full rounded-2xl overflow-hidden mb-5 bg-[#1E211A] shrink-0">
                   <img src={member.image} alt={member.name} className="w-full h-full object-cover" />
                 </div>
                 <div className="text-center flex-1 flex flex-col">
-                  <h3 className="text-lg font-bold text-slate-900">{member.name}</h3>
-                  <p className="text-sm font-semibold text-emerald-500 mb-3 tracking-wide">{member.role}</p>
-                  <p className="text-sm text-slate-500 mb-6 line-clamp-2 leading-relaxed flex-1">
+                  <h3 className="text-lg font-bold text-forest-beige">{member.name}</h3>
+                  <p className="text-sm font-semibold text-forest-accent mb-3 tracking-wide">{member.role}</p>
+                  <p className="text-sm text-forest-muted mb-6 line-clamp-2 leading-relaxed flex-1">
                     {member.description}
                   </p>
                   <div className="flex justify-center gap-3 mt-auto">
-                    <button className="w-8 h-8 rounded-full bg-slate-50 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 flex items-center justify-center transition-colors">
+                    <button className="w-8 h-8 rounded-full bg-[#181A15] text-[#7A8072] hover:text-[#829661] hover:bg-[#21261B] flex items-center justify-center transition-colors">
                       <Linkedin className="w-4 h-4" />
                     </button>
-                    <button className="w-8 h-8 rounded-full bg-slate-50 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 flex items-center justify-center transition-colors">
+                    <button className="w-8 h-8 rounded-full bg-[#181A15] text-[#7A8072] hover:text-[#829661] hover:bg-[#21261B] flex items-center justify-center transition-colors">
                       <Twitter className="w-4 h-4" />
                     </button>
-                    <button className="w-8 h-8 rounded-full bg-slate-50 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 flex items-center justify-center transition-colors">
+                    <button className="w-8 h-8 rounded-full bg-[#181A15] text-[#7A8072] hover:text-[#829661] hover:bg-[#21261B] flex items-center justify-center transition-colors">
                       <Mail className="w-4 h-4" />
                     </button>
                   </div>
@@ -263,7 +263,7 @@ export default function AboutPage() {
 
       {/* CTA Section */}
       <section className="py-24 relative overflow-hidden">
-        <div className="absolute inset-0 bg-slate-900" />
+        <div className="absolute inset-0 bg-forest" />
         <div className="absolute inset-0 bg-gradient-to-br from-emerald-600/20 to-transparent" />
         
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8">
@@ -275,7 +275,7 @@ export default function AboutPage() {
           </p>
           <div className="pt-4 flex justify-center">
             <Link href="/register">
-              <Button className="h-14 px-8 rounded-full bg-emerald-500 hover:bg-emerald-400 text-white text-lg font-semibold shadow-lg shadow-emerald-500/20 transition-all gap-2">
+              <Button className="h-14 px-8 rounded-full bg-forest-accent hover:bg-emerald-400 text-white text-lg font-semibold shadow-lg shadow-emerald-500/20 transition-all gap-2">
                 Get Started Today <ArrowRight size={20} />
               </Button>
             </Link>

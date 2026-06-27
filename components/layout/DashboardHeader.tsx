@@ -47,25 +47,25 @@ export default function DashboardHeader({
   };
 
   return (
-    <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-slate-200 bg-white/80 px-4 backdrop-blur-md sm:px-6 lg:px-8">
+    <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-forest-border bg-forest-card/80 px-4 backdrop-blur-md sm:px-6 lg:px-8">
       <div className="flex items-center gap-4">
         <button
           onClick={() => setMobileOpen(true)}
-          className="lg:hidden p-2 -ml-2 rounded-lg text-slate-500 hover:bg-slate-100 transition-colors"
+          className="lg:hidden p-2 -ml-2 rounded-lg text-forest-muted hover:bg-[#1E211A] transition-colors"
         >
           <Menu size={24} />
         </button>
 
-        <form onSubmit={handleSearch} className="hidden sm:flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 focus-within:ring-2 focus-within:ring-emerald-500/20 focus-within:border-emerald-500 transition-all w-64 lg:w-80">
-          <Search size={18} className="text-slate-400" />
+        <form onSubmit={handleSearch} className="hidden sm:flex items-center gap-2 rounded-full border border-forest-border bg-[#181A15] px-3 py-1.5 focus-within:ring-2 focus-within:ring-emerald-500/20 focus-within:border-forest-accent transition-all w-64 lg:w-80">
+          <Search size={18} className="text-[#7A8072]" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search projects, communities..."
-            className="w-full bg-transparent text-sm text-slate-900 outline-none placeholder:text-slate-400"
+            className="w-full bg-transparent text-sm text-forest-beige outline-none placeholder:text-[#7A8072]"
           />
-          <div className="hidden lg:flex items-center gap-1 rounded bg-slate-200 px-1.5 text-[10px] font-medium text-slate-500">
+          <div className="hidden lg:flex items-center gap-1 rounded bg-slate-200 px-1.5 text-[10px] font-medium text-forest-muted">
             <span>⌘</span>
             <span>K</span>
           </div>
@@ -74,12 +74,12 @@ export default function DashboardHeader({
 
       <div className="flex items-center gap-3 sm:gap-4">
         <Link href={`${basePath}/messages`}>
-          <button className="relative rounded-full p-2 text-slate-500 hover:bg-slate-100 transition-colors">
+          <button className="relative rounded-full p-2 text-forest-muted hover:bg-[#1E211A] transition-colors">
             <MessageSquare size={20} />
-            <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-emerald-500 ring-2 ring-white"></span>
+            <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-forest-accent ring-2 ring-white"></span>
           </button>
         </Link>
-        <button onClick={handleNotification} className="relative rounded-full p-2 text-slate-500 hover:bg-slate-100 transition-colors">
+        <button onClick={handleNotification} className="relative rounded-full p-2 text-forest-muted hover:bg-[#1E211A] transition-colors">
           <Bell size={20} />
           <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-red-500 ring-2 ring-white"></span>
         </button>
@@ -87,13 +87,13 @@ export default function DashboardHeader({
         
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <button className="flex items-center gap-2 rounded-full p-1 pr-3 hover:bg-slate-100 transition-colors border border-transparent hover:border-slate-200 outline-none">
-              <div className="h-8 w-8 overflow-hidden rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 font-medium text-sm shrink-0">
+            <button className="flex items-center gap-2 rounded-full p-1 pr-3 hover:bg-[#1E211A] transition-colors border border-transparent hover:border-forest-border outline-none">
+              <div className="h-8 w-8 overflow-hidden rounded-full bg-[#2C3322] flex items-center justify-center text-[#829661] font-medium text-sm shrink-0">
                 {userInitials}
               </div>
               <div className="hidden text-left sm:block">
-                <p className="text-sm font-medium text-slate-900 leading-none truncate max-w-[120px]">{userName}</p>
-                <p className="text-xs text-slate-500 mt-1 capitalize">{userRole}</p>
+                <p className="text-sm font-medium text-forest-beige leading-none truncate max-w-[120px]">{userName}</p>
+                <p className="text-xs text-forest-muted mt-1 capitalize">{userRole}</p>
               </div>
             </button>
           </DropdownMenuTrigger>

@@ -117,10 +117,10 @@ export default function CommunityPage() {
       
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold text-slate-900 tracking-tight">
+        <h1 className="text-3xl font-bold text-forest-beige tracking-tight">
           Community
         </h1>
-        <p className="text-slate-500 mt-1">
+        <p className="text-forest-muted mt-1">
           Share your impact, connect with others, and get inspired.
         </p>
       </div>
@@ -130,8 +130,8 @@ export default function CommunityPage() {
         <CardContent className="p-4 sm:p-6">
           <form onSubmit={handlePost}>
             <div className="flex gap-4">
-              <Avatar className="w-10 h-10 border border-slate-100">
-                <AvatarFallback className="bg-emerald-100 text-emerald-700">
+              <Avatar className="w-10 h-10 border border-forest-border">
+                <AvatarFallback className="bg-[#2C3322] text-[#829661]">
                   {userName.charAt(0).toUpperCase()}
                 </AvatarFallback>
               </Avatar>
@@ -142,9 +142,9 @@ export default function CommunityPage() {
                   value={newPost}
                   onChange={(e) => setNewPost(e.target.value)}
                 />
-                <div className="flex items-center justify-between border-t border-slate-100 pt-4">
+                <div className="flex items-center justify-between border-t border-forest-border pt-4">
                   <div className="flex items-center gap-2">
-                    <Button type="button" variant="ghost" size="icon" className="text-slate-500 hover:text-emerald-600 hover:bg-emerald-50 rounded-full">
+                    <Button type="button" variant="ghost" size="icon" className="text-forest-muted hover:text-[#829661] hover:bg-[#21261B] rounded-full">
                       <ImageIcon className="w-5 h-5" />
                     </Button>
                   </div>
@@ -176,22 +176,22 @@ export default function CommunityPage() {
                 <CardHeader className="p-4 sm:p-6 pb-2">
                   <div className="flex items-start justify-between">
                     <div className="flex items-center gap-3">
-                      <Avatar className="w-10 h-10 border border-slate-100">
+                      <Avatar className="w-10 h-10 border border-forest-border">
                         <AvatarImage src={post.author.avatar} />
-                        <AvatarFallback className="bg-emerald-100 text-emerald-700">
+                        <AvatarFallback className="bg-[#2C3322] text-[#829661]">
                           {post.author.name.charAt(0)}
                         </AvatarFallback>
                       </Avatar>
                       <div>
                         <div className="flex items-center gap-2">
-                          <h4 className="font-semibold text-slate-900">{post.author.name}</h4>
+                          <h4 className="font-semibold text-forest-beige">{post.author.name}</h4>
                           {post.author.isVerified && (
                             <Badge className="bg-blue-100 text-blue-700 hover:bg-blue-200 border-0 h-5 px-1.5 text-[10px]">
                               Verified
                             </Badge>
                           )}
                         </div>
-                        <div className="flex items-center gap-2 text-xs text-slate-500">
+                        <div className="flex items-center gap-2 text-xs text-forest-muted">
                           <span>{post.author.role}</span>
                           <span>•</span>
                           <span>{post.time}</span>
@@ -200,7 +200,7 @@ export default function CommunityPage() {
                     </div>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon" className="text-slate-400 hover:text-slate-600 -mr-2">
+                        <Button variant="ghost" size="icon" className="text-[#7A8072] hover:text-forest-muted -mr-2">
                           <MoreHorizontal className="w-5 h-5" />
                         </Button>
                       </DropdownMenuTrigger>
@@ -214,9 +214,9 @@ export default function CommunityPage() {
                   </div>
                 </CardHeader>
                 <CardContent className="p-4 sm:p-6 pt-2 pb-4">
-                  <p className="text-slate-700 whitespace-pre-wrap">{post.content}</p>
+                  <p className="text-[#DFD5C2] whitespace-pre-wrap">{post.content}</p>
                   {post.image && (
-                    <div className="mt-4 rounded-xl overflow-hidden border border-slate-100">
+                    <div className="mt-4 rounded-xl overflow-hidden border border-forest-border">
                       <img src={post.image} alt="Post image" className="w-full h-auto object-cover max-h-[400px]" />
                     </div>
                   )}
@@ -225,19 +225,19 @@ export default function CommunityPage() {
                   <div className="flex items-center gap-1 sm:gap-4 mt-4">
                     <Button 
                       variant="ghost" 
-                      className={`gap-2 rounded-full hover:bg-red-50 ${post.isLiked ? 'text-red-500 hover:text-red-600' : 'text-slate-500 hover:text-red-500'}`}
+                      className={`gap-2 rounded-full hover:bg-red-50 ${post.isLiked ? 'text-red-500 hover:text-red-600' : 'text-forest-muted hover:text-red-500'}`}
                       onClick={() => handleLike(post.id)}
                     >
                       <Heart className={`w-5 h-5 ${post.isLiked ? 'fill-current' : ''}`} />
                       <span>{post.likes}</span>
                     </Button>
-                    <Button variant="ghost" className="gap-2 text-slate-500 hover:text-blue-500 hover:bg-blue-50 rounded-full">
+                    <Button variant="ghost" className="gap-2 text-forest-muted hover:text-blue-500 hover:bg-blue-50 rounded-full">
                       <MessageCircle className="w-5 h-5" />
                       <span>{post.comments}</span>
                     </Button>
                   </div>
                   <div className="mt-4">
-                    <Button variant="ghost" size="icon" className="text-slate-500 hover:text-emerald-500 hover:bg-emerald-50 rounded-full">
+                    <Button variant="ghost" size="icon" className="text-forest-muted hover:text-forest-accent hover:bg-[#21261B] rounded-full">
                       <Share2 className="w-5 h-5" />
                     </Button>
                   </div>

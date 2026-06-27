@@ -17,6 +17,14 @@ const config: Config = {
     			]
     		},
     		colors: {
+    			forest: {
+    				DEFAULT: '#131511',
+    				card: '#1B1E16',
+    				beige: '#EAE1D1',
+    				muted: '#A3A89D',
+    				accent: '#5C6B45',
+    				border: '#2A2F22',
+    			},
     			primary: {
     				DEFAULT: '#10B981',
     				hover: '#059669',

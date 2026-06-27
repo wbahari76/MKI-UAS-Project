@@ -19,12 +19,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const pathname = usePathname();
 
   return (
-    <div className="flex min-h-screen bg-slate-50/50">
+    <div className="flex min-h-screen bg-[#181A15]/50">
       
       {/* Sidebar */}
-      <aside className="w-64 border-r border-slate-100 bg-white hidden md:block">
+      <aside className="w-64 border-r border-forest-border bg-forest-card hidden md:block">
         <div className="p-6">
-          <h2 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4">
+          <h2 className="text-xs font-bold text-[#7A8072] uppercase tracking-wider mb-4">
             Platform Admin
           </h2>
           <nav className="space-y-2">
@@ -36,8 +36,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 <Link key={item.href} href={item.href}>
                   <div className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${
                     isActive 
-                      ? "bg-slate-900 text-white shadow-md shadow-slate-900/10" 
-                      : "text-slate-500 hover:bg-slate-50 hover:text-slate-900"
+                      ? "bg-forest text-white shadow-md shadow-slate-900/10" 
+                      : "text-forest-muted hover:bg-[#181A15] hover:text-forest-beige"
                   }`}>
                     <Icon className={`w-5 h-5 ${isActive ? "text-emerald-400" : ""}`} />
                     <span className="font-medium text-sm">{item.label}</span>

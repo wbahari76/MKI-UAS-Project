@@ -32,15 +32,15 @@ export function EmptyState({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       className={cn(
-        "flex flex-col items-center justify-center p-8 text-center rounded-2xl border border-dashed border-slate-200 bg-slate-50 min-h-[300px]",
+        "flex flex-col items-center justify-center p-8 text-center rounded-2xl border border-dashed border-forest-border bg-[#181A15] min-h-[300px]",
         className
       )}
     >
-      <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 shadow-sm">
+      <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-[#2C3322] text-[#829661] shadow-sm">
         <Icon size={40} strokeWidth={1.5} />
       </div>
-      <h3 className="mb-2 text-xl font-bold text-slate-900">{title}</h3>
-      <p className="mb-8 max-w-sm text-sm text-slate-500">{description}</p>
+      <h3 className="mb-2 text-xl font-bold text-forest-beige">{title}</h3>
+      <p className="mb-8 max-w-sm text-sm text-forest-muted">{description}</p>
       
       <div className="flex items-center gap-3">
         {secondaryAction && (
@@ -49,7 +49,7 @@ export function EmptyState({
           </Button>
         )}
         {primaryAction && (
-          <Button className="bg-emerald-500 text-white hover:bg-emerald-600 shadow-lg shadow-emerald-500/20" onClick={primaryAction.onClick}>
+          <Button className="bg-forest-accent text-white hover:bg-[#4A5D23] shadow-lg shadow-emerald-500/20" onClick={primaryAction.onClick}>
             {primaryAction.label}
           </Button>
         )}

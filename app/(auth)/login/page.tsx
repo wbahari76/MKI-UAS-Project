@@ -65,11 +65,11 @@ export default function LoginPage() {
                 className="w-full max-w-md"
             >
                 <div className="text-center mb-8">
-                    <Link href="/" className="inline-flex items-center gap-2 text-2xl font-bold text-slate-900 mb-2">
-                        <Sparkles className="w-6 h-6 text-emerald-500" />
+                    <Link href="/" className="inline-flex items-center gap-2 text-2xl font-bold text-forest-beige mb-2">
+                        <Sparkles className="w-6 h-6 text-forest-accent" />
                         JALA VIVE
                     </Link>
-                    <p className="text-slate-600">Welcome back to the community</p>
+                    <p className="text-forest-muted">Welcome back to the community</p>
                 </div>
 
                 <Card className="border-0 shadow-xl shadow-emerald-900/5">
@@ -97,7 +97,7 @@ export default function LoginPage() {
                             <div className="space-y-2">
                                 <div className="flex items-center justify-between">
                                     <Label htmlFor="password">Password</Label>
-                                    <Link href="#" className="text-sm text-emerald-600 hover:text-emerald-700 font-medium">
+                                    <Link href="#" className="text-sm text-[#829661] hover:text-[#829661] font-medium">
                                         Forgot Password?
                                     </Link>
                                 </div>
@@ -130,10 +130,10 @@ export default function LoginPage() {
                             </Button>
                         </form>
                     </CardContent>
-                    <CardFooter className="flex justify-center border-t border-slate-100 pt-6">
-                        <p className="text-sm text-slate-600">
+                    <CardFooter className="flex justify-center border-t border-forest-border pt-6">
+                        <p className="text-sm text-forest-muted">
                             Don't have an account?{' '}
-                            <Link href="/register" className="text-emerald-600 hover:text-emerald-700 font-medium">
+                            <Link href="/register" className="text-[#829661] hover:text-[#829661] font-medium">
                                 Create an account
                             </Link>
                         </p>

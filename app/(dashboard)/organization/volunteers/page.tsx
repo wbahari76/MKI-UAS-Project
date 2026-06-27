@@ -118,10 +118,10 @@ export default function ManageVolunteersPage() {
       {/* Header */}
       <div className="flex flex-col space-y-4 md:flex-row md:items-center md:justify-between md:space-y-0">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900 tracking-tight">
+          <h1 className="text-3xl font-bold text-forest-beige tracking-tight">
             Volunteer Directory
           </h1>
-          <p className="text-slate-500 mt-1">
+          <p className="text-forest-muted mt-1">
             Manage your community of approved volunteers and their records.
           </p>
         </div>
@@ -130,15 +130,15 @@ export default function ManageVolunteersPage() {
       {/* Filters */}
       <div className="flex flex-col sm:flex-row gap-4 mb-6">
         <div className="relative flex-1 w-full max-w-md">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#7A8072]" />
           <Input 
             placeholder="Search by name or skills..." 
-            className="pl-9 bg-white border-slate-200 focus-visible:ring-emerald-500"
+            className="pl-9 bg-forest-card border-forest-border focus-visible:ring-emerald-500"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
-        <Button variant="outline" className="w-full sm:w-auto bg-white">
+        <Button variant="outline" className="w-full sm:w-auto bg-forest-card">
           <Filter className="w-4 h-4 mr-2" /> Filter
         </Button>
       </div>
@@ -153,16 +153,16 @@ export default function ManageVolunteersPage() {
             transition={{ delay: index * 0.05 }}
           >
             <Card className="border-0 shadow-sm shadow-slate-200 hover:shadow-md transition-all group overflow-hidden h-full flex flex-col">
-              <div className="h-16 bg-emerald-50 relative border-b border-emerald-100">
+              <div className="h-16 bg-[#21261B] relative border-b border-emerald-100">
                 <div className="absolute -bottom-8 left-6">
                   <Avatar className="w-16 h-16 border-4 border-white shadow-sm group-hover:scale-105 transition-transform cursor-pointer" onClick={() => handleViewProfile(vol)}>
-                    <AvatarFallback className="bg-slate-200 text-slate-700 text-lg font-bold">
+                    <AvatarFallback className="bg-slate-200 text-[#DFD5C2] text-lg font-bold">
                       {vol.name.charAt(0)}
                     </AvatarFallback>
                   </Avatar>
                 </div>
                 <div className="absolute right-4 top-4">
-                  <Badge className={vol.status === 'Active' ? 'bg-emerald-100 text-emerald-700 border-0 hover:bg-emerald-200' : 'bg-slate-100 text-slate-600 border-0 hover:bg-slate-200'}>
+                  <Badge className={vol.status === 'Active' ? 'bg-[#2C3322] text-[#829661] border-0 hover:bg-emerald-200' : 'bg-[#1E211A] text-forest-muted border-0 hover:bg-slate-200'}>
                     {vol.status}
                   </Badge>
                 </div>
@@ -171,31 +171,31 @@ export default function ManageVolunteersPage() {
               <CardContent className="pt-10 p-6 flex flex-col flex-1">
                 <div className="mb-4">
                   <h3 
-                    className="font-bold text-slate-900 text-lg group-hover:text-emerald-600 cursor-pointer transition-colors"
+                    className="font-bold text-forest-beige text-lg group-hover:text-[#829661] cursor-pointer transition-colors"
                     onClick={() => handleViewProfile(vol)}
                   >
                     {vol.name}
                   </h3>
-                  <p className="text-sm text-slate-500">{vol.role}</p>
+                  <p className="text-sm text-forest-muted">{vol.role}</p>
                 </div>
 
                 <div className="space-y-3 mb-6 flex-1">
-                  <div className="flex items-center text-sm text-slate-600">
-                    <MapPin className="w-4 h-4 mr-2 text-slate-400" />
+                  <div className="flex items-center text-sm text-forest-muted">
+                    <MapPin className="w-4 h-4 mr-2 text-[#7A8072]" />
                     {vol.location}
                   </div>
-                  <div className="flex items-center text-sm text-slate-600">
-                    <Calendar className="w-4 h-4 mr-2 text-slate-400" />
+                  <div className="flex items-center text-sm text-forest-muted">
+                    <Calendar className="w-4 h-4 mr-2 text-[#7A8072]" />
                     Joined {vol.joinedAt}
                   </div>
                   
-                  <div className="flex items-center gap-4 mt-4 p-3 bg-slate-50 rounded-lg">
+                  <div className="flex items-center gap-4 mt-4 p-3 bg-[#181A15] rounded-lg">
                     <div className="flex-1">
-                      <p className="text-xs text-slate-500 mb-1">Hours</p>
-                      <p className="font-semibold text-slate-900">{vol.volunteerHours}</p>
+                      <p className="text-xs text-forest-muted mb-1">Hours</p>
+                      <p className="font-semibold text-forest-beige">{vol.volunteerHours}</p>
                     </div>
-                    <div className="flex-1 border-l border-slate-200 pl-4">
-                      <p className="text-xs text-slate-500 mb-1">Rating</p>
+                    <div className="flex-1 border-l border-forest-border pl-4">
+                      <p className="text-xs text-forest-muted mb-1">Rating</p>
                       <p className="font-semibold text-amber-500 flex items-center">
                         <Star className="w-3 h-3 mr-1 fill-current" /> {vol.rating}
                       </p>
@@ -203,13 +203,13 @@ export default function ManageVolunteersPage() {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2 pt-4 border-t border-slate-100">
+                <div className="flex items-center gap-2 pt-4 border-t border-forest-border">
                   <Button variant="outline" className="flex-1 text-blue-600 hover:text-blue-700 hover:bg-blue-50 border-blue-200">
                     <MessageCircle className="w-4 h-4 mr-2" /> Message
                   </Button>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="icon" className="text-slate-400 hover:text-slate-600">
+                      <Button variant="ghost" size="icon" className="text-[#7A8072] hover:text-forest-muted">
                         <MoreHorizontal className="w-4 h-4" />
                       </Button>
                     </DropdownMenuTrigger>
@@ -221,7 +221,7 @@ export default function ManageVolunteersPage() {
                       {vol.status === 'Active' ? (
                         <DropdownMenuItem className="text-amber-600 focus:text-amber-600 focus:bg-amber-50">Mark as Inactive</DropdownMenuItem>
                       ) : (
-                        <DropdownMenuItem className="text-emerald-600 focus:text-emerald-600 focus:bg-emerald-50">Mark as Active</DropdownMenuItem>
+                        <DropdownMenuItem className="text-[#829661] focus:text-[#829661] focus:bg-[#21261B]">Mark as Active</DropdownMenuItem>
                       )}
                     </DropdownMenuContent>
                   </DropdownMenu>
@@ -232,12 +232,12 @@ export default function ManageVolunteersPage() {
         ))}
 
         {filteredVols.length === 0 && (
-          <div className="col-span-full text-center py-20 bg-white rounded-2xl border border-slate-100 border-dashed">
-            <div className="w-16 h-16 bg-slate-50 text-slate-400 rounded-full flex items-center justify-center mx-auto mb-4">
+          <div className="col-span-full text-center py-20 bg-forest-card rounded-2xl border border-forest-border border-dashed">
+            <div className="w-16 h-16 bg-[#181A15] text-[#7A8072] rounded-full flex items-center justify-center mx-auto mb-4">
               <User className="w-8 h-8" />
             </div>
-            <h3 className="text-lg font-semibold text-slate-900 mb-1">No volunteers found</h3>
-            <p className="text-slate-500 text-sm">
+            <h3 className="text-lg font-semibold text-forest-beige mb-1">No volunteers found</h3>
+            <p className="text-forest-muted text-sm">
               Try adjusting your search or filters to see results.
             </p>
           </div>
@@ -250,7 +250,7 @@ export default function ManageVolunteersPage() {
           <div className="h-24 bg-gradient-to-r from-emerald-500 to-teal-600 relative">
             <div className="absolute -bottom-8 left-6">
               <Avatar className="w-20 h-20 border-4 border-white shadow-md">
-                <AvatarFallback className="bg-slate-200 text-slate-700 text-xl font-bold">
+                <AvatarFallback className="bg-slate-200 text-[#DFD5C2] text-xl font-bold">
                   {selectedApp?.name?.charAt(0)}
                 </AvatarFallback>
               </Avatar>
@@ -258,7 +258,7 @@ export default function ManageVolunteersPage() {
             {selectedApp && (
               <div className="absolute right-6 bottom-3">
                 <Badge className={
-                  selectedApp.status === 'Active' ? 'bg-emerald-500 text-white border-0' :
+                  selectedApp.status === 'Active' ? 'bg-forest-accent text-white border-0' :
                   'bg-slate-500 text-white border-0'
                 }>
                   {selectedApp.status.toUpperCase()}
@@ -270,29 +270,29 @@ export default function ManageVolunteersPage() {
           <div className="pt-10 pb-6 px-6 space-y-6">
             {/* Header info */}
             <div>
-              <h3 className="text-2xl font-bold text-slate-900">{selectedApp?.name}</h3>
-              <p className="text-sm font-medium text-emerald-600 mt-1">{selectedApp?.role}</p>
+              <h3 className="text-2xl font-bold text-forest-beige">{selectedApp?.name}</h3>
+              <p className="text-sm font-medium text-[#829661] mt-1">{selectedApp?.role}</p>
             </div>
 
             {/* Quick Stats Grid */}
-            <div className="grid grid-cols-3 gap-4 p-4 bg-slate-50 rounded-xl border border-slate-100 text-center">
+            <div className="grid grid-cols-3 gap-4 p-4 bg-[#181A15] rounded-xl border border-forest-border text-center">
               <div>
-                <p className="text-xs text-slate-400 uppercase font-semibold">Rating</p>
-                <p className="text-base font-bold text-slate-900 flex items-center justify-center gap-1 mt-1">
+                <p className="text-xs text-[#7A8072] uppercase font-semibold">Rating</p>
+                <p className="text-base font-bold text-forest-beige flex items-center justify-center gap-1 mt-1">
                   <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
                   {selectedApp?.rating}
                 </p>
               </div>
-              <div className="border-x border-slate-200">
-                <p className="text-xs text-slate-400 uppercase font-semibold">Completed</p>
-                <p className="text-base font-bold text-slate-900 flex items-center justify-center gap-1 mt-1">
-                  <Award className="w-4 h-4 text-emerald-500" />
+              <div className="border-x border-forest-border">
+                <p className="text-xs text-[#7A8072] uppercase font-semibold">Completed</p>
+                <p className="text-base font-bold text-forest-beige flex items-center justify-center gap-1 mt-1">
+                  <Award className="w-4 h-4 text-forest-accent" />
                   {selectedApp?.completedProjects} Projects
                 </p>
               </div>
               <div>
-                <p className="text-xs text-slate-400 uppercase font-semibold">Total Hours</p>
-                <p className="text-base font-bold text-slate-900 flex items-center justify-center gap-1 mt-1">
+                <p className="text-xs text-[#7A8072] uppercase font-semibold">Total Hours</p>
+                <p className="text-base font-bold text-forest-beige flex items-center justify-center gap-1 mt-1">
                   <Calendar className="w-4 h-4 text-indigo-500" />
                   {selectedApp?.volunteerHours} Hours
                 </p>
@@ -300,35 +300,35 @@ export default function ManageVolunteersPage() {
             </div>
 
             {/* Detailed Contact info */}
-            <div className="space-y-3 text-sm text-slate-600">
+            <div className="space-y-3 text-sm text-forest-muted">
               <div className="flex items-center gap-3">
-                <Mail className="w-4 h-4 text-slate-400" />
-                <span className="font-semibold text-slate-900">Email:</span> {selectedApp?.email}
+                <Mail className="w-4 h-4 text-[#7A8072]" />
+                <span className="font-semibold text-forest-beige">Email:</span> {selectedApp?.email}
               </div>
               <div className="flex items-center gap-3">
-                <Phone className="w-4 h-4 text-slate-400" />
-                <span className="font-semibold text-slate-900">Phone:</span> {selectedApp?.phone}
+                <Phone className="w-4 h-4 text-[#7A8072]" />
+                <span className="font-semibold text-forest-beige">Phone:</span> {selectedApp?.phone}
               </div>
               <div className="flex items-center gap-3">
-                <MapPin className="w-4 h-4 text-slate-400" />
-                <span className="font-semibold text-slate-900">Location:</span> {selectedApp?.location}
+                <MapPin className="w-4 h-4 text-[#7A8072]" />
+                <span className="font-semibold text-forest-beige">Location:</span> {selectedApp?.location}
               </div>
             </div>
 
             {/* Bio / About */}
             <div className="space-y-2">
-              <h4 className="text-sm font-semibold text-slate-900">About</h4>
-              <p className="text-sm text-slate-600 bg-slate-50 p-4 rounded-xl border border-slate-100 leading-relaxed italic">
+              <h4 className="text-sm font-semibold text-forest-beige">About</h4>
+              <p className="text-sm text-forest-muted bg-[#181A15] p-4 rounded-xl border border-forest-border leading-relaxed italic">
                 "{selectedApp?.bio}"
               </p>
             </div>
 
             {/* Skills */}
             <div className="space-y-2">
-              <h4 className="text-sm font-semibold text-slate-900">Skills</h4>
+              <h4 className="text-sm font-semibold text-forest-beige">Skills</h4>
               <div className="flex flex-wrap gap-2">
                 {selectedApp?.skills?.map((skill: string, idx: number) => (
-                  <Badge key={idx} variant="secondary" className="bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border-0">
+                  <Badge key={idx} variant="secondary" className="bg-[#21261B] text-[#829661] hover:bg-[#2C3322] border-0">
                     {skill}
                   </Badge>
                 ))}
@@ -336,11 +336,11 @@ export default function ManageVolunteersPage() {
             </div>
           </div>
 
-          <DialogFooter className="bg-slate-50 px-6 py-4 flex gap-2 justify-end">
+          <DialogFooter className="bg-[#181A15] px-6 py-4 flex gap-2 justify-end">
             <Button variant="outline" className="rounded-xl w-full sm:w-auto" onClick={() => setIsDialogOpen(false)}>
               Close
             </Button>
-            <Button className="rounded-xl w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white" onClick={() => handleIssueClick(selectedApp)}>
+            <Button className="rounded-xl w-full sm:w-auto bg-[#4A5D23] hover:bg-emerald-700 text-white" onClick={() => handleIssueClick(selectedApp)}>
               Issue E-Certificate
             </Button>
           </DialogFooter>
@@ -359,16 +359,16 @@ export default function ManageVolunteersPage() {
           
           <div className="py-6 space-y-4">
             <div className="space-y-2">
-              <label className="text-sm font-medium text-slate-900">Certificate File (PDF, PNG, JPG)</label>
+              <label className="text-sm font-medium text-forest-beige">Certificate File (PDF, PNG, JPG)</label>
               <Input 
                 type="file" 
                 accept=".pdf,.png,.jpg,.jpeg"
                 onChange={(e) => setUploadFile(e.target.files?.[0] || null)}
-                className="cursor-pointer file:text-emerald-600 file:bg-emerald-50 file:border-0 file:rounded-md file:px-4 file:py-1 file:mr-4 file:hover:bg-emerald-100 transition-colors"
+                className="cursor-pointer file:text-[#829661] file:bg-[#21261B] file:border-0 file:rounded-md file:px-4 file:py-1 file:mr-4 file:hover:bg-[#2C3322] transition-colors"
               />
             </div>
             {uploadFile && (
-              <p className="text-sm text-emerald-600 bg-emerald-50 p-3 rounded-lg border border-emerald-100 flex items-center">
+              <p className="text-sm text-[#829661] bg-[#21261B] p-3 rounded-lg border border-emerald-100 flex items-center">
                 <Check className="w-4 h-4 mr-2" />
                 Selected: {uploadFile.name}
               </p>
@@ -380,7 +380,7 @@ export default function ManageVolunteersPage() {
               Cancel
             </Button>
             <Button 
-              className="bg-emerald-600 hover:bg-emerald-700 text-white" 
+              className="bg-[#4A5D23] hover:bg-emerald-700 text-white" 
               disabled={!uploadFile}
               onClick={() => {
                 toast.success(`Certificate "${uploadFile?.name}" sent to ${selectedApp?.name}!`);

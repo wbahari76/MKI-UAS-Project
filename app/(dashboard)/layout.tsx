@@ -12,7 +12,7 @@ export default function DashboardLayout({
   const [isMobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <div className="flex min-h-screen bg-slate-50 font-sans">
+    <div className="flex min-h-screen bg-[#181A15] font-sans">
       <DashboardSidebar
         isMobileOpen={isMobileOpen}
         setMobileOpen={setMobileOpen}

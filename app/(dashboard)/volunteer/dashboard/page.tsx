@@ -49,10 +49,10 @@ export default function VolunteerDashboard() {
           animate={{ opacity: 1, x: 0 }}
           className="space-y-1"
         >
-          <h1 className="text-3xl font-bold text-slate-900 tracking-tight">
+          <h1 className="text-3xl font-bold text-forest-beige tracking-tight">
             Welcome back, {firstName}! 👋
           </h1>
-          <p className="text-slate-500">
+          <p className="text-forest-muted">
             Here's what's happening with your projects today.
           </p>
         </motion.div>
@@ -87,7 +87,7 @@ export default function VolunteerDashboard() {
           title="Active Projects"
           value="2"
           icon={FolderKanban}
-          iconClassName="bg-emerald-100 text-emerald-600"
+          iconClassName="bg-[#2C3322] text-[#829661]"
         />
         <StatsCard
           title="Certificates"
@@ -113,10 +113,10 @@ export default function VolunteerDashboard() {
           className="lg:col-span-2 space-y-6"
         >
           <Card className="h-full border-0 shadow-sm shadow-slate-200">
-            <CardHeader className="flex flex-row items-center justify-between border-b border-slate-100 pb-4">
+            <CardHeader className="flex flex-row items-center justify-between border-b border-forest-border pb-4">
               <CardTitle className="text-xl">Active Projects</CardTitle>
               <Link href="/volunteer/events">
-                <Button variant="ghost" size="sm" className="text-emerald-600 font-medium hover:text-emerald-700 hover:bg-emerald-50">
+                <Button variant="ghost" size="sm" className="text-[#829661] font-medium hover:text-[#829661] hover:bg-[#21261B]">
                   View All
                 </Button>
               </Link>
@@ -129,29 +129,29 @@ export default function VolunteerDashboard() {
                   { title: "Digital Literacy for Seniors", org: "Tech For All", progress: 30, status: "Recruiting" }
                 ].map((project, i) => (
                   <Link href={`/volunteer/explore`} key={i}>
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-xl border border-slate-100 hover:border-emerald-200 hover:shadow-md transition-all group bg-white">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-xl border border-forest-border hover:border-[#4A5D23] hover:shadow-md transition-all group bg-forest-card">
                       <div className="flex items-start gap-4 mb-4 sm:mb-0">
-                        <div className="w-12 h-12 rounded-lg bg-emerald-50 flex items-center justify-center text-emerald-600 shrink-0">
+                        <div className="w-12 h-12 rounded-lg bg-[#21261B] flex items-center justify-center text-[#829661] shrink-0">
                           <FolderKanban className="w-6 h-6" />
                         </div>
                         <div>
-                          <h4 className="font-semibold text-slate-900 group-hover:text-emerald-600 transition-colors">
+                          <h4 className="font-semibold text-forest-beige group-hover:text-[#829661] transition-colors">
                             {project.title}
                           </h4>
-                          <p className="text-sm text-slate-500">{project.org}</p>
+                          <p className="text-sm text-forest-muted">{project.org}</p>
                         </div>
                       </div>
                       <div className="flex items-center justify-between sm:justify-end gap-6 sm:w-1/3">
                         <div className="w-full sm:w-24">
                           <div className="flex items-center justify-between text-xs mb-1">
-                            <span className="text-slate-500">Progress</span>
+                            <span className="text-forest-muted">Progress</span>
                             <span className="font-medium">{project.progress}%</span>
                           </div>
-                          <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
-                            <div className="h-full bg-emerald-500 rounded-full" style={{ width: `${project.progress}%` }} />
+                          <div className="h-1.5 w-full bg-[#1E211A] rounded-full overflow-hidden">
+                            <div className="h-full bg-forest-accent rounded-full" style={{ width: `${project.progress}%` }} />
                           </div>
                         </div>
-                        <Badge variant="outline" className={project.status === 'In Progress' ? 'bg-blue-50 text-blue-700 border-blue-200' : 'bg-emerald-50 text-emerald-700 border-emerald-200'}>
+                        <Badge variant="outline" className={project.status === 'In Progress' ? 'bg-blue-50 text-blue-700 border-blue-200' : 'bg-[#21261B] text-[#829661] border-[#4A5D23]'}>
                           {project.status}
                         </Badge>
                       </div>
@@ -178,14 +178,14 @@ export default function VolunteerDashboard() {
                   <CalendarDays className="w-5 h-5 text-emerald-100" />
                   Next Event
                 </CardTitle>
-                <Badge className="bg-white/20 hover:bg-white/30 border-0 text-white">Tomorrow</Badge>
+                <Badge className="bg-forest-card/20 hover:bg-forest-card/30 border-0 text-white">Tomorrow</Badge>
               </div>
             </CardHeader>
             <CardContent>
               <h4 className="text-xl font-bold mb-1">Coastal Cleanup Briefing</h4>
               <p className="text-emerald-100 text-sm mb-4">Zoom Meeting • 09:00 AM</p>
               <Link href="/volunteer/events">
-                <Button className="w-full bg-white text-emerald-700 hover:bg-slate-50 border-0 mt-2">
+                <Button className="w-full bg-forest-card text-[#829661] hover:bg-[#181A15] border-0 mt-2">
                   Join Event
                 </Button>
               </Link>
@@ -194,24 +194,24 @@ export default function VolunteerDashboard() {
 
           {/* Recent Activity */}
           <Card className="border-0 shadow-sm shadow-slate-200">
-            <CardHeader className="border-b border-slate-100 pb-4">
+            <CardHeader className="border-b border-forest-border pb-4">
               <CardTitle className="text-lg flex items-center gap-2">
-                <Activity className="w-5 h-5 text-slate-400" />
+                <Activity className="w-5 h-5 text-[#7A8072]" />
                 Recent Activity
               </CardTitle>
             </CardHeader>
             <CardContent className="pt-6">
-              <div className="relative border-l-2 border-slate-100 ml-3 space-y-6">
+              <div className="relative border-l-2 border-forest-border ml-3 space-y-6">
                 {[
                   { title: "Application Approved", time: "2 hours ago", desc: "Your application for 'Beach Cleanup' was accepted." },
                   { title: "Earned Badge", time: "Yesterday", desc: "You unlocked the 'Explorer' badge!" },
                   { title: "Joined Platform", time: "3 days ago", desc: "Welcome to JALA VIVE." }
                 ].map((item, i) => (
                   <div key={i} className="relative pl-6">
-                    <span className="absolute -left-[9px] top-1 w-4 h-4 rounded-full border-4 border-white bg-emerald-500" />
-                    <h5 className="font-semibold text-slate-900 text-sm">{item.title}</h5>
-                    <p className="text-slate-500 text-xs mb-1">{item.time}</p>
-                    <p className="text-slate-600 text-sm">{item.desc}</p>
+                    <span className="absolute -left-[9px] top-1 w-4 h-4 rounded-full border-4 border-white bg-forest-accent" />
+                    <h5 className="font-semibold text-forest-beige text-sm">{item.title}</h5>
+                    <p className="text-forest-muted text-xs mb-1">{item.time}</p>
+                    <p className="text-forest-muted text-sm">{item.desc}</p>
                   </div>
                 ))}
               </div>

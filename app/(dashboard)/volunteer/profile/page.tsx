@@ -66,8 +66,8 @@ export default function ProfilePage() {
   return (
     <div className="max-w-4xl mx-auto space-y-8 pb-20">
       <div>
-        <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Profile</h1>
-        <p className="text-slate-500 mt-1">Manage your personal information and certificates.</p>
+        <h1 className="text-3xl font-bold text-forest-beige tracking-tight">Profile</h1>
+        <p className="text-forest-muted mt-1">Manage your personal information and certificates.</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -77,18 +77,18 @@ export default function ProfilePage() {
           <Card className="border-0 shadow-sm shadow-slate-200">
             <CardContent className="p-6 flex flex-col items-center text-center">
               <div className="relative mb-4 group cursor-pointer">
-                <div className="w-24 h-24 rounded-full bg-emerald-100 flex items-center justify-center border-4 border-white shadow-lg overflow-hidden text-emerald-600 font-bold text-3xl tracking-wider">
+                <div className="w-24 h-24 rounded-full bg-[#2C3322] flex items-center justify-center border-4 border-white shadow-lg overflow-hidden text-[#829661] font-bold text-3xl tracking-wider">
                   {userInitials}
                 </div>
                 <div className="absolute inset-0 bg-black/40 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                   <Camera className="w-6 h-6 text-white" />
                 </div>
               </div>
-              <h2 className="text-xl font-bold text-slate-900">
+              <h2 className="text-xl font-bold text-forest-beige">
                 {userName}
               </h2>
-              <p className="text-sm text-slate-500 mb-4">{user?.email || "No email"}</p>
-              <Badge className="bg-emerald-500 text-white border-0">
+              <p className="text-sm text-forest-muted mb-4">{user?.email || "No email"}</p>
+              <Badge className="bg-forest-accent text-white border-0">
                 Active Volunteer
               </Badge>
             </CardContent>
@@ -100,16 +100,16 @@ export default function ProfilePage() {
             </CardHeader>
             <CardContent className="p-6 pt-2 space-y-4">
               <div className="flex justify-between items-center">
-                <span className="text-slate-500 text-sm">Events Joined</span>
-                <span className="font-semibold text-slate-900">12</span>
+                <span className="text-forest-muted text-sm">Events Joined</span>
+                <span className="font-semibold text-forest-beige">12</span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-slate-500 text-sm">Hours Contributed</span>
-                <span className="font-semibold text-slate-900">48h</span>
+                <span className="text-forest-muted text-sm">Hours Contributed</span>
+                <span className="font-semibold text-forest-beige">48h</span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-slate-500 text-sm">Certificates</span>
-                <span className="font-semibold text-slate-900">3</span>
+                <span className="text-forest-muted text-sm">Certificates</span>
+                <span className="font-semibold text-forest-beige">3</span>
               </div>
             </CardContent>
           </Card>
@@ -183,19 +183,19 @@ export default function ProfilePage() {
             <TabsContent value="certificates">
               <div className="grid grid-cols-1 gap-4">
                 {[1, 2, 3].map((item) => (
-                  <Card key={item} className="border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+                  <Card key={item} className="border border-forest-border shadow-sm hover:shadow-md transition-shadow">
                     <CardContent className="p-4 flex items-center gap-4">
-                      <div className="w-12 h-12 rounded-lg bg-emerald-50 flex items-center justify-center shrink-0">
-                        <Award className="w-6 h-6 text-emerald-600" />
+                      <div className="w-12 h-12 rounded-lg bg-[#21261B] flex items-center justify-center shrink-0">
+                        <Award className="w-6 h-6 text-[#829661]" />
                       </div>
                       <div className="flex-1">
-                        <h4 className="font-semibold text-slate-900">Coastal Cleanup 2026</h4>
-                        <p className="text-sm text-slate-500">Ocean Care ID • Completed June 2026</p>
+                        <h4 className="font-semibold text-forest-beige">Coastal Cleanup 2026</h4>
+                        <p className="text-sm text-forest-muted">Ocean Care ID • Completed June 2026</p>
                       </div>
                       <Button 
                         variant="outline" 
                         size="sm" 
-                        className="shrink-0 text-emerald-600 border-emerald-200 hover:bg-emerald-50"
+                        className="shrink-0 text-[#829661] border-[#4A5D23] hover:bg-[#21261B]"
                         onClick={() => handleDownload("Coastal Cleanup 2026")}
                       >
                         <FileText className="w-4 h-4 mr-2" /> Download

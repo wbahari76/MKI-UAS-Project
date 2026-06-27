@@ -99,17 +99,17 @@ export default function OrganizationMessagesPage() {
   const currentMessages = chats[activeContact.id] || [];
 
   return (
-    <div className="h-[calc(100vh-140px)] -mx-4 sm:-mx-6 lg:-mx-8 -my-4 sm:-my-6 lg:-my-8 flex bg-white rounded-xl sm:rounded-none overflow-hidden shadow-sm shadow-slate-200 border border-slate-100">
+    <div className="h-[calc(100vh-140px)] -mx-4 sm:-mx-6 lg:-mx-8 -my-4 sm:-my-6 lg:-my-8 flex bg-forest-card rounded-xl sm:rounded-none overflow-hidden shadow-sm shadow-slate-200 border border-forest-border">
       
       {/* Sidebar Contacts */}
-      <div className="w-full sm:w-80 border-r border-slate-100 flex flex-col bg-slate-50/50 hidden sm:flex">
-        <div className="p-4 border-b border-slate-100 bg-white">
-          <h2 className="text-lg font-bold text-slate-900 mb-4">Messages</h2>
+      <div className="w-full sm:w-80 border-r border-forest-border flex flex-col bg-[#181A15]/50 hidden sm:flex">
+        <div className="p-4 border-b border-forest-border bg-forest-card">
+          <h2 className="text-lg font-bold text-forest-beige mb-4">Messages</h2>
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#7A8072]" />
             <Input 
               placeholder="Search conversations..." 
-              className="pl-9 h-10 bg-slate-50 border-0 focus-visible:ring-emerald-500"
+              className="pl-9 h-10 bg-[#181A15] border-0 focus-visible:ring-emerald-500"
             />
           </div>
         </div>
@@ -124,28 +124,28 @@ export default function OrganizationMessagesPage() {
                 key={contact.id}
                 onClick={() => setActiveContact(contact)}
                 className={`p-4 border-b border-slate-50 cursor-pointer transition-colors flex items-start gap-3 ${
-                  activeContact.id === contact.id ? 'bg-white border-l-2 border-l-emerald-500 shadow-sm' : 'hover:bg-slate-100 border-l-2 border-l-transparent'
+                  activeContact.id === contact.id ? 'bg-forest-card border-l-2 border-l-emerald-500 shadow-sm' : 'hover:bg-[#1E211A] border-l-2 border-l-transparent'
                 }`}
               >
                 <div className="relative">
-                  <Avatar className="w-12 h-12 border border-slate-200">
-                    <AvatarFallback className="bg-emerald-100 text-emerald-700">
+                  <Avatar className="w-12 h-12 border border-forest-border">
+                    <AvatarFallback className="bg-[#2C3322] text-[#829661]">
                       {contact.name.charAt(0)}
                     </AvatarFallback>
                   </Avatar>
                   {contact.isOnline && (
-                    <span className="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 border-2 border-white rounded-full" />
+                    <span className="absolute bottom-0 right-0 w-3 h-3 bg-forest-accent border-2 border-white rounded-full" />
                   )}
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex justify-between items-baseline mb-0.5">
-                    <h4 className="font-semibold text-slate-900 text-sm truncate">{contact.name}</h4>
-                    <span className="text-xs text-slate-400 shrink-0">{lastMessage?.time}</span>
+                    <h4 className="font-semibold text-forest-beige text-sm truncate">{contact.name}</h4>
+                    <span className="text-xs text-[#7A8072] shrink-0">{lastMessage?.time}</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <p className="text-sm text-slate-500 truncate">{lastMessage?.text || "No messages yet."}</p>
+                    <p className="text-sm text-forest-muted truncate">{lastMessage?.text || "No messages yet."}</p>
                     {contact.unread > 0 && contact.id !== activeContact.id && (
-                      <span className="w-5 h-5 flex items-center justify-center bg-emerald-500 text-white text-[10px] font-bold rounded-full shrink-0">
+                      <span className="w-5 h-5 flex items-center justify-center bg-forest-accent text-white text-[10px] font-bold rounded-full shrink-0">
                         {contact.unread}
                       </span>
                     )}
@@ -158,37 +158,37 @@ export default function OrganizationMessagesPage() {
       </div>
 
       {/* Chat Area */}
-      <div className="flex-1 flex flex-col bg-white">
+      <div className="flex-1 flex flex-col bg-forest-card">
         {/* Chat Header */}
-        <div className="h-16 border-b border-slate-100 flex items-center justify-between px-6 bg-white shrink-0">
+        <div className="h-16 border-b border-forest-border flex items-center justify-between px-6 bg-forest-card shrink-0">
           <div className="flex items-center gap-3">
-            <Avatar className="w-10 h-10 border border-slate-200">
-              <AvatarFallback className="bg-emerald-100 text-emerald-700">
+            <Avatar className="w-10 h-10 border border-forest-border">
+              <AvatarFallback className="bg-[#2C3322] text-[#829661]">
                 {activeContact.name.charAt(0)}
               </AvatarFallback>
             </Avatar>
             <div>
-              <h3 className="font-semibold text-slate-900">{activeContact.name}</h3>
-              <p className="text-xs text-emerald-500 font-medium">
+              <h3 className="font-semibold text-forest-beige">{activeContact.name}</h3>
+              <p className="text-xs text-forest-accent font-medium">
                 {activeContact.isOnline ? 'Online' : 'Offline'}
               </p>
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <Button variant="ghost" size="icon" className="text-slate-400 hover:text-emerald-600 rounded-full">
+            <Button variant="ghost" size="icon" className="text-[#7A8072] hover:text-[#829661] rounded-full">
               <Phone className="w-5 h-5" />
             </Button>
-            <Button variant="ghost" size="icon" className="text-slate-400 hover:text-emerald-600 rounded-full">
+            <Button variant="ghost" size="icon" className="text-[#7A8072] hover:text-[#829661] rounded-full">
               <Video className="w-5 h-5" />
             </Button>
-            <Button variant="ghost" size="icon" className="text-slate-400 hover:text-slate-600 rounded-full">
+            <Button variant="ghost" size="icon" className="text-[#7A8072] hover:text-forest-muted rounded-full">
               <MoreVertical className="w-5 h-5" />
             </Button>
           </div>
         </div>
 
         {/* Messages */}
-        <div className="flex-1 overflow-y-auto p-6 space-y-6 bg-slate-50/30">
+        <div className="flex-1 overflow-y-auto p-6 space-y-6 bg-[#181A15]/30">
           {currentMessages.map((msg, idx) => (
             <motion.div 
               key={msg.id}
@@ -199,43 +199,43 @@ export default function OrganizationMessagesPage() {
               <div className="flex items-end gap-2 max-w-[80%]">
                 {!msg.isMe && (
                   <Avatar className="w-8 h-8 shrink-0 mb-1">
-                    <AvatarFallback className="bg-slate-200 text-slate-600 text-xs">
+                    <AvatarFallback className="bg-slate-200 text-forest-muted text-xs">
                       {msg.sender.charAt(0)}
                     </AvatarFallback>
                   </Avatar>
                 )}
                 <div className={`px-4 py-3 rounded-2xl ${
                   msg.isMe 
-                    ? 'bg-emerald-500 text-white rounded-br-sm' 
-                    : 'bg-white border border-slate-100 text-slate-800 rounded-bl-sm shadow-sm shadow-slate-100'
+                    ? 'bg-forest-accent text-white rounded-br-sm' 
+                    : 'bg-forest-card border border-forest-border text-forest-beige rounded-bl-sm shadow-sm shadow-slate-100'
                 }`}>
                   <p className="text-sm leading-relaxed">{msg.text}</p>
                 </div>
               </div>
-              <span className="text-[10px] text-slate-400 mt-1 mx-10">{msg.time}</span>
+              <span className="text-[10px] text-[#7A8072] mt-1 mx-10">{msg.time}</span>
             </motion.div>
           ))}
           <div ref={messagesEndRef} />
         </div>
 
         {/* Input Area */}
-        <div className="p-4 bg-white border-t border-slate-100">
+        <div className="p-4 bg-forest-card border-t border-forest-border">
           <form onSubmit={handleSend} className="flex items-center gap-2">
-            <Button type="button" variant="ghost" size="icon" className="text-slate-400 hover:text-slate-600 rounded-full shrink-0">
+            <Button type="button" variant="ghost" size="icon" className="text-[#7A8072] hover:text-forest-muted rounded-full shrink-0">
               <Paperclip className="w-5 h-5" />
             </Button>
-            <Button type="button" variant="ghost" size="icon" className="text-slate-400 hover:text-slate-600 rounded-full shrink-0 hidden sm:flex">
+            <Button type="button" variant="ghost" size="icon" className="text-[#7A8072] hover:text-forest-muted rounded-full shrink-0 hidden sm:flex">
               <ImageIcon className="w-5 h-5" />
             </Button>
             <Input 
               value={newMessage}
               onChange={(e) => setNewMessage(e.target.value)}
               placeholder="Type your message..." 
-              className="flex-1 h-12 bg-slate-50 border-0 focus-visible:ring-emerald-500 rounded-full px-6"
+              className="flex-1 h-12 bg-[#181A15] border-0 focus-visible:ring-emerald-500 rounded-full px-6"
             />
             <Button 
               type="submit" 
-              className="w-12 h-12 rounded-full bg-emerald-500 hover:bg-emerald-600 text-white shrink-0 shadow-sm"
+              className="w-12 h-12 rounded-full bg-forest-accent hover:bg-[#4A5D23] text-white shrink-0 shadow-sm"
               disabled={!newMessage.trim()}
             >
               <Send className="w-5 h-5" />

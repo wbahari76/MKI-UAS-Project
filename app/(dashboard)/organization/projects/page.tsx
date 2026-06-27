@@ -59,9 +59,9 @@ export default function OrganizationProjectsPage() {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "active":
-        return <Badge className="bg-emerald-100 text-emerald-700 border-emerald-200">Active</Badge>;
+        return <Badge className="bg-[#2C3322] text-[#829661] border-[#4A5D23]">Active</Badge>;
       case "draft":
-        return <Badge className="bg-slate-100 text-slate-700 border-slate-200">Draft</Badge>;
+        return <Badge className="bg-[#1E211A] text-[#DFD5C2] border-forest-border">Draft</Badge>;
       case "completed":
         return <Badge className="bg-blue-100 text-blue-700 border-blue-200">Completed</Badge>;
       default:
@@ -73,8 +73,8 @@ export default function OrganizationProjectsPage() {
     <div className="space-y-6 pb-20">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Manage Projects</h1>
-          <p className="text-slate-500 mt-1">Create, edit, and track your volunteer projects.</p>
+          <h1 className="text-3xl font-bold text-forest-beige tracking-tight">Manage Projects</h1>
+          <p className="text-forest-muted mt-1">Create, edit, and track your volunteer projects.</p>
         </div>
         <Link href="/organization/projects/new">
           <Button className="btn-primary w-full sm:w-auto">
@@ -88,10 +88,10 @@ export default function OrganizationProjectsPage() {
         <CardContent className="p-6">
           <div className="flex items-center gap-4 mb-6">
             <div className="relative flex-1 max-w-md">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#7A8072]" />
               <Input 
                 placeholder="Search projects..." 
-                className="pl-9 bg-slate-50 border-slate-200 focus-visible:ring-emerald-500"
+                className="pl-9 bg-[#181A15] border-forest-border focus-visible:ring-emerald-500"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
@@ -100,7 +100,7 @@ export default function OrganizationProjectsPage() {
 
           <div className="overflow-x-auto">
             <table className="w-full text-sm text-left">
-              <thead className="text-xs text-slate-500 uppercase bg-slate-50 border-b border-slate-100">
+              <thead className="text-xs text-forest-muted uppercase bg-[#181A15] border-b border-forest-border">
                 <tr>
                   <th className="px-6 py-4 font-medium">Project Name</th>
                   <th className="px-6 py-4 font-medium">Status</th>
@@ -111,21 +111,21 @@ export default function OrganizationProjectsPage() {
               </thead>
               <tbody>
                 {filteredProjects.map((project) => (
-                  <tr key={project.id} className="border-b border-slate-50 hover:bg-slate-50/50 transition-colors">
+                  <tr key={project.id} className="border-b border-slate-50 hover:bg-[#181A15]/50 transition-colors">
                     <td className="px-6 py-4">
-                      <div className="font-medium text-slate-900">{project.title}</div>
+                      <div className="font-medium text-forest-beige">{project.title}</div>
                     </td>
                     <td className="px-6 py-4">
                       {getStatusBadge(project.status)}
                     </td>
                     <td className="px-6 py-4">
-                      <div className="flex items-center gap-2 text-slate-600">
+                      <div className="flex items-center gap-2 text-forest-muted">
                         <Users className="w-4 h-4" />
                         {project.volunteers} registered
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      <div className="flex items-center gap-2 text-slate-600">
+                      <div className="flex items-center gap-2 text-forest-muted">
                         <CalendarDays className="w-4 h-4" />
                         {project.startDate} to {project.endDate}
                       </div>
@@ -133,7 +133,7 @@ export default function OrganizationProjectsPage() {
                     <td className="px-6 py-4 text-right">
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-500 hover:text-slate-900">
+                          <Button variant="ghost" size="icon" className="h-8 w-8 text-forest-muted hover:text-forest-beige">
                             <MoreHorizontal className="w-4 h-4" />
                           </Button>
                         </DropdownMenuTrigger>
@@ -160,7 +160,7 @@ export default function OrganizationProjectsPage() {
                 
                 {filteredProjects.length === 0 && (
                   <tr>
-                    <td colSpan={5} className="px-6 py-12 text-center text-slate-500">
+                    <td colSpan={5} className="px-6 py-12 text-center text-forest-muted">
                       No projects found matching your search.
                     </td>
                   </tr>

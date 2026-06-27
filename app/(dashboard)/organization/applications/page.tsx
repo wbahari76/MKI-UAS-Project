@@ -136,7 +136,7 @@ export default function OrganizationApplicationsPage() {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "approved":
-        return <Badge className="bg-emerald-100 text-emerald-700 hover:bg-emerald-200 border-0">Approved</Badge>;
+        return <Badge className="bg-[#2C3322] text-[#829661] hover:bg-emerald-200 border-0">Approved</Badge>;
       case "pending":
         return <Badge className="bg-amber-100 text-amber-700 hover:bg-amber-200 border-0">Pending</Badge>;
       case "rejected":
@@ -150,8 +150,8 @@ export default function OrganizationApplicationsPage() {
     <div className="space-y-6 pb-20">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Applications</h1>
-          <p className="text-slate-500 mt-1">Review and manage volunteer applications for your projects.</p>
+          <h1 className="text-3xl font-bold text-forest-beige tracking-tight">Applications</h1>
+          <p className="text-forest-muted mt-1">Review and manage volunteer applications for your projects.</p>
         </div>
       </div>
 
@@ -159,10 +159,10 @@ export default function OrganizationApplicationsPage() {
         <CardContent className="p-6">
           <div className="flex flex-col sm:flex-row items-center gap-4 mb-6">
             <div className="relative flex-1 w-full max-w-md">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#7A8072]" />
               <Input 
                 placeholder="Search applicants or projects..." 
-                className="pl-9 bg-slate-50 border-slate-200 focus-visible:ring-blue-500"
+                className="pl-9 bg-[#181A15] border-forest-border focus-visible:ring-blue-500"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
@@ -170,7 +170,7 @@ export default function OrganizationApplicationsPage() {
             
             <div className="w-full sm:w-[240px]">
               <Select value={selectedProject} onValueChange={setSelectedProject}>
-                <SelectTrigger className="bg-slate-50 border-slate-200">
+                <SelectTrigger className="bg-[#181A15] border-forest-border">
                   <SelectValue placeholder="Filter by Project" />
                 </SelectTrigger>
                 <SelectContent>
@@ -188,7 +188,7 @@ export default function OrganizationApplicationsPage() {
 
           <div className="overflow-x-auto">
             <table className="w-full text-sm text-left">
-              <thead className="text-xs text-slate-500 uppercase bg-slate-50 border-b border-slate-100">
+              <thead className="text-xs text-forest-muted uppercase bg-[#181A15] border-b border-forest-border">
                 <tr>
                   <th className="px-6 py-4 font-medium">Applicant</th>
                   <th className="px-6 py-4 font-medium">Project</th>
@@ -199,27 +199,27 @@ export default function OrganizationApplicationsPage() {
               </thead>
               <tbody>
                 {filteredApps.map((app) => (
-                  <tr key={app.id} className="border-b border-slate-50 hover:bg-slate-50/50 transition-colors">
+                  <tr key={app.id} className="border-b border-slate-50 hover:bg-[#181A15]/50 transition-colors">
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3 cursor-pointer group/name" onClick={() => handleViewProfile(app)}>
                         <Avatar className="w-8 h-8 group-hover/name:scale-105 transition-transform">
-                          <AvatarFallback className="bg-slate-200 text-slate-600 text-xs">
+                          <AvatarFallback className="bg-slate-200 text-forest-muted text-xs">
                             {app.name.charAt(0)}
                           </AvatarFallback>
                         </Avatar>
                         <div>
-                          <div className="font-medium text-slate-900 group-hover/name:text-blue-600 group-hover/name:underline transition-colors">{app.name}</div>
+                          <div className="font-medium text-forest-beige group-hover/name:text-blue-600 group-hover/name:underline transition-colors">{app.name}</div>
                         </div>
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      <div className="text-slate-900">{app.project}</div>
-                      <div className="text-xs text-slate-500">{app.role}</div>
+                      <div className="text-forest-beige">{app.project}</div>
+                      <div className="text-xs text-forest-muted">{app.role}</div>
                     </td>
                     <td className="px-6 py-4">
                       {getStatusBadge(app.status)}
                     </td>
-                    <td className="px-6 py-4 text-slate-500">
+                    <td className="px-6 py-4 text-forest-muted">
                       {app.date}
                     </td>
                     <td className="px-6 py-4 text-right">
@@ -229,7 +229,7 @@ export default function OrganizationApplicationsPage() {
                             <Button 
                               size="sm" 
                               variant="outline" 
-                              className="text-emerald-600 border-emerald-200 hover:bg-emerald-50 h-8 px-2"
+                              className="text-[#829661] border-[#4A5D23] hover:bg-[#21261B] h-8 px-2"
                               onClick={() => handleStatusChange(app.id, 'approved')}
                               title="Approve"
                             >
@@ -249,7 +249,7 @@ export default function OrganizationApplicationsPage() {
                           <Button 
                             size="sm" 
                             variant="ghost" 
-                            className="h-8 text-slate-500 hover:text-blue-600 hover:bg-blue-50"
+                            className="h-8 text-forest-muted hover:text-blue-600 hover:bg-blue-50"
                             onClick={() => handleViewProfile(app)}
                           >
                             <FileText className="w-4 h-4 mr-2" /> View Profile
@@ -262,7 +262,7 @@ export default function OrganizationApplicationsPage() {
                 
                 {filteredApps.length === 0 && (
                   <tr>
-                    <td colSpan={5} className="px-6 py-12 text-center text-slate-500">
+                    <td colSpan={5} className="px-6 py-12 text-center text-forest-muted">
                       No applications found.
                     </td>
                   </tr>
@@ -279,7 +279,7 @@ export default function OrganizationApplicationsPage() {
           <div className="h-24 bg-gradient-to-r from-blue-500 to-indigo-600 relative">
             <div className="absolute -bottom-8 left-6">
               <Avatar className="w-20 h-20 border-4 border-white shadow-md">
-                <AvatarFallback className="bg-slate-200 text-slate-700 text-xl font-bold">
+                <AvatarFallback className="bg-slate-200 text-[#DFD5C2] text-xl font-bold">
                   {selectedApp?.name?.charAt(0)}
                 </AvatarFallback>
               </Avatar>
@@ -287,7 +287,7 @@ export default function OrganizationApplicationsPage() {
             {selectedApp && (
               <div className="absolute right-6 bottom-3">
                 <Badge className={
-                  selectedApp.status === 'approved' ? 'bg-emerald-500 text-white border-0' :
+                  selectedApp.status === 'approved' ? 'bg-forest-accent text-white border-0' :
                   selectedApp.status === 'rejected' ? 'bg-red-500 text-white border-0' :
                   'bg-amber-500 text-white border-0'
                 }>
@@ -300,29 +300,29 @@ export default function OrganizationApplicationsPage() {
           <div className="pt-10 pb-6 px-6 space-y-6">
             {/* Header info */}
             <div>
-              <h3 className="text-2xl font-bold text-slate-900">{selectedApp?.name}</h3>
+              <h3 className="text-2xl font-bold text-forest-beige">{selectedApp?.name}</h3>
               <p className="text-sm font-medium text-blue-600 mt-1">{selectedApp?.role} Applied for {selectedApp?.project}</p>
             </div>
 
             {/* Quick Stats Grid */}
-            <div className="grid grid-cols-3 gap-4 p-4 bg-slate-50 rounded-xl border border-slate-100 text-center">
+            <div className="grid grid-cols-3 gap-4 p-4 bg-[#181A15] rounded-xl border border-forest-border text-center">
               <div>
-                <p className="text-xs text-slate-400 uppercase font-semibold">Rating</p>
-                <p className="text-base font-bold text-slate-900 flex items-center justify-center gap-1 mt-1">
+                <p className="text-xs text-[#7A8072] uppercase font-semibold">Rating</p>
+                <p className="text-base font-bold text-forest-beige flex items-center justify-center gap-1 mt-1">
                   <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
                   {selectedApp?.rating}
                 </p>
               </div>
-              <div className="border-x border-slate-200">
-                <p className="text-xs text-slate-400 uppercase font-semibold">Completed</p>
-                <p className="text-base font-bold text-slate-900 flex items-center justify-center gap-1 mt-1">
-                  <Award className="w-4 h-4 text-emerald-500" />
+              <div className="border-x border-forest-border">
+                <p className="text-xs text-[#7A8072] uppercase font-semibold">Completed</p>
+                <p className="text-base font-bold text-forest-beige flex items-center justify-center gap-1 mt-1">
+                  <Award className="w-4 h-4 text-forest-accent" />
                   {selectedApp?.completedProjects} Projects
                 </p>
               </div>
               <div>
-                <p className="text-xs text-slate-400 uppercase font-semibold">Total Hours</p>
-                <p className="text-base font-bold text-slate-900 flex items-center justify-center gap-1 mt-1">
+                <p className="text-xs text-[#7A8072] uppercase font-semibold">Total Hours</p>
+                <p className="text-base font-bold text-forest-beige flex items-center justify-center gap-1 mt-1">
                   <Calendar className="w-4 h-4 text-indigo-500" />
                   {selectedApp?.volunteerHours} Hours
                 </p>
@@ -330,32 +330,32 @@ export default function OrganizationApplicationsPage() {
             </div>
 
             {/* Detailed Contact info */}
-            <div className="space-y-3 text-sm text-slate-600">
+            <div className="space-y-3 text-sm text-forest-muted">
               <div className="flex items-center gap-3">
-                <Mail className="w-4 h-4 text-slate-400" />
-                <span className="font-semibold text-slate-900">Email:</span> {selectedApp?.email}
+                <Mail className="w-4 h-4 text-[#7A8072]" />
+                <span className="font-semibold text-forest-beige">Email:</span> {selectedApp?.email}
               </div>
               <div className="flex items-center gap-3">
-                <Phone className="w-4 h-4 text-slate-400" />
-                <span className="font-semibold text-slate-900">Phone:</span> {selectedApp?.phone}
+                <Phone className="w-4 h-4 text-[#7A8072]" />
+                <span className="font-semibold text-forest-beige">Phone:</span> {selectedApp?.phone}
               </div>
               <div className="flex items-center gap-3">
-                <MapPin className="w-4 h-4 text-slate-400" />
-                <span className="font-semibold text-slate-900">Location:</span> {selectedApp?.location}
+                <MapPin className="w-4 h-4 text-[#7A8072]" />
+                <span className="font-semibold text-forest-beige">Location:</span> {selectedApp?.location}
               </div>
             </div>
 
             {/* Bio / About */}
             <div className="space-y-2">
-              <h4 className="text-sm font-semibold text-slate-900">About Me</h4>
-              <p className="text-sm text-slate-600 bg-slate-50 p-4 rounded-xl border border-slate-100 leading-relaxed italic">
+              <h4 className="text-sm font-semibold text-forest-beige">About Me</h4>
+              <p className="text-sm text-forest-muted bg-[#181A15] p-4 rounded-xl border border-forest-border leading-relaxed italic">
                 "{selectedApp?.bio}"
               </p>
             </div>
 
             {/* Skills */}
             <div className="space-y-2">
-              <h4 className="text-sm font-semibold text-slate-900">Skills</h4>
+              <h4 className="text-sm font-semibold text-forest-beige">Skills</h4>
               <div className="flex flex-wrap gap-2">
                 {selectedApp?.skills?.map((skill: string, idx: number) => (
                   <Badge key={idx} variant="secondary" className="bg-blue-50 text-blue-700 hover:bg-blue-100 border-0">
@@ -366,7 +366,7 @@ export default function OrganizationApplicationsPage() {
             </div>
           </div>
 
-          <DialogFooter className="bg-slate-50 px-6 py-4 flex gap-2">
+          <DialogFooter className="bg-[#181A15] px-6 py-4 flex gap-2">
             <Button variant="outline" className="rounded-xl" onClick={() => setIsDialogOpen(false)}>
               Close
             </Button>
@@ -383,7 +383,7 @@ export default function OrganizationApplicationsPage() {
                   Reject
                 </Button>
                 <Button 
-                  className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl"
+                  className="bg-[#4A5D23] hover:bg-emerald-700 text-white rounded-xl"
                   onClick={() => {
                     handleStatusChange(selectedApp.id, 'approved');
                     setIsDialogOpen(false);

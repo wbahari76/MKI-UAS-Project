@@ -56,7 +56,7 @@
     }
 
     body {
-        @apply bg-white text-slate-900 antialiased;
+        @apply bg-forest text-forest-beige antialiased;
         font-feature-settings: "rlig" 1, "calt" 1;
         font-optical-sizing: auto;
     }
@@ -98,7 +98,7 @@
 
     /* Glass effect */
     .glass {
-        @apply bg-white/80 backdrop-blur-xl border border-white/20;
+        @apply bg-forest/80 backdrop-blur-xl border border-forest-border/50;
     }
 
     /* Skeleton animation */
@@ -147,7 +147,7 @@
     }
 
     .btn-primary {
-        @apply btn bg-emerald-500 text-white hover:bg-emerald-600 focus:ring-emerald-500 active:scale-[0.98];
+        @apply btn bg-forest-accent text-white hover:bg-[#4A5D23] focus:ring-forest-accent active:scale-[0.98];
     }
 
     .btn-secondary {
@@ -159,7 +159,7 @@
     }
 
     .btn-ghost {
-        @apply btn text-slate-600 hover:bg-slate-100 focus:ring-slate-500;
+        @apply btn text-forest-muted hover:bg-forest-card hover:text-forest-beige focus:ring-forest-border;
     }
 
     .btn-danger {
@@ -185,7 +185,7 @@
 
     /* Card styles */
     .card {
-        @apply bg-white rounded-2xl border border-slate-100 shadow-sm;
+        @apply bg-forest-card rounded-2xl border border-forest-border shadow-sm;
     }
 
     /* Stats card */

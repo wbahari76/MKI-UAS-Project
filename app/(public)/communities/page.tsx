@@ -71,7 +71,7 @@ const PUBLIC_COMMUNITIES = [
 
 export default function PublicCommunitiesPage() {
   return (
-    <div className="min-h-screen bg-slate-50 pt-24 pb-20">
+    <div className="min-h-screen bg-[#181A15] pt-24 pb-20">
       
       {/* Background Decor */}
       <div className="absolute top-0 inset-x-0 h-[500px] bg-gradient-to-b from-blue-500/10 to-transparent -z-10" />
@@ -83,10 +83,10 @@ export default function PublicCommunitiesPage() {
             <span className="inline-block py-1 px-3 rounded-full bg-blue-100 text-blue-700 text-sm font-semibold tracking-wider uppercase mb-4">
               Community Directory
             </span>
-            <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">
+            <h1 className="text-4xl md:text-5xl font-extrabold text-forest-beige tracking-tight leading-tight">
               Discover Organizations <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-500">Making an Impact</span>
             </h1>
-            <p className="text-lg text-slate-600 mt-4">
+            <p className="text-lg text-forest-muted mt-4">
               Connect with verified non-profits, NGOs, and community groups that align with your passions and values.
             </p>
           </motion.div>
@@ -97,17 +97,17 @@ export default function PublicCommunitiesPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 mb-12 flex flex-col md:flex-row gap-4"
+          className="bg-forest-card p-4 rounded-2xl shadow-sm border border-forest-border mb-12 flex flex-col md:flex-row gap-4"
         >
           <div className="relative flex-1">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#7A8072]" />
             <Input 
               placeholder="Search organizations by name, focus area, or location..." 
-              className="pl-12 h-12 bg-slate-50 border-0 focus-visible:ring-blue-500 rounded-xl text-base"
+              className="pl-12 h-12 bg-[#181A15] border-0 focus-visible:ring-blue-500 rounded-xl text-base"
             />
           </div>
           <div className="flex gap-4">
-            <Button variant="outline" className="h-12 px-6 rounded-xl border-slate-200 text-slate-600 hover:bg-slate-50">
+            <Button variant="outline" className="h-12 px-6 rounded-xl border-forest-border text-forest-muted hover:bg-[#181A15]">
               <Filter className="w-5 h-5 mr-2" /> Filters
             </Button>
             <Button className="h-12 px-8 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-medium">
@@ -127,7 +127,7 @@ export default function PublicCommunitiesPage() {
             <motion.div 
               key={community.id} 
               variants={fadeInUp}
-              className="group bg-white rounded-3xl overflow-hidden border border-slate-100 shadow-sm hover:shadow-xl transition-all duration-300"
+              className="group bg-forest-card rounded-3xl overflow-hidden border border-forest-border shadow-sm hover:shadow-xl transition-all duration-300"
             >
               {/* Community Banner Image */}
               <div className="relative h-48 overflow-hidden">
@@ -138,7 +138,7 @@ export default function PublicCommunitiesPage() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent" />
                 <div className="absolute bottom-4 left-6 flex items-center gap-4">
-                  <div className="w-16 h-16 rounded-2xl bg-white flex items-center justify-center text-2xl font-bold text-blue-600 shadow-md">
+                  <div className="w-16 h-16 rounded-2xl bg-forest-card flex items-center justify-center text-2xl font-bold text-blue-600 shadow-md">
                     {community.logo}
                   </div>
                   <div>
@@ -154,26 +154,26 @@ export default function PublicCommunitiesPage() {
 
               {/* Community Details */}
               <div className="p-6">
-                <p className="text-slate-600 mb-6 line-clamp-2 leading-relaxed">
+                <p className="text-forest-muted mb-6 line-clamp-2 leading-relaxed">
                   {community.description}
                 </p>
                 
                 <div className="grid grid-cols-2 gap-4 mb-6">
-                  <div className="flex items-center text-sm text-slate-600">
-                    <MapPin className="w-4 h-4 mr-2 text-slate-400 shrink-0" />
+                  <div className="flex items-center text-sm text-forest-muted">
+                    <MapPin className="w-4 h-4 mr-2 text-[#7A8072] shrink-0" />
                     <span className="line-clamp-1">{community.location}</span>
                   </div>
-                  <div className="flex items-center text-sm text-slate-600">
-                    <Users className="w-4 h-4 mr-2 text-slate-400 shrink-0" />
+                  <div className="flex items-center text-sm text-forest-muted">
+                    <Users className="w-4 h-4 mr-2 text-[#7A8072] shrink-0" />
                     <span className="line-clamp-1">{community.members} Volunteers</span>
                   </div>
-                  <div className="flex items-center text-sm text-slate-600 col-span-2">
-                    <Target className="w-4 h-4 mr-2 text-slate-400 shrink-0" />
+                  <div className="flex items-center text-sm text-forest-muted col-span-2">
+                    <Target className="w-4 h-4 mr-2 text-[#7A8072] shrink-0" />
                     <span className="line-clamp-1">{community.activeProjects} Active Projects</span>
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between pt-4 border-t border-slate-100">
+                <div className="flex items-center justify-between pt-4 border-t border-forest-border">
                   <Link href="/register">
                     <Button variant="ghost" className="text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-full px-4">
                       View Profile
@@ -192,7 +192,7 @@ export default function PublicCommunitiesPage() {
 
         {/* Load More */}
         <div className="mt-16 text-center">
-          <Button variant="outline" className="rounded-full h-12 px-8 border-slate-200 text-slate-600 hover:bg-slate-50">
+          <Button variant="outline" className="rounded-full h-12 px-8 border-forest-border text-forest-muted hover:bg-[#181A15]">
             View All Organizations
           </Button>
         </div>
@@ -204,7 +204,7 @@ export default function PublicCommunitiesPage() {
           viewport={{ once: true }}
           className="mt-24 bg-blue-600 rounded-3xl p-8 md:p-12 text-center text-white relative overflow-hidden"
         >
-          <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -z-10 transform translate-x-1/2 -translate-y-1/2" />
+          <div className="absolute top-0 right-0 w-64 h-64 bg-forest-card/10 rounded-full blur-3xl -z-10 transform translate-x-1/2 -translate-y-1/2" />
           <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-400/20 rounded-full blur-3xl -z-10 transform -translate-x-1/2 translate-y-1/2" />
           
           <h2 className="text-3xl md:text-4xl font-bold mb-4">Are you an organization?</h2>
@@ -212,7 +212,7 @@ export default function PublicCommunitiesPage() {
             Join JALA VIVE to recruit passionate volunteers, manage your projects efficiently, and measure your impact in real-time.
           </p>
           <Link href="/register?type=organization">
-            <Button className="h-14 px-8 rounded-full bg-white text-blue-600 hover:bg-slate-50 text-lg font-semibold shadow-xl shadow-blue-900/20 transition-all">
+            <Button className="h-14 px-8 rounded-full bg-forest-card text-blue-600 hover:bg-[#181A15] text-lg font-semibold shadow-xl shadow-blue-900/20 transition-all">
               Register Your Organization
             </Button>
           </Link>

@@ -49,14 +49,14 @@ export default function AdminUsersPage() {
     <div className="space-y-8 pb-20">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Manage Users</h1>
-          <p className="text-slate-500 mt-1">View and manage volunteers and organizations.</p>
+          <h1 className="text-3xl font-bold text-forest-beige tracking-tight">Manage Users</h1>
+          <p className="text-forest-muted mt-1">View and manage volunteers and organizations.</p>
         </div>
         <div className="relative w-full sm:w-72">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#7A8072]" />
           <Input 
             placeholder="Search users..." 
-            className="pl-9 bg-white border-slate-200"
+            className="pl-9 bg-forest-card border-forest-border"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
@@ -65,7 +65,7 @@ export default function AdminUsersPage() {
 
       <Card className="border-0 shadow-sm shadow-slate-200 overflow-hidden">
         <Tabs defaultValue="all" className="w-full">
-          <div className="border-b border-slate-100 p-4">
+          <div className="border-b border-forest-border p-4">
             <TabsList>
               <TabsTrigger value="all">All Users</TabsTrigger>
               <TabsTrigger value="organizations">Organizations</TabsTrigger>
@@ -76,7 +76,7 @@ export default function AdminUsersPage() {
           <CardContent className="p-0">
             <div className="overflow-x-auto">
               <table className="w-full text-sm text-left">
-                <thead className="text-xs text-slate-500 bg-slate-50 uppercase">
+                <thead className="text-xs text-forest-muted bg-[#181A15] uppercase">
                   <tr>
                     <th className="px-6 py-4 font-semibold">User</th>
                     <th className="px-6 py-4 font-semibold">Role</th>
@@ -87,29 +87,29 @@ export default function AdminUsersPage() {
                 </thead>
                 <tbody className="divide-y divide-slate-100">
                   {filteredUsers.map((user) => (
-                    <tr key={user.id} className="hover:bg-slate-50/50 transition-colors bg-white">
+                    <tr key={user.id} className="hover:bg-[#181A15]/50 transition-colors bg-forest-card">
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-3">
                           <Avatar className="w-8 h-8">
-                            <AvatarFallback className={user.role === 'Organization' ? 'bg-blue-100 text-blue-700' : 'bg-emerald-100 text-emerald-700'}>
+                            <AvatarFallback className={user.role === 'Organization' ? 'bg-blue-100 text-blue-700' : 'bg-[#2C3322] text-[#829661]'}>
                               {user.name.charAt(0)}
                             </AvatarFallback>
                           </Avatar>
                           <div>
-                            <p className="font-medium text-slate-900">{user.name}</p>
-                            <p className="text-xs text-slate-500">{user.email}</p>
+                            <p className="font-medium text-forest-beige">{user.name}</p>
+                            <p className="text-xs text-forest-muted">{user.email}</p>
                           </div>
                         </div>
                       </td>
                       <td className="px-6 py-4">
-                        <div className="flex items-center gap-2 text-slate-600">
+                        <div className="flex items-center gap-2 text-forest-muted">
                           {user.role === 'Organization' ? <Building2 className="w-4 h-4" /> : <User className="w-4 h-4" />}
                           {user.role}
                         </div>
                       </td>
                       <td className="px-6 py-4">
                         <Badge variant="outline" className={`
-                          ${user.status === 'Active' ? 'border-emerald-200 text-emerald-700 bg-emerald-50' : ''}
+                          ${user.status === 'Active' ? 'border-[#4A5D23] text-[#829661] bg-[#21261B]' : ''}
                           ${user.status === 'Verified' ? 'border-blue-200 text-blue-700 bg-blue-50' : ''}
                           ${user.status === 'Pending' ? 'border-amber-200 text-amber-700 bg-amber-50' : ''}
                           ${user.status === 'Suspended' ? 'border-red-200 text-red-700 bg-red-50' : ''}
@@ -117,13 +117,13 @@ export default function AdminUsersPage() {
                           {user.status}
                         </Badge>
                       </td>
-                      <td className="px-6 py-4 text-slate-500">
+                      <td className="px-6 py-4 text-forest-muted">
                         {user.joinDate}
                       </td>
                       <td className="px-6 py-4 text-right">
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="icon" className="text-slate-400 hover:text-slate-600">
+                            <Button variant="ghost" size="icon" className="text-[#7A8072] hover:text-forest-muted">
                               <MoreHorizontal className="w-4 h-4" />
                             </Button>
                           </DropdownMenuTrigger>
@@ -139,7 +139,7 @@ export default function AdminUsersPage() {
                                 <ShieldAlert className="w-4 h-4 mr-2" /> Suspend
                               </DropdownMenuItem>
                             ) : (
-                              <DropdownMenuItem onClick={() => handleVerify(user.id)} className="text-emerald-600">
+                              <DropdownMenuItem onClick={() => handleVerify(user.id)} className="text-[#829661]">
                                 <ShieldCheck className="w-4 h-4 mr-2" /> Reactivate
                               </DropdownMenuItem>
                             )}

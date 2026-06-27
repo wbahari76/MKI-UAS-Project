@@ -58,8 +58,8 @@ export default function SettingsPage() {
   return (
     <div className="max-w-4xl mx-auto space-y-8 pb-20">
       <div>
-        <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Settings</h1>
-        <p className="text-slate-500 mt-1">Manage your account preferences and security.</p>
+        <h1 className="text-3xl font-bold text-forest-beige tracking-tight">Settings</h1>
+        <p className="text-forest-muted mt-1">Manage your account preferences and security.</p>
       </div>
 
       <div className="grid gap-6">
@@ -67,7 +67,7 @@ export default function SettingsPage() {
         <Card className="border-0 shadow-sm shadow-slate-200">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Shield className="w-5 h-5 text-emerald-600" />
+              <Shield className="w-5 h-5 text-[#829661]" />
               Account Security
             </CardTitle>
             <CardDescription>Update your password and secure your account.</CardDescription>
@@ -75,8 +75,8 @@ export default function SettingsPage() {
           <CardContent className="space-y-4">
             <div className="space-y-2">
               <Label>Email Address</Label>
-              <Input disabled value={user?.email || ""} className="bg-slate-50" />
-              <p className="text-xs text-slate-500">Your email is managed by your authentication provider.</p>
+              <Input disabled value={user?.email || ""} className="bg-[#181A15]" />
+              <p className="text-xs text-forest-muted">Your email is managed by your authentication provider.</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
               <div className="space-y-2">
@@ -95,7 +95,7 @@ export default function SettingsPage() {
         <Card className="border-0 shadow-sm shadow-slate-200">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Bell className="w-5 h-5 text-emerald-600" />
+              <Bell className="w-5 h-5 text-[#829661]" />
               Notifications
             </CardTitle>
             <CardDescription>Choose what updates you want to receive.</CardDescription>
@@ -104,7 +104,7 @@ export default function SettingsPage() {
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
                 <Label className="text-base">Email Notifications</Label>
-                <p className="text-sm text-slate-500">Receive emails about new projects and events.</p>
+                <p className="text-sm text-forest-muted">Receive emails about new projects and events.</p>
               </div>
               <Switch 
                 checked={settings.emailNotifs} 
@@ -114,7 +114,7 @@ export default function SettingsPage() {
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
                 <Label className="text-base">Event Reminders</Label>
-                <p className="text-sm text-slate-500">Get notified 24 hours before your event starts.</p>
+                <p className="text-sm text-forest-muted">Get notified 24 hours before your event starts.</p>
               </div>
               <Switch 
                 checked={settings.eventReminders} 
@@ -124,7 +124,7 @@ export default function SettingsPage() {
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
                 <Label className="text-base">Messages</Label>
-                <p className="text-sm text-slate-500">Receive notifications for new direct messages.</p>
+                <p className="text-sm text-forest-muted">Receive notifications for new direct messages.</p>
               </div>
               <Switch 
                 checked={settings.messages} 
@@ -138,7 +138,7 @@ export default function SettingsPage() {
         <Card className="border-0 shadow-sm shadow-slate-200">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Eye className="w-5 h-5 text-emerald-600" />
+              <Eye className="w-5 h-5 text-[#829661]" />
               Privacy
             </CardTitle>
             <CardDescription>Control who can see your profile and activity.</CardDescription>
@@ -147,7 +147,7 @@ export default function SettingsPage() {
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
                 <Label className="text-base">Public Profile</Label>
-                <p className="text-sm text-slate-500">Allow organizations to view your volunteer history.</p>
+                <p className="text-sm text-forest-muted">Allow organizations to view your volunteer history.</p>
               </div>
               <Switch 
                 checked={settings.publicProfile} 
@@ -157,7 +157,7 @@ export default function SettingsPage() {
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
                 <Label className="text-base">Show Online Status</Label>
-                <p className="text-sm text-slate-500">Let others see when you are active on the platform.</p>
+                <p className="text-sm text-forest-muted">Let others see when you are active on the platform.</p>
               </div>
               <Switch 
                 checked={settings.showOnline} 

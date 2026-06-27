@@ -105,7 +105,7 @@ export function PublicNavbar() {
             className={cn(
                 "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
                 isScrolled
-                    ? "bg-white/95 backdrop-blur-xl shadow-sm border-b border-slate-100"
+                    ? "bg-forest-card/95 backdrop-blur-xl shadow-sm border-b border-forest-border"
                     : "bg-transparent"
             )}
         >
@@ -115,12 +115,12 @@ export function PublicNavbar() {
                     <Link href="/" className="flex items-center gap-2.5 group">
                         <motion.div
                             whileHover={{ rotate: 10, scale: 1.05 }}
-                            className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl flex items-center justify-center shadow-lg shadow-emerald-500/25"
+                            className="w-10 h-10 bg-forest-accent rounded-xl flex items-center justify-center shadow-lg shadow-forest-accent/25"
                         >
                             <HandHelping className="w-5 h-5 text-white" />
                         </motion.div>
-                        <span className="font-bold text-xl text-slate-900">
-                            JALA<span className="text-emerald-500">VIVE</span>
+                        <span className="font-bold text-xl text-forest-beige">
+                            JALA<span className="text-forest-accent">VIVE</span>
                         </span>
                     </Link>
 
@@ -133,8 +133,8 @@ export function PublicNavbar() {
                                 className={cn(
                                     "px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200",
                                     isActive(item.href)
-                                        ? "text-emerald-600 bg-emerald-50"
-                                        : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
+                                        ? "text-[#829661] bg-[#21261B]"
+                                        : "text-forest-muted hover:text-forest-beige hover:bg-[#181A15]"
                                 )}
                             >
                                 {item.name}
@@ -149,7 +149,7 @@ export function PublicNavbar() {
                             variant="ghost"
                             size="sm"
                             onClick={() => setIsSearchOpen(true)}
-                            className="text-slate-500 hover:text-slate-900"
+                            className="text-forest-muted hover:text-forest-beige"
                         >
                             <Search className="w-4 h-4" />
                         </Button>
@@ -157,7 +157,7 @@ export function PublicNavbar() {
                         {user ? (
                             <>
                                 {/* Notifications */}
-                                <Button variant="ghost" size="sm" onClick={handleNotification} className="relative text-slate-500 hover:text-slate-900">
+                                <Button variant="ghost" size="sm" onClick={handleNotification} className="relative text-forest-muted hover:text-forest-beige">
                                     <Bell className="w-4 h-4" />
                                     <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
                                         3
@@ -166,9 +166,9 @@ export function PublicNavbar() {
 
                                 {/* Messages */}
                                 <Link href={getMessagesLink()}>
-                                    <Button variant="ghost" size="sm" className="relative text-slate-500 hover:text-slate-900">
+                                    <Button variant="ghost" size="sm" className="relative text-forest-muted hover:text-forest-beige">
                                         <MessageCircle className="w-4 h-4" />
-                                        <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-emerald-500 text-white text-xs rounded-full flex items-center justify-center">
+                                        <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-forest-accent text-white text-xs rounded-full flex items-center justify-center">
                                             2
                                         </span>
                                     </Button>
@@ -177,14 +177,14 @@ export function PublicNavbar() {
                                 {/* User Menu */}
                                 <DropdownMenu>
                                     <DropdownMenuTrigger asChild>
-                                        <Button variant="ghost" className="flex items-center gap-2 pl-2 pr-3 hover:bg-slate-50">
+                                        <Button variant="ghost" className="flex items-center gap-2 pl-2 pr-3 hover:bg-[#181A15]">
                                             <Avatar className="w-8 h-8 border-2 border-emerald-100">
                                                 <AvatarImage src={profile?.avatar_url || ''} />
-                                                <AvatarFallback className="bg-emerald-100 text-emerald-600 text-sm font-medium">
+                                                <AvatarFallback className="bg-[#2C3322] text-[#829661] text-sm font-medium">
                                                     {profile?.full_name?.charAt(0) || 'U'}
                                                 </AvatarFallback>
                                             </Avatar>
-                                            <ChevronDown className="w-4 h-4 text-slate-400" />
+                                            <ChevronDown className="w-4 h-4 text-[#7A8072]" />
                                         </Button>
                                     </DropdownMenuTrigger>
                                     <DropdownMenuContent align="end" className="w-56">
@@ -213,12 +213,12 @@ export function PublicNavbar() {
                         ) : (
                             <>
                                 <Link href="/login">
-                                    <Button variant="ghost" size="sm" className="text-slate-600 hover:text-slate-900">
+                                    <Button variant="ghost" size="sm" className="text-forest-muted hover:text-forest-beige">
                                         Log In
                                     </Button>
                                 </Link>
                                 <Link href="/register">
-                                    <Button className="bg-emerald-500 hover:bg-emerald-600 text-white shadow-lg shadow-emerald-500/25">
+                                    <Button className="bg-forest-accent hover:bg-[#4A5D23] text-white shadow-lg shadow-emerald-500/25">
                                         Get Started
                                     </Button>
                                 </Link>
@@ -232,7 +232,7 @@ export function PublicNavbar() {
                             variant="ghost"
                             size="sm"
                             onClick={() => setIsSearchOpen(true)}
-                            className="text-slate-500"
+                            className="text-forest-muted"
                         >
                             <Search className="w-5 h-5" />
                         </Button>
@@ -240,7 +240,7 @@ export function PublicNavbar() {
                             variant="ghost"
                             size="sm"
                             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                            className="text-slate-600"
+                            className="text-forest-muted"
                         >
                             {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
                         </Button>
@@ -255,7 +255,7 @@ export function PublicNavbar() {
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: 'auto' }}
                         exit={{ opacity: 0, height: 0 }}
-                        className="lg:hidden bg-white border-t border-slate-100"
+                        className="lg:hidden bg-forest-card border-t border-forest-border"
                     >
                         <div className="px-4 py-4 space-y-1">
                             {publicNavItems.map((item) => (
@@ -266,27 +266,27 @@ export function PublicNavbar() {
                                     className={cn(
                                         "block px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200",
                                         isActive(item.href)
-                                            ? "text-emerald-600 bg-emerald-50"
-                                            : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
+                                            ? "text-[#829661] bg-[#21261B]"
+                                            : "text-forest-muted hover:text-forest-beige hover:bg-[#181A15]"
                                     )}
                                 >
                                     {item.name}
                                 </Link>
                             ))}
-                            <div className="pt-4 border-t border-slate-100 space-y-2">
+                            <div className="pt-4 border-t border-forest-border space-y-2">
                                 {user ? (
                                     <>
                                         <Link
                                             href={getDashboardLink()}
                                             onClick={() => setIsMobileMenuOpen(false)}
-                                            className="block px-4 py-3 rounded-xl text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-50"
+                                            className="block px-4 py-3 rounded-xl text-sm font-medium text-forest-muted hover:text-forest-beige hover:bg-[#181A15]"
                                         >
                                             Dashboard
                                         </Link>
                                         <Link
                                             href="/profile"
                                             onClick={() => setIsMobileMenuOpen(false)}
-                                            className="block px-4 py-3 rounded-xl text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-50"
+                                            className="block px-4 py-3 rounded-xl text-sm font-medium text-forest-muted hover:text-forest-beige hover:bg-[#181A15]"
                                         >
                                             Profile
                                         </Link>
@@ -308,7 +308,7 @@ export function PublicNavbar() {
                                             </Button>
                                         </Link>
                                         <Link href="/register" onClick={() => setIsMobileMenuOpen(false)}>
-                                            <Button className="w-full bg-emerald-500 hover:bg-emerald-600">
+                                            <Button className="w-full bg-forest-accent hover:bg-[#4A5D23]">
                                                 Get Started
                                             </Button>
                                         </Link>
@@ -327,7 +327,7 @@ export function PublicNavbar() {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm"
+                        className="fixed inset-0 z-50 bg-forest/50 backdrop-blur-sm"
                         onClick={() => setIsSearchOpen(false)}
                     >
                         <motion.div
@@ -337,10 +337,10 @@ export function PublicNavbar() {
                             className="fixed top-20 left-1/2 -translate-x-1/2 w-full max-w-2xl px-4"
                             onClick={(e) => e.stopPropagation()}
                         >
-                            <div className="bg-white rounded-2xl shadow-2xl overflow-hidden">
+                            <div className="bg-forest-card rounded-2xl shadow-2xl overflow-hidden">
                                 <div className="p-4">
                                     <form onSubmit={handleSearch} className="relative">
-                                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#7A8072]" />
                                         <Input
                                             value={searchQuery}
                                             onChange={(e) => setSearchQuery(e.target.value)}
@@ -350,8 +350,8 @@ export function PublicNavbar() {
                                         />
                                     </form>
                                 </div>
-                                <div className="border-t border-slate-100 p-4">
-                                    <p className="text-xs text-slate-500 mb-3">Quick Links</p>
+                                <div className="border-t border-forest-border p-4">
+                                    <p className="text-xs text-forest-muted mb-3">Quick Links</p>
                                     <div className="flex flex-wrap gap-2">
                                         <Button variant="outline" size="sm" className="rounded-full">
                                             <Heart className="w-3.5 h-3.5 mr-1.5" />
@@ -367,8 +367,8 @@ export function PublicNavbar() {
                                         </Button>
                                     </div>
                                 </div>
-                                <div className="border-t border-slate-100 px-4 py-3 bg-slate-50 text-xs text-slate-500">
-                                    Press <kbd className="px-1.5 py-0.5 bg-white rounded border border-slate-200 font-mono">ESC</kbd> to close
+                                <div className="border-t border-forest-border px-4 py-3 bg-[#181A15] text-xs text-forest-muted">
+                                    Press <kbd className="px-1.5 py-0.5 bg-forest-card rounded border border-forest-border font-mono">ESC</kbd> to close
                                 </div>
                             </div>
                         </motion.div>
