@@ -100,33 +100,34 @@ export function PublicNavbar() {
     };
 
     return (
-        <motion.header
-            initial={{ y: -100 }}
-            animate={{ y: 0 }}
-            className={cn(
-                "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
-                isScrolled
-                    ? "bg-[#131511]/70 backdrop-blur-xl border-b border-white/5"
-                    : "bg-transparent"
-            )}
-        >
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <nav className="flex items-center justify-between h-16">
+        <>
+        <div className="fixed top-0 left-0 right-0 z-50 flex justify-center pt-6 px-4 pointer-events-none">
+            <motion.header
+                initial={{ y: -100 }}
+                animate={{ y: 0 }}
+                className={cn(
+                    "pointer-events-auto transition-all duration-300 rounded-[28px] border px-2 sm:px-4 flex items-center justify-between w-full max-w-[1200px]",
+                    isScrolled
+                        ? "bg-[#131511]/85 backdrop-blur-xl border-white/10 shadow-2xl shadow-black/50"
+                        : "bg-[#181A15]/60 backdrop-blur-lg border-white/5 shadow-xl"
+                )}
+            >
+                <nav className="flex items-center justify-between h-14 w-full">
                     {/* Logo */}
-                    <Link href="/" className="flex items-center gap-4 group">
+                    <Link href="/" className="flex items-center gap-3 group pl-2">
                         <motion.div
                             whileHover={{ rotate: 10, scale: 1.05 }}
-                            className="w-10 h-10 bg-forest-accent rounded-xl flex items-center justify-center shadow-lg shadow-forest-accent/25"
+                            className="w-9 h-9 bg-forest-accent rounded-xl flex items-center justify-center shadow-lg shadow-forest-accent/25"
                         >
-                            <HandHelping className="w-5 h-5 text-forest-beige" />
+                            <HandHelping className="w-4 h-4 text-forest-beige" />
                         </motion.div>
-                        <span className="font-bold text-xl tracking-tight text-white">
+                        <span className="font-bold text-lg tracking-tight text-white hidden sm:block">
                             JALA<span className="text-forest-accent ml-1">VIVE</span>
                         </span>
                     </Link>
 
                     {/* Desktop Navigation */}
-                    <div className="hidden lg:flex items-center gap-6">
+                    <div className="hidden lg:flex items-center gap-2">
                         {publicNavItems.map((item) => (
                             <Link
                                 key={item.name}
@@ -134,7 +135,7 @@ export function PublicNavbar() {
                                 className={cn(
                                     "px-4 py-2 rounded-full text-sm font-medium transition-all duration-300",
                                     isActive(item.href)
-                                        ? "text-white bg-white/10 shadow-[0_0_10px_rgba(255,255,255,0.05)]"
+                                        ? "text-[#131511] bg-[#829661] shadow-[0_0_15px_rgba(130,150,97,0.3)]"
                                         : "text-forest-muted hover:text-white hover:bg-white/5"
                                 )}
                             >
@@ -247,9 +248,8 @@ export function PublicNavbar() {
                         </Button>
                     </div>
                 </nav>
-            </div>
-
-            {/* Mobile Menu */}
+            </motion.header>
+        </div>
             <AnimatePresence>
                 {isMobileMenuOpen && (
                     <motion.div
@@ -376,6 +376,6 @@ export function PublicNavbar() {
                     </motion.div>
                 )}
             </AnimatePresence>
-        </motion.header>
+        </>
     );
 }
