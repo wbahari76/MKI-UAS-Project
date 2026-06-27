@@ -55,6 +55,7 @@ export default function CreateProjectPage() {
     
     try {
       // First get the user's organization ID
+      let orgId;
       const { data: org, error: orgError } = await supabase
         .from('organizations')
         .select('id')
@@ -62,9 +63,25 @@ export default function CreateProjectPage() {
         .single();
 
       if (orgError || !org) {
-        toast.error("Could not find your organization profile.");
-        setIsSubmitting(false);
-        return;
+        // Auto-create a default organization profile
+        const { data: newOrg, error: newOrgError } = await supabase
+          .from('organizations')
+          .insert({
+            owner_id: user.id,
+            name: user.user_metadata?.full_name || 'My Organization',
+            slug: 'org-' + Date.now(),
+          })
+          .select('id')
+          .single();
+          
+        if (newOrgError || !newOrg) {
+          toast.error("Could not find or create your organization profile.");
+          setIsSubmitting(false);
+          return;
+        }
+        orgId = newOrg.id;
+      } else {
+        orgId = org.id;
       }
 
       // Format arrays
@@ -75,7 +92,7 @@ export default function CreateProjectPage() {
       const { error: insertError } = await supabase
         .from('projects')
         .insert({
-          organization_id: org.id,
+          organization_id: orgId,
           title: title,
           slug: title.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-' + Date.now(),
           category: category,
