@@ -85,7 +85,7 @@ export default function OrganizationDashboard() {
   useEffect(() => {
     async function fetchDashboardData() {
       if (!user) return;
-      
+
       try {
         setProjectsLoading(true);
         const { data: org, error: orgError } = await supabase
@@ -95,9 +95,9 @@ export default function OrganizationDashboard() {
           .single();
 
         if (orgError) {
-           console.error("No org profile found yet");
-           setProjectsLoading(false);
-           return;
+          console.error("No org profile found yet");
+          setProjectsLoading(false);
+          return;
         }
 
         const { data: projectsData, error: projectsError } = await supabase
@@ -108,13 +108,13 @@ export default function OrganizationDashboard() {
           .limit(5);
 
         if (projectsError) throw projectsError;
-        
+
         setProjects(projectsData || []);
-        
+
         // Calculate basic stats from the projects
         const activeCount = projectsData?.filter(p => p.status !== 'draft' && p.status !== 'completed').length || 0;
         const volCount = projectsData?.reduce((acc, p) => acc + (p.volunteer_count || 0), 0) || 0;
-        
+
         setStats(prev => ({
           ...prev,
           activeProjects: activeCount,
@@ -188,7 +188,7 @@ export default function OrganizationDashboard() {
     <div className="space-y-8">
       {/* Greeting Section */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           className="space-y-1"
@@ -218,7 +218,7 @@ export default function OrganizationDashboard() {
       </div>
 
       {/* Stats Cards */}
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
@@ -287,7 +287,7 @@ export default function OrganizationDashboard() {
                         <h4 className="font-semibold text-forest-beige group-hover:text-blue-400 transition-colors flex items-center gap-2">
                           {project.title}
                           {project.is_paid && (
-                             <Badge className="bg-amber-500/10 text-amber-500 border-amber-500/20 text-[10px] px-1.5 py-0">Paid</Badge>
+                            <Badge className="bg-amber-500/10 text-amber-500 border-amber-500/20 text-[10px] px-1.5 py-0">Paid</Badge>
                           )}
                         </h4>
                         <div className="flex items-center gap-3 mt-1">

@@ -55,13 +55,9 @@ const organizationLinks = [
 
 const adminLinks = [
   { name: "Dashboard", href: "/admin/dashboard", icon: LayoutDashboard },
-  { name: "Organizations", href: "/admin/organizations", icon: Briefcase },
-  { name: "Projects", href: "/admin/projects", icon: FolderHeart },
-  { name: "Users", href: "/admin/users", icon: Users },
-  { name: "Reports", href: "/admin/reports", icon: ShieldAlert },
+  { name: "Manage Users", href: "/admin/users", icon: Users },
+  { name: "Manage Projects", href: "/admin/projects", icon: FolderHeart },
   { name: "Support", href: "/admin/support", icon: Headset },
-  { name: "Analytics", href: "/admin/analytics", icon: BarChart },
-  { name: "Settings", href: "/admin/settings", icon: Settings },
 ];
 
 export default function DashboardSidebar({
@@ -126,18 +122,16 @@ export default function DashboardSidebar({
                 key={link.name}
                 href={link.href}
                 onClick={() => setMobileOpen(false)}
-                className={`flex items-center gap-3 rounded-xl px-3 py-2.5 transition-all duration-200 group ${
-                  isActive
+                className={`flex items-center gap-3 rounded-xl px-3 py-2.5 transition-all duration-200 group ${isActive
                     ? "bg-[#21261B] text-[#829661] font-medium"
                     : "text-forest-muted hover:bg-[#181A15] hover:text-forest-beige"
-                }`}
+                  }`}
                 title={isCollapsed ? link.name : undefined}
               >
                 <link.icon
                   size={20}
-                  className={`flex-shrink-0 ${
-                    isActive ? "text-[#829661]" : "text-[#7A8072] group-hover:text-forest-muted"
-                  }`}
+                  className={`flex-shrink-0 ${isActive ? "text-[#829661]" : "text-[#7A8072] group-hover:text-forest-muted"
+                    }`}
                 />
                 {!isCollapsed && <span>{link.name}</span>}
               </Link>
@@ -148,9 +142,8 @@ export default function DashboardSidebar({
 
       <div className="p-4 border-t border-forest-border">
         <button
-          className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-red-500 transition-colors hover:bg-red-500/10 ${
-            isCollapsed ? "justify-center" : ""
-          }`}
+          className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-red-500 transition-colors hover:bg-red-500/10 ${isCollapsed ? "justify-center" : ""
+            }`}
           title={isCollapsed ? "Logout" : undefined}
         >
           <LogOut size={20} />

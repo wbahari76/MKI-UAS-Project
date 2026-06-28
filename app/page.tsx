@@ -135,7 +135,7 @@ function ImpactKPISection() {
                 let vols = 0;
                 let orgs = 0;
                 let totalHours = 0;
-                
+
                 if (profiles) {
                     profiles.forEach(p => {
                         if (p.role === 'volunteer') vols++;
@@ -146,7 +146,7 @@ function ImpactKPISection() {
 
                 // Fetch total projects
                 const { count: projectsCount } = await supabase.from('projects').select('*', { count: 'exact', head: true });
-                
+
                 setMetrics({
                     volunteers: vols,
                     organizations: orgs,
@@ -162,14 +162,14 @@ function ImpactKPISection() {
                     .select('full_name, role, created_at')
                     .order('created_at', { ascending: false })
                     .limit(5);
-                    
+
                 // Fetch recent projects for Live Activity
                 const { data: recentProjects } = await supabase
                     .from('projects')
                     .select('title, category, created_at')
                     .order('created_at', { ascending: false })
                     .limit(5);
-                
+
                 let combined: any[] = [];
                 if (recentProfiles) {
                     recentProfiles.forEach(p => {
@@ -187,14 +187,14 @@ function ImpactKPISection() {
                         });
                     });
                 }
-                
+
                 if (combined.length > 0) {
                     combined.sort((a, b) => b.time - a.time);
                     setRealActivities(combined.map(c => c.text));
                 } else {
                     setRealActivities(["JALA VIVE platform is live!"]);
                 }
-            } catch(e) {
+            } catch (e) {
                 console.error("Failed to fetch real-time metrics", e);
             }
         }
@@ -226,7 +226,7 @@ function ImpactKPISection() {
             {/* Background Glows */}
             <div className="absolute top-1/4 -left-64 w-96 h-96 bg-forest-accent/5 rounded-full blur-3xl -z-10 pointer-events-none" />
             <div className="absolute bottom-1/4 -right-64 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl -z-10 pointer-events-none" />
-            
+
             <div className="container-custom relative z-10">
                 <div className="text-center max-w-3xl mx-auto mb-16">
                     <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
@@ -259,10 +259,10 @@ function ImpactKPISection() {
                                         <div className={cn(
                                             "w-10 h-10 rounded-xl flex items-center justify-center transition-colors duration-300",
                                             kpi.color === 'emerald' ? "bg-emerald-500/10 text-emerald-400 group-hover:bg-emerald-500/20" :
-                                            kpi.color === 'blue' ? "bg-blue-500/10 text-blue-400 group-hover:bg-blue-500/20" :
-                                            kpi.color === 'amber' ? "bg-amber-500/10 text-amber-400 group-hover:bg-amber-500/20" :
-                                            kpi.color === 'purple' ? "bg-purple-500/10 text-purple-400 group-hover:bg-purple-500/20" :
-                                            "bg-rose-500/10 text-rose-400 group-hover:bg-rose-500/20"
+                                                kpi.color === 'blue' ? "bg-blue-500/10 text-blue-400 group-hover:bg-blue-500/20" :
+                                                    kpi.color === 'amber' ? "bg-amber-500/10 text-amber-400 group-hover:bg-amber-500/20" :
+                                                        kpi.color === 'purple' ? "bg-purple-500/10 text-purple-400 group-hover:bg-purple-500/20" :
+                                                            "bg-rose-500/10 text-rose-400 group-hover:bg-rose-500/20"
                                         )}>
                                             <Icon className="w-5 h-5" />
                                         </div>
@@ -292,33 +292,33 @@ function ImpactKPISection() {
                         >
                             <div className="flex items-center gap-3 mb-8">
                                 <div className="relative flex h-3 w-3">
-                                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                                  <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                    <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
                                 </div>
                                 <h3 className="text-lg font-semibold text-white">Live Activity</h3>
                             </div>
-                            
+
                             <div className="flex-1 relative overflow-hidden min-h-[200px]">
                                 <div className="absolute inset-0 flex flex-col justify-center">
                                     {realActivities.map((activity, index) => {
                                         const isActive = index === activeFeedIndex;
                                         const isPrev = index === (activeFeedIndex - 1 + realActivities.length) % realActivities.length;
                                         const isNext = index === (activeFeedIndex + 1) % realActivities.length;
-                                        
+
                                         let yOffset = 100;
                                         let opacity = 0;
                                         let scale = 0.9;
-                                        
+
                                         if (isActive) { yOffset = 0; opacity = 1; scale = 1; }
                                         else if (isPrev) { yOffset = -40; opacity = 0.3; scale = 0.95; }
                                         else if (isNext) { yOffset = 40; opacity = 0.3; scale = 0.95; }
-                                        
+
                                         return (
                                             <motion.div
                                                 key={index}
                                                 className="absolute w-full left-0 right-0 flex items-center gap-4 bg-white/5 p-4 rounded-xl border border-white/5"
-                                                animate={{ 
-                                                    y: yOffset, 
+                                                animate={{
+                                                    y: yOffset,
                                                     opacity: opacity,
                                                     scale: scale,
                                                     zIndex: isActive ? 10 : 5
@@ -340,7 +340,7 @@ function ImpactKPISection() {
                     </div>
                 </div>
 
-                <motion.div 
+                <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
@@ -508,13 +508,13 @@ function CategoriesSection() {
             try {
                 const { data, error } = await supabase.from('projects').select('category');
                 if (error) throw error;
-                
+
                 if (data) {
                     const counts: Record<string, number> = {};
                     data.forEach(p => {
                         counts[p.category] = (counts[p.category] || 0) + 1;
                     });
-                    
+
                     setCategories(prev => prev.map(c => ({
                         ...c,
                         count: counts[c.name] || 0

@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
-import { 
-  Search, MoreHorizontal, ShieldCheck, ShieldAlert, 
-  UserX, Building2, User 
+import React, { useState, useEffect } from "react";
+import {
+  Search, MoreHorizontal, ShieldCheck, ShieldAlert,
+  UserX, Building2, User, RefreshCw
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -18,31 +18,158 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { toast } from "sonner";
-
-const MOCK_USERS = [
-  { id: 1, name: "Budi Santoso", email: "budi@example.com", role: "Volunteer", status: "Active", joinDate: "2026-01-15" },
-  { id: 2, name: "Ocean Care ID", email: "contact@oceancare.id", role: "Organization", status: "Verified", joinDate: "2026-02-20" },
-  { id: 3, name: "Tech for All", email: "hello@techforall.org", role: "Organization", status: "Pending", joinDate: "2026-06-10" },
-  { id: 4, name: "Siti Aminah", email: "siti@example.com", role: "Volunteer", status: "Suspended", joinDate: "2025-11-05" },
-];
+import { supabase } from "@/lib/supabase/client";
 
 export default function AdminUsersPage() {
-  const [users, setUsers] = useState(MOCK_USERS);
+  const [users, setUsers] = useState<any[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [activeTab, setActiveTab] = useState("all");
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
-  const handleVerify = (id: number) => {
-    setUsers(users.map(u => u.id === id ? { ...u, status: "Verified" } : u));
-    toast.success("Organization verified successfully.");
+  useEffect(() => {
+    const fetchData = async () => {
+      // Fetch Volunteers from Profiles
+      const { data: profiles } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('role', 'volunteer');
+
+      // Fetch Organizations from Organizations
+      const { data: organizations } = await supabase
+        .from('organizations')
+        .select('*');
+
+      const combined: any[] = [];
+      if (profiles) {
+        profiles.forEach(p => {
+          combined.push({
+            id: p.id,
+            user_id: p.user_id, // used for suspend
+            name: p.full_name || 'Unnamed Volunteer',
+            email: 'Private', // Email not stored in public.profiles
+            role: 'Volunteer',
+            status: p.is_active ? 'Active' : 'Suspended',
+            joinDate: new Date(p.created_at).toISOString().split('T')[0]
+          });
+        });
+      }
+      if (organizations) {
+        organizations.forEach(o => {
+          combined.push({
+            id: o.id,
+            name: o.name,
+            email: o.email || 'No Email',
+            role: 'Organization',
+            status: o.is_verified ? 'Verified' : 'Pending',
+            joinDate: new Date(o.created_at).toISOString().split('T')[0]
+          });
+        });
+      }
+
+      setUsers(combined);
+    };
+
+    fetchData();
+
+    const profilesSub = supabase.channel('admin-users-profiles')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'profiles' }, () => {
+        fetchData();
+      }).subscribe();
+
+    const orgsSub = supabase.channel('admin-users-orgs')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'organizations' }, () => {
+        fetchData();
+      }).subscribe();
+
+    return () => {
+      supabase.removeChannel(profilesSub);
+      supabase.removeChannel(orgsSub);
+    };
+  }, []);
+
+  const handleRefresh = async () => {
+    setIsRefreshing(true);
+
+    const { data: profiles } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('role', 'volunteer');
+
+    const { data: organizations } = await supabase
+      .from('organizations')
+      .select('*');
+
+    const combined: any[] = [];
+    if (profiles) {
+      profiles.forEach(p => {
+        combined.push({
+          id: p.id,
+          user_id: p.user_id,
+          name: p.full_name || 'Unnamed Volunteer',
+          email: 'Private',
+          role: 'Volunteer',
+          status: p.is_active ? 'Active' : 'Suspended',
+          joinDate: new Date(p.created_at).toISOString().split('T')[0]
+        });
+      });
+    }
+    if (organizations) {
+      organizations.forEach(o => {
+        combined.push({
+          id: o.id,
+          name: o.name,
+          email: o.email || 'No Email',
+          role: 'Organization',
+          status: o.is_verified ? 'Verified' : 'Pending',
+          joinDate: new Date(o.created_at).toISOString().split('T')[0]
+        });
+      });
+    }
+
+    setUsers(combined);
+
+    setTimeout(() => {
+      setIsRefreshing(false);
+      toast.success("Data synchronized successfully.");
+    }, 500);
   };
 
-  const handleSuspend = (id: number) => {
-    setUsers(users.map(u => u.id === id ? { ...u, status: "Suspended" } : u));
-    toast.error("Account suspended.");
+  const handleVerify = async (id: string, role: string) => {
+    if (role === 'Organization') {
+      const { error } = await supabase
+        .from('organizations')
+        .update({ is_verified: true })
+        .eq('id', id);
+
+      if (error) {
+        toast.error("Failed to verify organization.");
+      } else {
+        toast.success("Organization verified successfully.");
+      }
+    }
   };
 
-  const filteredUsers = users.filter(u => 
-    u.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-    u.email.toLowerCase().includes(searchQuery.toLowerCase())
+  const handleSuspend = async (user_id: string, role: string) => {
+    if (role === 'Volunteer') {
+      const { error } = await supabase
+        .from('profiles')
+        .update({ is_active: false })
+        .eq('user_id', user_id);
+
+      if (error) {
+        toast.error("Failed to suspend user.");
+      } else {
+        toast.success("Account suspended.");
+      }
+    }
+  };
+
+  const filteredUsers = users.filter(u =>
+    (u.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      u.email.toLowerCase().includes(searchQuery.toLowerCase())) &&
+    (activeTab === 'all' ||
+      (activeTab === 'organizations' && u.role === 'Organization') ||
+      (activeTab === 'volunteers' && u.role === 'Volunteer'))
   );
 
   return (
@@ -54,17 +181,26 @@ export default function AdminUsersPage() {
         </div>
         <div className="relative w-full sm:w-72">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#7A8072]" />
-          <Input 
-            placeholder="Search users..." 
+          <Input
+            placeholder="Search users..."
             className="pl-9 bg-forest-card border-forest-border"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
+        <Button
+          variant="outline"
+          className="border-forest-border bg-forest-card hover:bg-[#21261B] text-forest-beige"
+          onClick={handleRefresh}
+          disabled={isRefreshing}
+        >
+          <RefreshCw className={`w-4 h-4 mr-2 ${isRefreshing ? 'animate-spin' : ''}`} />
+          {isRefreshing ? 'Syncing...' : 'Sync Data'}
+        </Button>
       </div>
 
       <Card className="border-0 shadow-sm shadow-forest-border/20 overflow-hidden">
-        <Tabs defaultValue="all" className="w-full">
+        <Tabs defaultValue="all" className="w-full" onValueChange={setActiveTab}>
           <div className="border-b border-forest-border p-4">
             <TabsList>
               <TabsTrigger value="all">All Users</TabsTrigger>
@@ -72,7 +208,7 @@ export default function AdminUsersPage() {
               <TabsTrigger value="volunteers">Volunteers</TabsTrigger>
             </TabsList>
           </div>
-          
+
           <CardContent className="p-0">
             <div className="overflow-x-auto">
               <table className="w-full text-sm text-left">
@@ -86,7 +222,13 @@ export default function AdminUsersPage() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
-                  {filteredUsers.map((user) => (
+                  {filteredUsers.length === 0 ? (
+                    <tr>
+                      <td colSpan={5} className="px-6 py-8 text-center text-forest-muted">
+                        No users found.
+                      </td>
+                    </tr>
+                  ) : filteredUsers.map((user) => (
                     <tr key={user.id} className="hover:bg-[#181A15]/50 transition-colors bg-forest-card">
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-3">
@@ -102,18 +244,22 @@ export default function AdminUsersPage() {
                         </div>
                       </td>
                       <td className="px-6 py-4">
-                        <div className="flex items-center gap-2 text-forest-muted">
-                          {user.role === 'Organization' ? <Building2 className="w-4 h-4" /> : <User className="w-4 h-4" />}
+                        <Badge variant="outline" className={
+                          user.role === 'Organization'
+                            ? 'border-blue-500/30 text-blue-400 bg-blue-500/5'
+                            : 'border-[#829661]/30 text-[#829661] bg-[#829661]/5'
+                        }>
                           {user.role}
-                        </div>
+                        </Badge>
                       </td>
                       <td className="px-6 py-4">
-                        <Badge variant="outline" className={`
-                          ${user.status === 'Active' ? 'border-[#4A5D23] text-[#829661] bg-[#21261B]' : ''}
-                          ${user.status === 'Verified' ? 'border-blue-500/20 text-blue-400 bg-blue-500/10' : ''}
-                          ${user.status === 'Pending' ? 'border-amber-200 text-amber-400 bg-amber-500/10' : ''}
-                          ${user.status === 'Suspended' ? 'border-red-500/20 text-red-400 bg-red-500/10' : ''}
-                        `}>
+                        <Badge variant="outline" className={
+                          user.status === 'Verified' || user.status === 'Active'
+                            ? 'border-emerald-500/30 text-emerald-500 bg-emerald-500/5'
+                            : user.status === 'Suspended'
+                              ? 'border-red-500/30 text-red-500 bg-red-500/5'
+                              : 'border-yellow-500/30 text-yellow-500 bg-yellow-500/5'
+                        }>
                           {user.status}
                         </Badge>
                       </td>
@@ -123,26 +269,35 @@ export default function AdminUsersPage() {
                       <td className="px-6 py-4 text-right">
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="icon" className="text-[#7A8072] hover:text-forest-muted">
-                              <MoreHorizontal className="w-4 h-4" />
+                            <Button variant="ghost" className="h-8 w-8 p-0 text-[#7A8072] hover:text-forest-beige hover:bg-[#21261B]">
+                              <MoreHorizontal className="h-4 w-4" />
                             </Button>
                           </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end" className="w-40">
+                          <DropdownMenuContent align="end" className="bg-[#181A15] border-forest-border">
                             {user.role === 'Organization' && user.status === 'Pending' && (
-                              <DropdownMenuItem onClick={() => handleVerify(user.id)} className="text-blue-400">
-                                <ShieldCheck className="w-4 h-4 mr-2" /> Verify Org
+                              <DropdownMenuItem
+                                className="text-emerald-500 hover:text-emerald-400 focus:text-emerald-400 focus:bg-[#21261B] cursor-pointer"
+                                onSelect={() => handleVerify(user.id, user.role)}
+                              >
+                                <ShieldCheck className="w-4 h-4 mr-2" />
+                                Verify Organization
                               </DropdownMenuItem>
                             )}
-                            <DropdownMenuItem>View Details</DropdownMenuItem>
-                            {user.status !== 'Suspended' ? (
-                              <DropdownMenuItem onClick={() => handleSuspend(user.id)} className="text-red-600">
-                                <ShieldAlert className="w-4 h-4 mr-2" /> Suspend
-                              </DropdownMenuItem>
-                            ) : (
-                              <DropdownMenuItem onClick={() => handleVerify(user.id)} className="text-[#829661]">
-                                <ShieldCheck className="w-4 h-4 mr-2" /> Reactivate
+                            {user.role === 'Volunteer' && user.status === 'Active' && (
+                              <DropdownMenuItem
+                                className="text-red-500 hover:text-red-400 focus:text-red-400 focus:bg-[#21261B] cursor-pointer"
+                                onSelect={() => handleSuspend(user.user_id, user.role)}
+                              >
+                                <UserX className="w-4 h-4 mr-2" />
+                                Suspend Account
                               </DropdownMenuItem>
                             )}
+                            <DropdownMenuItem
+                              className="text-forest-beige focus:bg-[#21261B] focus:text-forest-beige cursor-pointer"
+                              onSelect={() => toast.info("Full profile view coming soon.")}
+                            >
+                              View Full Profile
+                            </DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>
                       </td>

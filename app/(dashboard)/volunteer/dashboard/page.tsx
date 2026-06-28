@@ -39,10 +39,10 @@ export default function VolunteerDashboard() {
           `)
           .eq('user_id', user.id)
           .order('created_at', { ascending: false });
-          
+
         if (appsError) throw appsError;
         setApplications(apps || []);
-        
+
       } catch (error) {
         console.error("Error fetching dashboard data:", error);
       } finally {
@@ -74,21 +74,21 @@ export default function VolunteerDashboard() {
   }
 
   const firstName = profile?.full_name?.split(" ")[0] || user?.email?.split("@")[0] || "Volunteer";
-  
+
   // Calculate real stats based on applications
   const activeApps = applications.filter(a => a.status === 'approved' || a.status === 'in_progress');
   const completedApps = applications.filter(a => a.status === 'completed' || a.status === 'certified');
-  
+
   // Note: Total hours and Impact Points can be calculated if we add them to the schema later.
   // For now, we will use mock logic for points based on completed projects.
-  const totalHours = completedApps.length * 10; 
+  const totalHours = completedApps.length * 10;
   const impactPoints = completedApps.length * 150 + activeApps.length * 50;
 
   return (
     <div className="space-y-8">
       {/* Greeting Section */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           className="space-y-1"
@@ -115,7 +115,7 @@ export default function VolunteerDashboard() {
       </div>
 
       {/* Stats Cards */}
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
@@ -189,9 +189,9 @@ export default function VolunteerDashboard() {
                               <span className="font-medium capitalize">{app.status}</span>
                             </div>
                             <div className="h-1.5 w-full bg-[#1E211A] rounded-full overflow-hidden">
-                              <div 
-                                className="h-full bg-[#829661] rounded-full" 
-                                style={{ width: app.status === 'approved' ? '50%' : app.status === 'completed' ? '100%' : '10%' }} 
+                              <div
+                                className="h-full bg-[#829661] rounded-full"
+                                style={{ width: app.status === 'approved' ? '50%' : app.status === 'completed' ? '100%' : '10%' }}
                               />
                             </div>
                           </div>

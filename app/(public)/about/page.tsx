@@ -73,7 +73,7 @@ export default function AboutPage() {
         <div className="absolute inset-0 bg-gradient-to-br from-forest-accent/5 to-blue-500/5 -z-10" />
         <div className="absolute top-0 right-0 -translate-y-12 translate-x-1/3 w-96 h-96 bg-forest-accent/20 rounded-full blur-3xl -z-10" />
         <div className="absolute bottom-0 left-0 translate-y-1/3 -translate-x-1/3 w-96 h-96 bg-blue-400/20 rounded-full blur-3xl -z-10" />
-        
+
         <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div
             initial="initial"
@@ -89,13 +89,13 @@ export default function AboutPage() {
                 Connecting Passion with <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-500">Purpose</span>
               </h1>
             </motion.div>
-            
+
             <motion.div variants={fadeIn}>
               <p className="text-lg md:text-xl text-forest-muted leading-relaxed">
                 JALA VIVE is a platform dedicated to bridging the gap between passionate volunteers and organizations driving real impact. We believe that everyone has the power to make a difference.
               </p>
             </motion.div>
-            
+
             <motion.div variants={fadeIn} className="flex flex-col sm:flex-row justify-center gap-4 pt-4">
               <Link href="/register">
                 <Button className="w-full sm:w-auto px-8 h-12 rounded-full bg-[#4A5D23] hover:bg-[#38402D] text-forest-beige text-base shadow-lg shadow-forest-accent/25 transition-all">
@@ -121,7 +121,7 @@ export default function AboutPage() {
         <div className="absolute top-1/2 left-0 -translate-y-1/2 w-[400px] h-[800px] bg-rose-500/5 rounded-full blur-[120px] pointer-events-none -z-10"></div>
 
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -138,10 +138,10 @@ export default function AboutPage() {
               Our concept validation research highlights the key challenges within today's volunteer ecosystem, revealing why a more connected, transparent, and efficient platform is needed.
             </p>
           </motion.div>
-          
+
           <div className="space-y-12 md:space-y-24">
             {/* Card 1 */}
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-100px" }}
@@ -170,7 +170,7 @@ export default function AboutPage() {
                 <p className="text-forest-muted text-lg leading-relaxed font-light">
                   Managing volunteer recruitment through Google Forms, spreadsheets, and messaging applications is time-consuming, difficult to monitor, and inefficient.
                 </p>
-                
+
                 <div className="flex flex-wrap gap-3 pt-4">
                   {["Google Forms", "Manual Tracking", "Scattered Communication"].map((tag, idx) => (
                     <span key={idx} className="px-4 py-2 rounded-xl bg-white/5 border border-white/5 text-sm text-[#DFD5C2] font-medium group-hover:border-emerald-500/30 group-hover:bg-emerald-500/5 transition-all duration-300">
@@ -182,7 +182,7 @@ export default function AboutPage() {
             </motion.div>
 
             {/* Card 2 */}
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-100px" }}
@@ -194,7 +194,7 @@ export default function AboutPage() {
                 <p className="text-forest-muted text-lg leading-relaxed font-light">
                   Many volunteers hesitate to participate because project goals, expected impact, and responsibilities are often unclear.
                 </p>
-                
+
                 <div className="flex flex-wrap gap-3 pt-4">
                   {["Unclear Impact", "Missing Information", "Low Trust"].map((tag, idx) => (
                     <span key={idx} className="px-4 py-2 rounded-xl bg-white/5 border border-white/5 text-sm text-[#DFD5C2] font-medium group-hover:border-emerald-500/30 group-hover:bg-emerald-500/5 transition-all duration-300">
@@ -223,7 +223,7 @@ export default function AboutPage() {
             </motion.div>
 
             {/* Card 3 */}
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-100px" }}
@@ -252,7 +252,7 @@ export default function AboutPage() {
                 <p className="text-forest-muted text-lg leading-relaxed font-light">
                   Volunteer opportunities are spread across different social media platforms, making projects harder to discover and reducing volunteer participation.
                 </p>
-                
+
                 <div className="flex flex-wrap gap-3 pt-4">
                   {["Instagram", "WhatsApp", "Telegram", "Facebook"].map((tag, idx) => (
                     <span key={idx} className="px-4 py-2 rounded-xl bg-white/5 border border-white/5 text-sm text-[#DFD5C2] font-medium group-hover:border-emerald-500/30 group-hover:bg-emerald-500/5 transition-all duration-300">
@@ -264,7 +264,7 @@ export default function AboutPage() {
             </motion.div>
           </div>
 
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
@@ -282,7 +282,7 @@ export default function AboutPage() {
       <section className="py-20 bg-forest-card">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-2 gap-16 items-center">
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
@@ -308,8 +308,8 @@ export default function AboutPage() {
                 ))}
               </ul>
             </motion.div>
-            
-            <motion.div 
+
+            <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
@@ -317,8 +317,8 @@ export default function AboutPage() {
               className="relative"
             >
               <div className="absolute inset-0 bg-gradient-to-tr from-forest-accent to-teal-400 rounded-3xl transform rotate-3 scale-[1.02] opacity-20" />
-              <img 
-                src="https://images.unsplash.com/photo-1593113563332-e14b58e7279b?auto=format&fit=crop&w=1200&q=80" 
+              <img
+                src="https://images.unsplash.com/photo-1593113563332-e14b58e7279b?auto=format&fit=crop&w=1200&q=80"
                 alt="Volunteers working together"
                 className="relative rounded-3xl shadow-xl object-cover aspect-[4/3] w-full"
               />
@@ -331,25 +331,25 @@ export default function AboutPage() {
       <section className="py-24 bg-[#181A15]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold text-forest-beige mb-16">Our Core Values</h2>
-          
+
           <div className="grid md:grid-cols-3 gap-8">
             {[
-              { 
-                title: "Community First", 
+              {
+                title: "Community First",
                 desc: "We prioritize the needs of the communities we serve above all else, ensuring our platform is inclusive and accessible.",
                 icon: Users,
                 color: "text-blue-400",
                 bg: "bg-blue-500/10"
               },
-              { 
-                title: "Transparency", 
+              {
+                title: "Transparency",
                 desc: "We believe in clear communication and honest reporting to build trust between volunteers and organizations.",
                 icon: Globe,
                 color: "text-[#829661]",
                 bg: "bg-[#2C3322]"
               },
-              { 
-                title: "Impact Driven", 
+              {
+                title: "Impact Driven",
                 desc: "Every feature we build is designed to maximize the positive impact our users can have on the world.",
                 icon: Target,
                 color: "text-amber-400",
@@ -431,7 +431,7 @@ export default function AboutPage() {
       <section className="py-24 relative overflow-hidden">
         <div className="absolute inset-0 bg-forest" />
         <div className="absolute inset-0 bg-gradient-to-br from-emerald-600/20 to-transparent" />
-        
+
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8">
           <h2 className="text-3xl md:text-5xl font-bold text-forest-beige leading-tight">
             Ready to make a difference?

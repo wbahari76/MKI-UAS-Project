@@ -3,37 +3,28 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { supabase } from "@/lib/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 import { Search, Send, Image as ImageIcon, Paperclip, MoreVertical, Phone, Video, Loader2, FileText, Download } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { toast } from "sonner";
-
-const CONTACTS = [
-  { id: 1, name: "Budi Santoso", role: "Volunteer", unread: 2, isOnline: true },
-  { id: 2, name: "Andi Saputra", role: "Volunteer", unread: 0, isOnline: false },
-  { id: 3, name: "Admin JALA", role: "Support", unread: 0, isOnline: true },
-];
-
-const INITIAL_CHATS: Record<number, any[]> = {
-  1: [
-    { id: 1, sender: "Me", isMe: true, text: "Hi Budi, your application for the Coastal Cleanup was approved!", time: "09:00 AM" },
-    { id: 2, sender: "Budi Santoso", isMe: false, text: "Thank you so much! I'm really looking forward to it.", time: "09:05 AM" },
-    { id: 3, sender: "Budi Santoso", isMe: false, text: "Do I need to bring any specific equipment?", time: "09:06 AM" },
-  ],
-  2: [
-    { id: 1, sender: "Andi Saputra", isMe: false, text: "Hello, I sent my application for the Tree Planting project yesterday.", time: "Yesterday" },
-  ],
-  3: [
-    { id: 1, sender: "Admin JALA", isMe: false, text: "Your organization profile is fully verified. You can now post more projects.", time: "Mon" },
-  ]
-};
+import { useSearchParams } from "next/navigation";
 
 export default function OrganizationMessagesPage() {
-  const [chats, setChats] = useState(INITIAL_CHATS);
+  const { user } = useAuth();
+  const searchParams = useSearchParams();
+  const initialUserId = searchParams.get('user');
+
+  const [contacts, setContacts] = useState<any[]>([]);
+  const [activeContact, setActiveContact] = useState<any>(null);
+  const [chats, setChats] = useState<any[]>([]);
   const [newMessage, setNewMessage] = useState("");
-  const [activeContact, setActiveContact] = useState(CONTACTS[0]);
+  const [loadingContacts, setLoadingContacts] = useState(true);
+  const [loadingChats, setLoadingChats] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+  const [conversationId, setConversationId] = useState<string>("");
+  
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -43,69 +34,165 @@ export default function OrganizationMessagesPage() {
 
   useEffect(() => {
     scrollToBottom();
-  }, [chats, activeContact]);
+  }, [chats]);
 
+  // Fetch Contacts
   useEffect(() => {
-    const channel = supabase.channel('chat:global', {
-      config: { broadcast: { self: false } }
-    });
+    if (!user) return;
+    const fetchContacts = async () => {
+      try {
+        setLoadingContacts(true);
+        // Get org id
+        const { data: org, error: orgError } = await supabase
+          .from('organizations')
+          .select('id')
+          .eq('owner_id', user.id)
+          .single();
 
-    channel.on('broadcast', { event: 'new-message' }, (payload) => {
-      const message = payload.payload;
-      setChats((prev) => ({
-        ...prev,
-        [message.contactId]: [...(prev[message.contactId] || []), { ...message, isMe: false }]
-      }));
-    }).subscribe();
+        if (orgError) throw orgError;
+
+        // Fetch approved applications for this org's projects
+        const { data: appsData, error: appsError } = await supabase
+          .from('project_applications')
+          .select(`user_id, projects!inner(organization_id)`)
+          .eq('projects.organization_id', org.id)
+          .eq('status', 'approved');
+
+        if (appsError) throw appsError;
+
+        const userIds = Array.from(new Set((appsData || []).map(a => a.user_id)));
+        
+        if (userIds.length === 0) {
+          setContacts([]);
+          setLoadingContacts(false);
+          return;
+        }
+
+        const { data: profiles, error: profilesError } = await supabase
+          .from('profiles')
+          .select('id, user_id, full_name, avatar_url, role')
+          .in('user_id', userIds);
+
+        if (profilesError) throw profilesError;
+
+        const formattedContacts = (profiles || []).map(p => ({
+          id: p.user_id,
+          name: p.full_name || 'Unknown',
+          avatar_url: p.avatar_url,
+          role: p.role,
+          unread: 0,
+          isOnline: true
+        }));
+
+        setContacts(formattedContacts);
+
+        if (formattedContacts.length > 0) {
+          if (initialUserId) {
+            const found = formattedContacts.find(c => c.id === initialUserId);
+            if (found) setActiveContact(found);
+            else setActiveContact(formattedContacts[0]);
+          } else {
+            setActiveContact(formattedContacts[0]);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching contacts:", error);
+      } finally {
+        setLoadingContacts(false);
+      }
+    };
+    fetchContacts();
+  }, [user, initialUserId]);
+
+  // Fetch Chats and Subscribe
+  useEffect(() => {
+    if (!user || !activeContact) return;
+
+    const fetchChats = async () => {
+      setLoadingChats(true);
+      try {
+        const { data, error } = await supabase
+          .from('messages')
+          .select('*')
+          .or(`and(sender_id.eq.${user.id},receiver_id.eq.${activeContact.id}),and(sender_id.eq.${activeContact.id},receiver_id.eq.${user.id})`)
+          .order('created_at', { ascending: true });
+
+        if (error) throw error;
+        
+        setChats(data || []);
+        if (data && data.length > 0) {
+          setConversationId(data[0].conversation_id);
+        } else {
+          setConversationId(crypto.randomUUID());
+        }
+      } catch (err) {
+        console.error("Error fetching chats:", err);
+      } finally {
+        setLoadingChats(false);
+      }
+    };
+
+    fetchChats();
+
+    const channel = supabase.channel(`messages-${activeContact.id}`)
+      .on(
+        'postgres_changes',
+        { event: 'INSERT', schema: 'public', table: 'messages' },
+        (payload) => {
+          const msg = payload.new;
+          if (
+            (msg.sender_id === user.id && msg.receiver_id === activeContact.id) ||
+            (msg.sender_id === activeContact.id && msg.receiver_id === user.id)
+          ) {
+            setChats(prev => {
+              if (prev.find(p => p.id === msg.id)) return prev;
+              return [...prev, msg];
+            });
+          }
+        }
+      )
+      .subscribe();
 
     return () => {
       supabase.removeChannel(channel);
     };
-  }, []);
+  }, [user, activeContact]);
 
-  const handleSend = (e: React.FormEvent) => {
+  const handleSend = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newMessage.trim()) return;
+    if (!newMessage.trim() || !user || !activeContact) return;
 
-    const msg = {
-      id: Date.now(),
-      sender: "Me",
-      isMe: true,
-      text: newMessage,
-      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-    };
-
-    setChats((prev) => ({
-      ...prev,
-      [activeContact.id]: [...(prev[activeContact.id] || []), msg]
-    }));
-    
-    supabase.channel('chat:global').send({
-      type: 'broadcast',
-      event: 'new-message',
-      payload: { ...msg, contactId: activeContact.id }
-    });
+    const msgText = newMessage.trim();
     setNewMessage("");
 
-    // Auto-reply
-    setTimeout(() => {
-      const reply = {
-        id: Date.now() + 1,
-        sender: activeContact.name,
-        isMe: false,
-        text: `Automated reply from ${activeContact.name}. I'll get back to you soon!`,
-        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-      };
-      setChats((prev) => ({
-        ...prev,
-        [activeContact.id]: [...(prev[activeContact.id] || []), reply]
-      }));
-    }, 1500);
+    const newMsg = {
+      id: crypto.randomUUID(),
+      conversation_id: conversationId,
+      sender_id: user.id,
+      receiver_id: activeContact.id,
+      content: msgText,
+      created_at: new Date().toISOString()
+    };
+
+    // Optimistic update
+    setChats(prev => [...prev, newMsg]);
+
+    const { error } = await supabase.from('messages').insert({
+      conversation_id: conversationId,
+      sender_id: user.id,
+      receiver_id: activeContact.id,
+      content: msgText
+    });
+
+    if (error) {
+      console.error("Error sending message:", error);
+      toast.error("Failed to send message");
+    }
   };
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     try {
-      if (!e.target.files || e.target.files.length === 0) return;
+      if (!e.target.files || e.target.files.length === 0 || !user || !activeContact) return;
       const file = e.target.files[0];
       const fileExt = file.name.split('.').pop();
       const fileName = `chat-${Date.now()}.${fileExt}`;
@@ -117,202 +204,256 @@ export default function OrganizationMessagesPage() {
 
       const { data } = supabase.storage.from('community').getPublicUrl(fileName);
       
-      const msg = {
-        id: Date.now(),
-        sender: "Me",
-        isMe: true,
-        text: `Sent an attachment: ${file.name}`,
-        fileUrl: data.publicUrl,
-        fileName: file.name,
-        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      const newMsg = {
+        id: crypto.randomUUID(),
+        conversation_id: conversationId,
+        sender_id: user.id,
+        receiver_id: activeContact.id,
+        content: `Sent an attachment: ${file.name}`,
+        image_url: data.publicUrl,
+        created_at: new Date().toISOString()
       };
 
-      setChats((prev) => ({
-        ...prev,
-        [activeContact.id]: [...(prev[activeContact.id] || []), msg]
-      }));
-      
-      supabase.channel('chat:global').send({
-        type: 'broadcast',
-        event: 'new-message',
-        payload: { ...msg, contactId: activeContact.id }
+      setChats(prev => [...prev, newMsg]);
+
+      const { error } = await supabase.from('messages').insert({
+        conversation_id: conversationId,
+        sender_id: user.id,
+        receiver_id: activeContact.id,
+        content: `Sent an attachment: ${file.name}`,
+        image_url: data.publicUrl
       });
+      if (error) throw error;
       
+      toast.success("File sent successfully");
     } catch (error: any) {
-      toast.error("Failed to upload file: " + error.message);
+      console.error("Upload error:", error);
+      toast.error(error.message || "Failed to upload file");
     } finally {
       setIsUploading(false);
-      if (fileInputRef.current) fileInputRef.current.value = '';
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
     }
   };
 
-  const currentMessages = chats[activeContact.id] || [];
+  const formatTime = (isoString: string) => {
+    const d = new Date(isoString);
+    return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  };
+
+  if (loadingContacts) {
+    return (
+      <div className="flex items-center justify-center h-[calc(100vh-100px)]">
+        <Loader2 className="w-8 h-8 text-emerald-500 animate-spin" />
+      </div>
+    );
+  }
 
   return (
-    <div className="h-[calc(100vh-140px)] -mx-4 sm:-mx-6 lg:-mx-8 -my-4 sm:-my-6 lg:-my-8 flex bg-forest-card rounded-xl sm:rounded-none overflow-hidden shadow-sm shadow-forest-border/20 border border-forest-border">
-      
+    <div className="h-[calc(100vh-120px)] flex bg-forest-card rounded-2xl border border-forest-border overflow-hidden shadow-lg shadow-black/20">
       {/* Sidebar Contacts */}
-      <div className="w-full sm:w-80 border-r border-forest-border flex flex-col bg-[#181A15]/50 hidden sm:flex">
-        <div className="p-4 border-b border-forest-border bg-forest-card">
-          <h2 className="text-lg font-bold text-forest-beige mb-4">Messages</h2>
+      <div className="w-80 border-r border-forest-border flex flex-col bg-[#131511]">
+        <div className="p-4 border-b border-forest-border bg-[#181A15]">
+          <h2 className="text-xl font-bold text-forest-beige mb-4">Messages</h2>
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#7A8072]" />
             <Input 
-              placeholder="Search conversations..." 
-              className="pl-9 h-10 bg-[#181A15] border-0 focus-visible:ring-forest-accent"
+              placeholder="Search contacts..." 
+              className="pl-9 bg-[#21261B] border-transparent focus-visible:ring-forest-accent rounded-xl text-forest-beige"
             />
           </div>
         </div>
-        
-        <div className="flex-1 overflow-y-auto">
-          {CONTACTS.map((contact) => {
-            const contactMessages = chats[contact.id] || [];
-            const lastMessage = contactMessages[contactMessages.length - 1];
 
-            return (
-              <div 
+        <div className="flex-1 overflow-y-auto custom-scrollbar">
+          {contacts.length === 0 ? (
+            <div className="p-8 text-center text-forest-muted">
+              <p>No approved volunteers yet.</p>
+            </div>
+          ) : (
+            contacts.map((contact) => (
+              <div
                 key={contact.id}
                 onClick={() => setActiveContact(contact)}
-                className={`p-4 border-b border-forest-border cursor-pointer transition-colors flex items-start gap-3 ${
-                  activeContact.id === contact.id ? 'bg-forest-card border-l-2 border-l-emerald-500 shadow-sm' : 'hover:bg-[#1E211A] border-l-2 border-l-transparent'
+                className={`flex items-center p-4 cursor-pointer border-b border-[#21261B] transition-colors ${
+                  activeContact?.id === contact.id 
+                    ? "bg-[#2C3322]/50 border-l-4 border-l-[#829661]" 
+                    : "hover:bg-[#1E211A] border-l-4 border-l-transparent"
                 }`}
               >
-                <div className="relative">
-                  <Avatar className="w-12 h-12 border border-forest-border">
-                    <AvatarFallback className="bg-[#2C3322] text-[#829661]">
-                      {contact.name.charAt(0)}
-                    </AvatarFallback>
+                <div className="relative mr-4">
+                  <Avatar className="w-12 h-12 border-2 border-forest-card shadow-sm">
+                    {contact.avatar_url ? (
+                      <img src={contact.avatar_url} alt={contact.name} className="object-cover" />
+                    ) : (
+                      <AvatarFallback className="bg-[#21261B] text-[#DFD5C2]">{contact.name.charAt(0)}</AvatarFallback>
+                    )}
                   </Avatar>
                   {contact.isOnline && (
-                    <span className="absolute bottom-0 right-0 w-3 h-3 bg-forest-accent border-2 border-forest-border rounded-full" />
+                    <div className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-emerald-500 border-2 border-[#131511] rounded-full"></div>
                   )}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="flex justify-between items-baseline mb-0.5">
-                    <h4 className="font-semibold text-forest-beige text-sm truncate">{contact.name}</h4>
-                    <span className="text-xs text-[#7A8072] shrink-0">{lastMessage?.time}</span>
+                  <div className="flex justify-between items-baseline mb-1">
+                    <h3 className="font-semibold text-forest-beige truncate pr-2">{contact.name}</h3>
                   </div>
-                  <div className="flex justify-between items-center">
-                    <p className="text-sm text-forest-muted truncate">{lastMessage?.text || "No messages yet."}</p>
-                    {contact.unread > 0 && contact.id !== activeContact.id && (
-                      <span className="w-5 h-5 flex items-center justify-center bg-forest-accent text-forest-beige text-[10px] font-bold rounded-full shrink-0">
-                        {contact.unread}
-                      </span>
-                    )}
-                  </div>
+                  <p className="text-xs text-forest-muted truncate">{contact.role}</p>
                 </div>
               </div>
-            );
-          })}
+            ))
+          )}
         </div>
       </div>
 
-      {/* Chat Area */}
-      <div className="flex-1 flex flex-col bg-forest-card">
-        {/* Chat Header */}
-        <div className="h-16 border-b border-forest-border flex items-center justify-between px-6 bg-forest-card shrink-0">
-          <div className="flex items-center gap-3">
-            <Avatar className="w-10 h-10 border border-forest-border">
-              <AvatarFallback className="bg-[#2C3322] text-[#829661]">
-                {activeContact.name.charAt(0)}
-              </AvatarFallback>
-            </Avatar>
-            <div>
-              <h3 className="font-semibold text-forest-beige">{activeContact.name}</h3>
-              <p className="text-xs text-forest-accent font-medium">
-                {activeContact.isOnline ? 'Online' : 'Offline'}
-              </p>
+      {/* Main Chat Area */}
+      {activeContact ? (
+        <div className="flex-1 flex flex-col bg-[#181A15]">
+          {/* Chat Header */}
+          <div className="h-20 border-b border-forest-border flex items-center justify-between px-6 bg-[#181A15]/80 backdrop-blur-md sticky top-0 z-10">
+            <div className="flex items-center">
+              <Avatar className="w-10 h-10 mr-4 shadow-sm">
+                {activeContact.avatar_url ? (
+                  <img src={activeContact.avatar_url} alt={activeContact.name} className="object-cover" />
+                ) : (
+                  <AvatarFallback className="bg-[#21261B] text-[#DFD5C2]">{activeContact.name.charAt(0)}</AvatarFallback>
+                )}
+              </Avatar>
+              <div>
+                <h3 className="font-bold text-forest-beige">{activeContact.name}</h3>
+                <p className="text-xs text-emerald-500 font-medium flex items-center">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5"></span>
+                  Online
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <Button variant="ghost" size="icon" className="text-[#7A8072] hover:text-forest-beige hover:bg-[#21261B] rounded-full">
+                <Phone className="w-5 h-5" />
+              </Button>
+              <Button variant="ghost" size="icon" className="text-[#7A8072] hover:text-forest-beige hover:bg-[#21261B] rounded-full">
+                <Video className="w-5 h-5" />
+              </Button>
+              <Button variant="ghost" size="icon" className="text-[#7A8072] hover:text-forest-beige hover:bg-[#21261B] rounded-full">
+                <MoreVertical className="w-5 h-5" />
+              </Button>
             </div>
           </div>
-          <div className="flex items-center gap-2">
-            <Button variant="ghost" size="icon" className="text-[#7A8072] hover:text-[#829661] rounded-full">
-              <Phone className="w-5 h-5" />
-            </Button>
-            <Button variant="ghost" size="icon" className="text-[#7A8072] hover:text-[#829661] rounded-full">
-              <Video className="w-5 h-5" />
-            </Button>
-            <Button variant="ghost" size="icon" className="text-[#7A8072] hover:text-forest-muted rounded-full">
-              <MoreVertical className="w-5 h-5" />
-            </Button>
+
+          {/* Messages */}
+          <div className="flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar bg-[url('/noise.png')] bg-repeat opacity-95">
+            {loadingChats ? (
+              <div className="flex justify-center items-center h-full">
+                <Loader2 className="w-8 h-8 text-emerald-500 animate-spin" />
+              </div>
+            ) : chats.length === 0 ? (
+              <div className="flex justify-center items-center h-full text-forest-muted">
+                <p>Say hi to {activeContact.name}!</p>
+              </div>
+            ) : (
+              chats.map((msg, idx) => {
+                const isMe = msg.sender_id === user?.id;
+                return (
+                  <motion.div
+                    key={msg.id || idx}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className={`flex ${isMe ? 'justify-end' : 'justify-start'}`}
+                  >
+                    {!isMe && (
+                      <Avatar className="w-8 h-8 mr-3 mt-auto shadow-sm">
+                        {activeContact.avatar_url ? (
+                          <img src={activeContact.avatar_url} alt={activeContact.name} className="object-cover" />
+                        ) : (
+                          <AvatarFallback className="bg-[#21261B] text-[#DFD5C2] text-xs">{activeContact.name.charAt(0)}</AvatarFallback>
+                        )}
+                      </Avatar>
+                    )}
+                    <div className={`max-w-[70%] group ${isMe ? 'items-end' : 'items-start'} flex flex-col`}>
+                      <div 
+                        className={`p-4 rounded-2xl shadow-sm ${
+                          isMe 
+                            ? 'bg-gradient-to-br from-[#829661] to-[#6A7D4C] text-[#F3F4F0] rounded-br-sm' 
+                            : 'bg-[#21261B] text-forest-beige rounded-bl-sm border border-[#2C3322]'
+                        }`}
+                      >
+                        {msg.image_url ? (
+                          <div className="space-y-2">
+                            <div className="flex items-center gap-2 p-3 bg-black/20 rounded-xl">
+                              <FileText className="w-8 h-8 opacity-80" />
+                              <div className="flex-1 min-w-0">
+                                <p className="text-sm font-medium truncate">{msg.content}</p>
+                              </div>
+                              <a href={msg.image_url} target="_blank" rel="noopener noreferrer" className="p-2 hover:bg-black/20 rounded-full transition-colors">
+                                <Download className="w-4 h-4" />
+                              </a>
+                            </div>
+                          </div>
+                        ) : (
+                          <p className="leading-relaxed">{msg.content}</p>
+                        )}
+                      </div>
+                      <span className={`text-[10px] text-forest-muted mt-1.5 font-medium px-1 ${isMe ? 'text-right' : 'text-left'}`}>
+                        {formatTime(msg.created_at)}
+                      </span>
+                    </div>
+                  </motion.div>
+                );
+              })
+            )}
+            <div ref={messagesEndRef} />
+          </div>
+
+          {/* Message Input */}
+          <div className="p-4 bg-[#181A15] border-t border-forest-border">
+            <form onSubmit={handleSend} className="flex items-end gap-3 max-w-4xl mx-auto">
+              <div className="flex gap-2">
+                <input 
+                  type="file"
+                  ref={fileInputRef}
+                  className="hidden"
+                  onChange={handleFileUpload}
+                  accept="image/*,.pdf,.doc,.docx"
+                />
+                <Button 
+                  type="button" 
+                  variant="ghost" 
+                  size="icon" 
+                  className="h-12 w-12 rounded-full text-[#7A8072] hover:text-forest-beige hover:bg-[#21261B]"
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={isUploading}
+                >
+                  {isUploading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Paperclip className="w-5 h-5" />}
+                </Button>
+              </div>
+              
+              <div className="flex-1 relative">
+                <Input 
+                  placeholder="Write a message..."
+                  className="w-full h-12 bg-[#21261B] border-transparent focus-visible:ring-forest-accent rounded-full pl-6 pr-12 text-forest-beige placeholder:text-forest-muted/70 shadow-inner"
+                  value={newMessage}
+                  onChange={(e) => setNewMessage(e.target.value)}
+                />
+              </div>
+
+              <Button 
+                type="submit"
+                disabled={!newMessage.trim() || isUploading}
+                className="h-12 w-12 rounded-full bg-[#829661] hover:bg-[#91A670] text-[#131511] shadow-lg shadow-[#829661]/20 flex-shrink-0 flex items-center justify-center p-0 transition-all hover:scale-105 active:scale-95"
+              >
+                <Send className="w-5 h-5 ml-1" />
+              </Button>
+            </form>
           </div>
         </div>
-
-        {/* Messages */}
-        <div className="flex-1 overflow-y-auto p-6 space-y-6 bg-[#181A15]/30">
-          {currentMessages.map((msg, idx) => (
-            <motion.div 
-              key={msg.id}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className={`flex flex-col ${msg.isMe ? 'items-end' : 'items-start'}`}
-            >
-              <div className="flex items-end gap-2 max-w-[80%]">
-                {!msg.isMe && (
-                  <Avatar className="w-8 h-8 shrink-0 mb-1">
-                    <AvatarFallback className="bg-[#2A2F22] text-forest-muted text-xs">
-                      {msg.sender.charAt(0)}
-                    </AvatarFallback>
-                  </Avatar>
-                )}
-                <div className={`px-4 py-3 rounded-2xl ${
-                  msg.isMe 
-                    ? 'bg-forest-accent text-forest-beige rounded-br-sm' 
-                    : 'bg-forest-card border border-forest-border text-forest-beige rounded-bl-sm shadow-sm shadow-forest-border/10'
-                }`}>
-                  {msg.fileUrl ? (
-                    <a href={msg.fileUrl} target="_blank" rel="noreferrer" className="flex items-center gap-2 p-2 rounded bg-black/20 hover:bg-black/30 transition-colors mb-1">
-                      <FileText className="w-5 h-5 shrink-0" />
-                      <span className="text-sm truncate max-w-[150px]">{msg.fileName}</span>
-                      <Download className="w-4 h-4 ml-1 opacity-70" />
-                    </a>
-                  ) : null}
-                  <p className="text-sm leading-relaxed">{msg.text}</p>
-                </div>
-              </div>
-              <span className="text-[10px] text-[#7A8072] mt-1 mx-10">{msg.time}</span>
-            </motion.div>
-          ))}
-          <div ref={messagesEndRef} />
+      ) : (
+        <div className="flex-1 flex flex-col items-center justify-center bg-[#181A15] text-forest-muted">
+          <div className="w-20 h-20 bg-[#21261B] rounded-full flex items-center justify-center mb-6 shadow-inner">
+            <Send className="w-8 h-8 text-[#7A8072]" />
+          </div>
+          <h2 className="text-xl font-bold text-forest-beige mb-2">No Contact Selected</h2>
+          <p>Choose a contact from the list to start messaging.</p>
         </div>
-
-        {/* Input Area */}
-        <div className="p-4 bg-forest-card border-t border-forest-border">
-          <form onSubmit={handleSend} className="flex items-center gap-2">
-            <input 
-              type="file" 
-              className="hidden" 
-              ref={fileInputRef} 
-              onChange={handleFileUpload}
-            />
-            <Button 
-              type="button" 
-              variant="ghost" 
-              size="icon" 
-              className="text-[#7A8072] hover:text-forest-muted rounded-full shrink-0 relative"
-              onClick={() => fileInputRef.current?.click()}
-              disabled={isUploading}
-            >
-              {isUploading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Paperclip className="w-5 h-5" />}
-            </Button>
-            <Button type="button" variant="ghost" size="icon" className="text-[#7A8072] hover:text-forest-muted rounded-full shrink-0 hidden sm:flex">
-              <ImageIcon className="w-5 h-5" />
-            </Button>
-            <Input 
-              value={newMessage}
-              onChange={(e) => setNewMessage(e.target.value)}
-              placeholder="Type your message..." 
-              className="flex-1 h-12 bg-[#181A15] border-0 focus-visible:ring-forest-accent rounded-full px-6"
-            />
-            <Button 
-              type="submit" 
-              className="w-12 h-12 rounded-full bg-forest-accent hover:bg-[#4A5D23] text-forest-beige shrink-0 shadow-sm"
-              disabled={!newMessage.trim()}
-            >
-              <Send className="w-5 h-5" />
-            </Button>
-          </form>
-        </div>
-      </div>
+      )}
     </div>
   );
 }

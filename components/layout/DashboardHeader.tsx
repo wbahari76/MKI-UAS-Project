@@ -21,13 +21,13 @@ export default function DashboardHeader({
   const { user, profile } = useAuth();
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
-  
+
   const userName = profile?.full_name || user?.email?.split("@")[0] || "User Name";
   const userRole = profile?.role || "Volunteer";
   const userInitials = userName.substring(0, 2).toUpperCase();
-  
-  const basePath = userRole.toLowerCase() === 'organization' ? '/organization' : 
-                   userRole.toLowerCase() === 'admin' ? '/admin' : '/volunteer';
+
+  const basePath = userRole.toLowerCase() === 'organization' ? '/organization' :
+    userRole.toLowerCase() === 'admin' ? '/admin' : '/volunteer';
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -84,7 +84,7 @@ export default function DashboardHeader({
           <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-red-500 ring-2 ring-[#1B1E16]"></span>
         </button>
         <div className="h-8 w-px bg-forest-border mx-1 hidden sm:block"></div>
-        
+
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <button className="flex items-center gap-2 rounded-full p-1 pr-3 hover:bg-[#1E211A] transition-colors border border-transparent hover:border-forest-border outline-none">

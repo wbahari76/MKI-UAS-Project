@@ -1,20 +1,143 @@
 "use client";
 
-import React, { useState } from "react";
-import { motion } from "framer-motion";
+import React, { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase/client";
-import { 
-  Users, Building2, CalendarDays, Activity, Send, Megaphone, Server 
+import {
+  Users, Building2, CalendarDays, Activity, Send, Megaphone, Server
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { StatsCard } from "@/components/ui/stats-card";
+import { formatDistanceToNow } from "date-fns";
 
 export default function AdminDashboardPage() {
   const [announcement, setAnnouncement] = useState("");
   const [isSending, setIsSending] = useState(false);
+
+  const [stats, setStats] = useState({
+    volunteers: 0,
+    organizations: 0,
+    activeProjects: 0
+  });
+
+  const [logs, setLogs] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      // Fetch Volunteers Count
+      const { count: volCount } = await supabase
+        .from('profiles')
+        .select('*', { count: 'exact', head: true })
+        .eq('role', 'volunteer');
+
+      // Fetch Orgs Count
+      const { count: orgCount } = await supabase
+        .from('organizations')
+        .select('*', { count: 'exact', head: true });
+
+      // Fetch Active Projects Count
+      const { count: projCount } = await supabase
+        .from('projects')
+        .select('*', { count: 'exact', head: true })
+        .eq('status', 'published');
+
+      setStats({
+        volunteers: volCount || 0,
+        organizations: orgCount || 0,
+        activeProjects: projCount || 0
+      });
+
+      // Fetch Recent Activity
+      const { data: recentProfiles } = await supabase
+        .from('profiles')
+        .select('full_name, role, created_at')
+        .order('created_at', { ascending: false })
+        .limit(3);
+
+      const { data: recentProjects } = await supabase
+        .from('projects')
+        .select('title, created_at, organizations(name)')
+        .order('created_at', { ascending: false })
+        .limit(3);
+
+      const combinedLogs: any[] = [];
+      if (recentProfiles) {
+        recentProfiles.forEach(p => {
+          combinedLogs.push({
+            user: p.full_name || 'A user',
+            action: `joined as a ${p.role}`,
+            time: p.created_at,
+            timestamp: new Date(p.created_at).getTime()
+          });
+        });
+      }
+      if (recentProjects) {
+        recentProjects.forEach(p => {
+          combinedLogs.push({
+            user: (p.organizations as any)?.name || 'An organization',
+            action: `created project "${p.title}"`,
+            time: p.created_at,
+            timestamp: new Date(p.created_at).getTime()
+          });
+        });
+      }
+
+      combinedLogs.sort((a, b) => b.timestamp - a.timestamp);
+      setLogs(combinedLogs.slice(0, 5));
+    };
+
+    fetchData();
+
+    // Setup Subscriptions for Stats
+    const profilesSub = supabase.channel('admin-profiles')
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'profiles' }, (payload) => {
+        if (payload.new.role === 'volunteer') {
+          setStats(s => ({ ...s, volunteers: s.volunteers + 1 }));
+        }
+        setLogs(prev => {
+          const newLog = {
+            user: payload.new.full_name || 'A user',
+            action: `joined as a ${payload.new.role}`,
+            time: payload.new.created_at,
+            timestamp: new Date(payload.new.created_at).getTime()
+          };
+          return [newLog, ...prev].slice(0, 5);
+        });
+      }).subscribe();
+
+    const orgsSub = supabase.channel('admin-orgs')
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'organizations' }, (payload) => {
+        setStats(s => ({ ...s, organizations: s.organizations + 1 }));
+      }).subscribe();
+
+    const projectsSub = supabase.channel('admin-projects')
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'projects' }, (payload) => {
+        setLogs(prev => {
+          const newLog = {
+            user: 'An organization',
+            action: `created project "${payload.new.title}"`,
+            time: payload.new.created_at,
+            timestamp: new Date(payload.new.created_at).getTime()
+          };
+          return [newLog, ...prev].slice(0, 5);
+        });
+      })
+      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'projects' }, (payload) => {
+        if (payload.old.status !== 'published' && payload.new.status === 'published') {
+          setStats(s => ({ ...s, activeProjects: s.activeProjects + 1 }));
+        } else if (payload.old.status === 'published' && payload.new.status !== 'published') {
+          setStats(s => ({ ...s, activeProjects: s.activeProjects - 1 }));
+        }
+      }).subscribe();
+
+    return () => {
+      supabase.removeChannel(profilesSub);
+      supabase.removeChannel(orgsSub);
+      supabase.removeChannel(projectsSub);
+    };
+  }, []);
 
   const handleBroadcast = (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,7 +150,7 @@ export default function AdminDashboardPage() {
       event: 'admin-broadcast',
       payload: { message: announcement }
     });
-    
+
     setTimeout(() => {
       setIsSending(false);
       setAnnouncement("");
@@ -44,14 +167,14 @@ export default function AdminDashboardPage() {
 
       {/* Stats Overview */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <StatsCard title="Total Volunteers" value="1,248" icon={Users} trend={{ value: 12, isPositive: true }} />
-        <StatsCard title="Organizations" value="84" icon={Building2} trend={{ value: 3, isPositive: true }} />
-        <StatsCard title="Active Projects" value="45" icon={CalendarDays} trend={{ value: 8, isPositive: true }} />
+        <StatsCard title="Total Volunteers" value={stats.volunteers.toString()} icon={Users} trend={{ value: 0, isPositive: true }} />
+        <StatsCard title="Organizations" value={stats.organizations.toString()} icon={Building2} trend={{ value: 0, isPositive: true }} />
+        <StatsCard title="Active Projects" value={stats.activeProjects.toString()} icon={CalendarDays} trend={{ value: 0, isPositive: true }} />
         <StatsCard title="System Health" value="99.9%" icon={Activity} />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        
+
         {/* Broadcast System */}
         <div className="lg:col-span-2">
           <Card className="border-0 shadow-sm shadow-forest-border/20">
@@ -66,15 +189,15 @@ export default function AdminDashboardPage() {
                 <p className="text-sm text-forest-muted">
                   Send a realtime notification to all currently connected users across the platform.
                 </p>
-                <Textarea 
+                <Textarea
                   placeholder="Type your announcement here..."
                   className="min-h-[120px] bg-[#181A15] border-0 focus-visible:ring-forest-border"
                   value={announcement}
                   onChange={(e) => setAnnouncement(e.target.value)}
                 />
                 <div className="flex justify-end">
-                  <Button 
-                    type="submit" 
+                  <Button
+                    type="submit"
                     className="bg-forest text-forest-beige hover:bg-forest-card px-6"
                     disabled={!announcement.trim() || isSending}
                   >
@@ -102,19 +225,18 @@ export default function AdminDashboardPage() {
             </CardHeader>
             <CardContent className="p-0">
               <div className="divide-y divide-slate-100 max-h-[300px] overflow-y-auto">
-                {[
-                  { user: "Ocean Care ID", action: "created a new project", time: "2m ago" },
-                  { user: "Budi Santoso", action: "joined Coastal Cleanup", time: "15m ago" },
-                  { user: "Tech for All", action: "updated their profile", time: "1h ago" },
-                  { user: "System", action: "daily backup completed", time: "3h ago" },
-                ].map((log, i) => (
+                {logs.length === 0 ? (
+                  <div className="p-4 text-sm text-forest-muted">No recent activity.</div>
+                ) : logs.map((log, i) => (
                   <div key={i} className="p-4 flex items-start gap-3 hover:bg-[#181A15] transition-colors">
                     <div className="w-2 h-2 rounded-full bg-forest-accent mt-2 shrink-0" />
                     <div>
                       <p className="text-sm text-forest-beige">
                         <span className="font-semibold">{log.user}</span> {log.action}
                       </p>
-                      <span className="text-xs text-[#7A8072]">{log.time}</span>
+                      <span className="text-xs text-[#7A8072]">
+                        {formatDistanceToNow(new Date(log.time), { addSuffix: true })}
+                      </span>
                     </div>
                   </div>
                 ))}

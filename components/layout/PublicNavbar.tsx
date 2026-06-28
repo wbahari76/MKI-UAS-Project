@@ -99,122 +99,122 @@ export function PublicNavbar() {
 
     return (
         <>
-        <div className="fixed top-4 left-0 right-0 z-50 flex justify-center px-4 sm:px-6 pointer-events-none">
-            <motion.header
-                initial={{ y: -100 }}
-                animate={{ y: 0 }}
-                className={cn(
-                    "pointer-events-auto transition-all duration-300 rounded-full border w-full max-w-[1200px] flex items-center justify-between px-6 h-[64px]",
-                    isScrolled
-                        ? "bg-[#131511]/80 backdrop-blur-xl border-white/10 shadow-2xl"
-                        : "bg-[#181A15]/60 backdrop-blur-md border-white/5 shadow-xl"
-                )}
-            >
-                {/* Left Zone: Logo */}
-                <div className="flex-1 flex items-center justify-start">
-                    <Link href="/" className="flex items-center gap-3 group">
-                        <motion.div
-                            whileHover={{ rotate: 10, scale: 1.05 }}
-                            className="w-9 h-9 bg-forest-accent rounded-xl flex items-center justify-center shadow-lg shadow-forest-accent/25"
-                        >
-                            <HandHelping className="w-4 h-4 text-forest-beige" />
-                        </motion.div>
-                        <span className="font-extrabold text-[20px] tracking-tight text-white hidden sm:block">
-                            JALA<span className="text-forest-accent ml-0.5">VIVE</span>
-                        </span>
-                    </Link>
-                </div>
-
-                {/* Center Zone: Navigation */}
-                <div className="hidden lg:flex flex-1 items-center justify-center gap-8">
-                    {publicNavItems.map((item) => (
-                        <Link
-                            key={item.name}
-                            href={item.href}
-                            className={cn(
-                                "text-[14px] font-medium transition-colors",
-                                isActive(item.href) ? "text-white" : "text-gray-400 hover:text-white"
-                            )}
-                        >
-                            {item.name}
-                        </Link>
-                    ))}
-                </div>
-
-                {/* Right Zone: Actions */}
-                <div className="flex-1 flex items-center justify-end gap-5">
-                    {/* Search Button (Mobile) */}
-                    <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => setIsSearchOpen(true)}
-                        className="lg:hidden text-gray-400 hover:text-white"
-                    >
-                        <Search className="w-5 h-5" />
-                    </Button>
-
-                    {user ? (
-                        <>
-                            {/* Notifications */}
-                            <Button variant="ghost" size="icon" onClick={handleNotification} className="relative rounded-full text-forest-muted hover:text-white group hidden sm:flex">
-                                <Bell className="w-5 h-5 transition-transform group-hover:scale-105" />
-                                <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full animate-pulse shadow-sm shadow-red-500/50"></span>
-                            </Button>
-
-                            {/* User Menu */}
-                            <DropdownMenu>
-                                <DropdownMenuTrigger asChild>
-                                    <Button variant="ghost" className="flex items-center gap-2 pl-2 pr-2 hover:bg-[#181A15] rounded-full h-10">
-                                        <Avatar className="w-8 h-8 border border-[#2C3322]">
-                                            <AvatarImage src={profile?.avatar_url || ''} />
-                                            <AvatarFallback className="bg-[#2C3322] text-[#829661] text-sm font-medium">
-                                                {profile?.full_name?.charAt(0) || 'U'}
-                                            </AvatarFallback>
-                                        </Avatar>
-                                    </Button>
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent align="end" className="w-56 bg-[#181A15] border-white/10 rounded-xl mt-2">
-                                    <DropdownMenuItem asChild>
-                                        <Link href={getDashboardLink()} className="flex items-center gap-2 cursor-pointer hover:bg-white/5">
-                                            <Shield className="w-4 h-4" />
-                                            Dashboard
-                                        </Link>
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem
-                                        onClick={signOut}
-                                        className="flex items-center gap-2 text-red-500 focus:text-red-500 cursor-pointer hover:bg-white/5"
-                                    >
-                                        <LogIn className="w-4 h-4 rotate-180" />
-                                        Sign Out
-                                    </DropdownMenuItem>
-                                </DropdownMenuContent>
-                            </DropdownMenu>
-                        </>
-                    ) : (
-                        <div className="hidden sm:flex items-center gap-5">
-                            <Link href="/login" className="text-[14px] font-semibold text-gray-400 hover:text-white transition-colors">
-                                Log in
-                            </Link>
-                            <Link href="/register">
-                                <Button className="bg-white hover:bg-gray-200 text-black rounded-full px-6 h-10 font-bold transition-transform hover:scale-105 text-[14px]">
-                                    Get Started
-                                </Button>
-                            </Link>
-                        </div>
+            <div className="fixed top-4 left-0 right-0 z-50 flex justify-center px-4 sm:px-6 pointer-events-none">
+                <motion.header
+                    initial={{ y: -100 }}
+                    animate={{ y: 0 }}
+                    className={cn(
+                        "pointer-events-auto transition-all duration-300 rounded-full border w-full max-w-[1200px] flex items-center justify-between px-6 h-[64px]",
+                        isScrolled
+                            ? "bg-[#131511]/80 backdrop-blur-xl border-white/10 shadow-2xl"
+                            : "bg-[#181A15]/60 backdrop-blur-md border-white/5 shadow-xl"
                     )}
+                >
+                    {/* Left Zone: Logo */}
+                    <div className="flex-1 flex items-center justify-start">
+                        <Link href="/" className="flex items-center gap-3 group">
+                            <motion.div
+                                whileHover={{ rotate: 10, scale: 1.05 }}
+                                className="w-9 h-9 bg-forest-accent rounded-xl flex items-center justify-center shadow-lg shadow-forest-accent/25"
+                            >
+                                <HandHelping className="w-4 h-4 text-forest-beige" />
+                            </motion.div>
+                            <span className="font-extrabold text-[20px] tracking-tight text-white hidden sm:block">
+                                JALA<span className="text-forest-accent ml-0.5">VIVE</span>
+                            </span>
+                        </Link>
+                    </div>
 
-                    {/* Mobile Menu Button */}
-                    <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                        className="lg:hidden text-gray-400 hover:text-white ml-1"
-                    >
-                        {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-                    </Button>
-                </div>
-            </motion.header>
-        </div>
+                    {/* Center Zone: Navigation */}
+                    <div className="hidden lg:flex flex-1 items-center justify-center gap-8">
+                        {publicNavItems.map((item) => (
+                            <Link
+                                key={item.name}
+                                href={item.href}
+                                className={cn(
+                                    "text-[14px] font-medium transition-colors",
+                                    isActive(item.href) ? "text-white" : "text-gray-400 hover:text-white"
+                                )}
+                            >
+                                {item.name}
+                            </Link>
+                        ))}
+                    </div>
+
+                    {/* Right Zone: Actions */}
+                    <div className="flex-1 flex items-center justify-end gap-5">
+                        {/* Search Button (Mobile) */}
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => setIsSearchOpen(true)}
+                            className="lg:hidden text-gray-400 hover:text-white"
+                        >
+                            <Search className="w-5 h-5" />
+                        </Button>
+
+                        {user ? (
+                            <>
+                                {/* Notifications */}
+                                <Button variant="ghost" size="icon" onClick={handleNotification} className="relative rounded-full text-forest-muted hover:text-white group hidden sm:flex">
+                                    <Bell className="w-5 h-5 transition-transform group-hover:scale-105" />
+                                    <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full animate-pulse shadow-sm shadow-red-500/50"></span>
+                                </Button>
+
+                                {/* User Menu */}
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger asChild>
+                                        <Button variant="ghost" className="flex items-center gap-2 pl-2 pr-2 hover:bg-[#181A15] rounded-full h-10">
+                                            <Avatar className="w-8 h-8 border border-[#2C3322]">
+                                                <AvatarImage src={profile?.avatar_url || ''} />
+                                                <AvatarFallback className="bg-[#2C3322] text-[#829661] text-sm font-medium">
+                                                    {profile?.full_name?.charAt(0) || 'U'}
+                                                </AvatarFallback>
+                                            </Avatar>
+                                        </Button>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent align="end" className="w-56 bg-[#181A15] border-white/10 rounded-xl mt-2">
+                                        <DropdownMenuItem asChild>
+                                            <Link href={getDashboardLink()} className="flex items-center gap-2 cursor-pointer hover:bg-white/5">
+                                                <Shield className="w-4 h-4" />
+                                                Dashboard
+                                            </Link>
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem
+                                            onClick={signOut}
+                                            className="flex items-center gap-2 text-red-500 focus:text-red-500 cursor-pointer hover:bg-white/5"
+                                        >
+                                            <LogIn className="w-4 h-4 rotate-180" />
+                                            Sign Out
+                                        </DropdownMenuItem>
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
+                            </>
+                        ) : (
+                            <div className="hidden sm:flex items-center gap-5">
+                                <Link href="/login" className="text-[14px] font-semibold text-gray-400 hover:text-white transition-colors">
+                                    Log in
+                                </Link>
+                                <Link href="/register">
+                                    <Button className="bg-white hover:bg-gray-200 text-black rounded-full px-6 h-10 font-bold transition-transform hover:scale-105 text-[14px]">
+                                        Get Started
+                                    </Button>
+                                </Link>
+                            </div>
+                        )}
+
+                        {/* Mobile Menu Button */}
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                            className="lg:hidden text-gray-400 hover:text-white ml-1"
+                        >
+                            {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+                        </Button>
+                    </div>
+                </motion.header>
+            </div>
             <AnimatePresence>
                 {isMobileMenuOpen && (
                     <motion.div

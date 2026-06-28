@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Search, Filter, Check, X, User, MapPin, Mail, MessageCircle, MoreHorizontal, Phone, Star, Award, Calendar } from "lucide-react";
+import { Search, Filter, Check, X, User, MapPin, Mail, MessageCircle, MoreHorizontal, Phone, Star, Award, Calendar, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -23,78 +23,123 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog";
-
-// Mock Data for Member Directory
-const MOCK_VOLUNTEERS = [
-  { 
-    id: 1, 
-    name: "Andi Saputra", 
-    email: "andi.s@example.com", 
-    role: "Field Volunteer",
-    location: "Bali, Indonesia", 
-    status: "Active", 
-    joinedAt: "Jan 2026", 
-    rating: 4.8, 
-    completedProjects: 12,
-    phone: "+62 812-3456-7890",
-    volunteerHours: 48,
-    skills: ["Beach Cleanup", "Teamwork", "First Aid"],
-    bio: "Saya sangat menyukai kegiatan lingkungan dan aktif melakukan aksi bersih-bersih pantai secara sukarela sejak 2 tahun lalu."
-  },
-  { 
-    id: 2, 
-    name: "Budi Santoso", 
-    email: "budi.santoso@example.com", 
-    role: "Logistics Coordinator",
-    location: "Surabaya, Indonesia", 
-    status: "Active", 
-    joinedAt: "Mar 2026", 
-    rating: 5.0, 
-    completedProjects: 5,
-    phone: "+62 812-9876-5432",
-    volunteerHours: 20,
-    skills: ["Logistics", "Event Operations", "Inventory Control"],
-    bio: "Berpengalaman dalam koordinasi logistik lapangan untuk acara komunitas berskala menengah."
-  },
-  { 
-    id: 3, 
-    name: "Dewi Lestari", 
-    email: "dewi.l@example.com", 
-    role: "Environmental Expert",
-    location: "Bandung, Indonesia", 
-    status: "Inactive", 
-    joinedAt: "Dec 2025", 
-    rating: 4.2, 
-    completedProjects: 7,
-    phone: "+62 813-4444-5555",
-    volunteerHours: 28,
-    skills: ["Gardening", "Species Identification", "Physical Labor"],
-    bio: "Pecinta alam yang aktif menanam pohon dan merawat tanaman hias di waktu luang."
-  },
-  { 
-    id: 4, 
-    name: "Eko Prasetyo", 
-    email: "eko.p@example.com", 
-    role: "IT Mentor",
-    location: "Jakarta, Indonesia", 
-    status: "Active", 
-    joinedAt: "Feb 2026", 
-    rating: 4.9, 
-    completedProjects: 8,
-    phone: "+62 812-8888-9999",
-    volunteerHours: 60,
-    skills: ["Web Development", "Teaching", "Public Speaking"],
-    bio: "Pengajar IT dengan passion membagi pengetahuan literasi digital dasar kepada anak-anak di daerah pelosok."
-  },
-];
+import { supabase } from "@/lib/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
+import { useRouter } from "next/navigation";
 
 export default function ManageVolunteersPage() {
-  const [volunteers, setVolunteers] = useState(MOCK_VOLUNTEERS);
+  const { user } = useAuth();
+  const router = useRouter();
+  const [volunteers, setVolunteers] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedApp, setSelectedApp] = useState<any>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isUploadDialogOpen, setIsUploadDialogOpen] = useState(false);
   const [uploadFile, setUploadFile] = useState<File | null>(null);
+
+  useEffect(() => {
+    if (!user) return;
+
+    const fetchVolunteers = async () => {
+      try {
+        setLoading(true);
+        // Get org id
+        const { data: org, error: orgError } = await supabase
+          .from('organizations')
+          .select('id')
+          .eq('owner_id', user.id)
+          .single();
+
+        if (orgError) throw orgError;
+
+        // Fetch applications where status = 'approved' for projects owned by this org
+        const { data: appsData, error: appsError } = await supabase
+          .from('project_applications')
+          .select(`
+            user_id,
+            status,
+            created_at,
+            projects!inner (
+              organization_id
+            )
+          `)
+          .eq('projects.organization_id', org.id)
+          .eq('status', 'approved');
+
+        if (appsError) throw appsError;
+
+        if (!appsData || appsData.length === 0) {
+          setVolunteers([]);
+          setLoading(false);
+          return;
+        }
+
+        const userIds = Array.from(new Set(appsData.map(a => a.user_id)));
+        
+        // Fetch profiles
+        const { data: profilesData, error: profilesError } = await supabase
+          .from('profiles')
+          .select('id, user_id, full_name, bio, phone, location, skills, volunteer_hours')
+          .in('user_id', userIds);
+
+        if (profilesError) throw profilesError;
+
+        const profileIds = Array.from(new Set((profilesData || []).map(p => p.id)));
+        
+        // Fetch volunteer_profiles
+        const { data: volProfilesData, error: volProfilesError } = await supabase
+          .from('volunteer_profiles')
+          .select('profile_id, cv_url, portfolio_url')
+          .in('profile_id', profileIds);
+
+        if (volProfilesError) throw volProfilesError;
+
+        const volProfilesMap = (volProfilesData || []).reduce((acc, vp) => {
+          acc[vp.profile_id] = vp;
+          return acc;
+        }, {} as Record<string, any>);
+
+        const profilesMap = (profilesData || []).reduce((acc, profile) => {
+          acc[profile.user_id] = { ...profile, ...volProfilesMap[profile.id] };
+          return acc;
+        }, {} as Record<string, any>);
+
+        // Create volunteer list
+        const formattedVols = userIds.map(uid => {
+          const profile = profilesMap[uid as string] || {};
+          const app = appsData.find(a => a.user_id === uid); // just get one to get joined date
+
+          return {
+            id: uid,
+            name: profile.full_name || 'Unknown Volunteer',
+            email: "hidden@example.com", // Hidden for privacy or we could fetch from auth admin if we had it
+            role: "Volunteer",
+            location: profile.location || "Not specified",
+            status: "Active",
+            joinedAt: new Date(app?.created_at || Date.now()).toLocaleDateString(undefined, { month: 'short', year: 'numeric' }),
+            rating: 5.0, // Default for now
+            completedProjects: 0,
+            phone: profile.phone || "Not provided",
+            volunteerHours: profile.volunteer_hours || 0,
+            skills: profile.skills || [],
+            bio: profile.bio || "No bio provided.",
+            cv_url: profile.cv_url,
+            portfolio_url: profile.portfolio_url
+          };
+        });
+
+        setVolunteers(formattedVols);
+      } catch (error) {
+        console.error("Error fetching volunteers:", error);
+        toast.error("Failed to load volunteers");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchVolunteers();
+  }, [user]);
 
   const handleIssueClick = (vol: any) => {
     setSelectedApp(vol);
@@ -110,7 +155,7 @@ export default function ManageVolunteersPage() {
 
   const filteredVols = volunteers.filter(vol => {
     return vol.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-           vol.skills.some(skill => skill.toLowerCase().includes(searchQuery.toLowerCase()));
+           vol.skills.some((skill: string) => skill.toLowerCase().includes(searchQuery.toLowerCase()));
   });
 
   return (
@@ -144,7 +189,18 @@ export default function ManageVolunteersPage() {
       </div>
 
       {/* Directory Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      {loading ? (
+        <div className="flex justify-center py-20">
+          <Loader2 className="w-8 h-8 text-emerald-500 animate-spin" />
+        </div>
+      ) : filteredVols.length === 0 ? (
+        <div className="text-center py-20 bg-forest-card rounded-xl border border-forest-border">
+          <User className="w-12 h-12 text-forest-muted mx-auto mb-4" />
+          <h3 className="text-xl font-bold text-forest-beige">No Volunteers Found</h3>
+          <p className="text-forest-muted mt-2">You don't have any approved volunteers yet.</p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {filteredVols.map((vol, index) => (
           <motion.div
             key={vol.id}
@@ -204,7 +260,10 @@ export default function ManageVolunteersPage() {
                 </div>
 
                 <div className="flex items-center gap-2 pt-4 border-t border-forest-border">
-                  <Button variant="outline" className="flex-1 text-blue-400 hover:text-blue-400 hover:bg-blue-500/10 border-blue-500/20">
+                  <Button 
+                    className="flex-1 bg-[#2C3322] hover:bg-[#38402D] text-[#829661]" 
+                    onClick={() => router.push(`/organization/messages?user=${vol.id}`)}
+                  >
                     <MessageCircle className="w-4 h-4 mr-2" /> Message
                   </Button>
                   <DropdownMenu>
@@ -230,19 +289,8 @@ export default function ManageVolunteersPage() {
             </Card>
           </motion.div>
         ))}
-
-        {filteredVols.length === 0 && (
-          <div className="col-span-full text-center py-20 bg-forest-card rounded-2xl border border-forest-border border-dashed">
-            <div className="w-16 h-16 bg-[#181A15] text-[#7A8072] rounded-full flex items-center justify-center mx-auto mb-4">
-              <User className="w-8 h-8" />
-            </div>
-            <h3 className="text-lg font-semibold text-forest-beige mb-1">No volunteers found</h3>
-            <p className="text-forest-muted text-sm">
-              Try adjusting your search or filters to see results.
-            </p>
-          </div>
-        )}
       </div>
+      )}
 
       {/* Volunteer Profile Dialog */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
