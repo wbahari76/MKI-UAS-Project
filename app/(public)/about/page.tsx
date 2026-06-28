@@ -69,12 +69,12 @@ export default function AboutPage() {
   return (
     <div className="min-h-screen bg-[#181A15]">
       {/* Hero Section */}
-      <section className="relative pt-32 pb-20 overflow-hidden">
+      <section className="relative min-h-[70vh] flex items-center justify-center pt-24 pb-20 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-forest-accent/5 to-blue-500/5 -z-10" />
         <div className="absolute top-0 right-0 -translate-y-12 translate-x-1/3 w-96 h-96 bg-forest-accent/20 rounded-full blur-3xl -z-10" />
         <div className="absolute bottom-0 left-0 translate-y-1/3 -translate-x-1/3 w-96 h-96 bg-blue-400/20 rounded-full blur-3xl -z-10" />
         
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div
             initial="initial"
             animate="animate"
