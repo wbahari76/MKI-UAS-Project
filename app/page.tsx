@@ -461,14 +461,40 @@ function FeaturedProjectsSection() {
 }
 
 function CategoriesSection() {
-    const categories = [
-        { name: 'Education', icon: GraduationCap, count: 234, color: 'blue' },
-        { name: 'Environment', icon: TreeDeciduous, count: 189, color: 'emerald' },
-        { name: 'Health', icon: Stethoscope, count: 156, color: 'red' },
-        { name: 'Animal', icon: PawPrint, count: 78, color: 'amber' },
-        { name: 'Technology', icon: Globe, count: 123, color: 'purple' },
-        { name: 'Community', icon: Users, count: 245, color: 'indigo' },
+    const defaultCategories = [
+        { name: 'Education', icon: GraduationCap, count: 0, color: 'blue' },
+        { name: 'Environment', icon: TreeDeciduous, count: 0, color: 'emerald' },
+        { name: 'Health', icon: Stethoscope, count: 0, color: 'red' },
+        { name: 'Animal', icon: PawPrint, count: 0, color: 'amber' },
+        { name: 'Technology', icon: Globe, count: 0, color: 'purple' },
+        { name: 'Community', icon: Users, count: 0, color: 'indigo' },
     ];
+
+    const [categories, setCategories] = useState(defaultCategories);
+
+    useEffect(() => {
+        async function fetchCategoryCounts() {
+            try {
+                const { data, error } = await supabase.from('projects').select('category');
+                if (error) throw error;
+                
+                if (data) {
+                    const counts: Record<string, number> = {};
+                    data.forEach(p => {
+                        counts[p.category] = (counts[p.category] || 0) + 1;
+                    });
+                    
+                    setCategories(prev => prev.map(c => ({
+                        ...c,
+                        count: counts[c.name] || 0
+                    })));
+                }
+            } catch (err) {
+                console.error("Failed to fetch category counts", err);
+            }
+        }
+        fetchCategoryCounts();
+    }, []);
 
     return (
         <section className="py-16 md:py-24 bg-forest-card">
