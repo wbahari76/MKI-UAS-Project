@@ -124,11 +124,11 @@ export default function PublicProjectDetailsPage() {
   };
 
   if (loading) {
-      return <div className="flex justify-center py-20"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-forest-accent"></div></div>;
+      return <div className="flex justify-center py-20"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-bubblegum"></div></div>;
   }
 
   if (!project) {
-      return <div className="text-center py-20 text-forest-muted">Project not found.</div>;
+      return <div className="text-center py-20 text-charcoal">Project not found.</div>;
   }
 
   const volunteersNeeded = project.volunteer_needed || 1;
