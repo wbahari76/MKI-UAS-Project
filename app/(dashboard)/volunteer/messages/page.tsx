@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+// Tambahkan import Suspense dari react
+import React, { useState, useEffect, useRef, Suspense } from "react";
 import { motion } from "framer-motion";
 import { supabase } from "@/lib/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
@@ -11,7 +12,8 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { toast } from "sonner";
 import { useSearchParams } from "next/navigation";
 
-export default function VolunteerMessagesPage() {
+// 1. Ubah nama dari 'export default function VolunteerMessagesPage' menjadi komponen internal biasa
+function VolunteerMessagesContent() {
   const { user } = useAuth();
   const searchParams = useSearchParams();
   const initialUserId = searchParams.get('user');
@@ -24,7 +26,7 @@ export default function VolunteerMessagesPage() {
   const [loadingChats, setLoadingChats] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [conversationId, setConversationId] = useState<string>("");
-  
+
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -42,7 +44,7 @@ export default function VolunteerMessagesPage() {
     const fetchContacts = async () => {
       try {
         setLoadingContacts(true);
-        
+
         // Fetch approved applications for this user
         const { data: appsData, error: appsError } = await supabase
           .from('project_applications')
@@ -53,7 +55,7 @@ export default function VolunteerMessagesPage() {
         if (appsError) throw appsError;
 
         const orgIds = Array.from(new Set((appsData || []).map(a => (a.projects as any).organization_id)));
-        
+
         if (orgIds.length === 0) {
           setContacts([]);
           setLoadingContacts(false);
@@ -114,7 +116,7 @@ export default function VolunteerMessagesPage() {
           .order('created_at', { ascending: true });
 
         if (error) throw error;
-        
+
         setChats(data || []);
         if (data && data.length > 0) {
           setConversationId(data[0].conversation_id);
@@ -192,14 +194,14 @@ export default function VolunteerMessagesPage() {
       const file = e.target.files[0];
       const fileExt = file.name.split('.').pop();
       const fileName = `chat-${Date.now()}.${fileExt}`;
-      
+
       setIsUploading(true);
-      
+
       const { error: uploadError } = await supabase.storage.from('community').upload(fileName, file, { upsert: true });
       if (uploadError) throw uploadError;
 
       const { data } = supabase.storage.from('community').getPublicUrl(fileName);
-      
+
       const newMsg = {
         id: crypto.randomUUID(),
         conversation_id: conversationId,
@@ -220,7 +222,7 @@ export default function VolunteerMessagesPage() {
         image_url: data.publicUrl
       });
       if (error) throw error;
-      
+
       toast.success("File sent successfully");
     } catch (error: any) {
       console.error("Upload error:", error);
@@ -254,8 +256,8 @@ export default function VolunteerMessagesPage() {
           <h2 className="text-xl font-bold text-forest-beige mb-4">Messages</h2>
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#7A8072]" />
-            <Input 
-              placeholder="Search contacts..." 
+            <Input
+              placeholder="Search contacts..."
               className="pl-9 bg-[#21261B] border-transparent focus-visible:ring-forest-accent rounded-xl text-forest-beige"
             />
           </div>
@@ -271,11 +273,10 @@ export default function VolunteerMessagesPage() {
               <div
                 key={contact.id}
                 onClick={() => setActiveContact(contact)}
-                className={`flex items-center p-4 cursor-pointer border-b border-[#21261B] transition-colors ${
-                  activeContact?.id === contact.id 
-                    ? "bg-[#2C3322]/50 border-l-4 border-l-[#829661]" 
+                className={`flex items-center p-4 cursor-pointer border-b border-[#21261B] transition-colors ${activeContact?.id === contact.id
+                    ? "bg-[#2C3322]/50 border-l-4 border-l-[#829661]"
                     : "hover:bg-[#1E211A] border-l-4 border-l-transparent"
-                }`}
+                  }`}
               >
                 <div className="relative mr-4">
                   <Avatar className="w-12 h-12 border-2 border-forest-card shadow-sm">
@@ -365,12 +366,11 @@ export default function VolunteerMessagesPage() {
                       </Avatar>
                     )}
                     <div className={`max-w-[70%] group ${isMe ? 'items-end' : 'items-start'} flex flex-col`}>
-                      <div 
-                        className={`p-4 rounded-2xl shadow-sm ${
-                          isMe 
-                            ? 'bg-gradient-to-br from-[#829661] to-[#6A7D4C] text-[#F3F4F0] rounded-br-sm' 
+                      <div
+                        className={`p-4 rounded-2xl shadow-sm ${isMe
+                            ? 'bg-gradient-to-br from-[#829661] to-[#6A7D4C] text-[#F3F4F0] rounded-br-sm'
                             : 'bg-[#21261B] text-forest-beige rounded-bl-sm border border-[#2C3322]'
-                        }`}
+                          }`}
                       >
                         {msg.image_url ? (
                           <div className="space-y-2">
@@ -403,17 +403,17 @@ export default function VolunteerMessagesPage() {
           <div className="p-4 bg-[#181A15] border-t border-forest-border">
             <form onSubmit={handleSend} className="flex items-end gap-3 max-w-4xl mx-auto">
               <div className="flex gap-2">
-                <input 
+                <input
                   type="file"
                   ref={fileInputRef}
                   className="hidden"
                   onChange={handleFileUpload}
                   accept="image/*,.pdf,.doc,.docx"
                 />
-                <Button 
-                  type="button" 
-                  variant="ghost" 
-                  size="icon" 
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
                   className="h-12 w-12 rounded-full text-[#7A8072] hover:text-forest-beige hover:bg-[#21261B]"
                   onClick={() => fileInputRef.current?.click()}
                   disabled={isUploading}
@@ -421,9 +421,9 @@ export default function VolunteerMessagesPage() {
                   {isUploading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Paperclip className="w-5 h-5" />}
                 </Button>
               </div>
-              
+
               <div className="flex-1 relative">
-                <Input 
+                <Input
                   placeholder="Write a message..."
                   className="w-full h-12 bg-[#21261B] border-transparent focus-visible:ring-forest-accent rounded-full pl-6 pr-12 text-forest-beige placeholder:text-forest-muted/70 shadow-inner"
                   value={newMessage}
@@ -431,7 +431,7 @@ export default function VolunteerMessagesPage() {
                 />
               </div>
 
-              <Button 
+              <Button
                 type="submit"
                 disabled={!newMessage.trim() || isUploading}
                 className="h-12 w-12 rounded-full bg-[#829661] hover:bg-[#91A670] text-[#131511] shadow-lg shadow-[#829661]/20 flex-shrink-0 flex items-center justify-center p-0 transition-all hover:scale-105 active:scale-95"
@@ -451,5 +451,20 @@ export default function VolunteerMessagesPage() {
         </div>
       )}
     </div>
+  );
+}
+
+// 2. Buat default export baru yang membungkus komponen di atas dengan <Suspense>
+export default function VolunteerMessagesPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex items-center justify-center h-[calc(100vh-100px)]">
+          <Loader2 className="w-8 h-8 text-emerald-500 animate-spin" />
+        </div>
+      }
+    >
+      <VolunteerMessagesContent />
+    </Suspense>
   );
 }
