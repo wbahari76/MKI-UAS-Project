@@ -2,7 +2,7 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { Heart, Users, Globe, Target, ArrowRight, Linkedin, Twitter, Mail } from "lucide-react";
+import { Heart, Users, Globe, Target, ArrowRight, Linkedin, Twitter, Mail, FileText, Handshake } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
@@ -109,6 +109,66 @@ export default function AboutPage() {
               </Link>
             </motion.div>
           </motion.div>
+        </div>
+      </section>
+
+      {/* The Problem Section */}
+      <section className="py-24 bg-[#181A15]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="max-w-3xl mx-auto mb-16 space-y-4">
+            <span className="inline-block py-1 px-3 rounded-full bg-rose-500/10 text-rose-400 text-sm font-semibold tracking-wider uppercase">
+              The Problem
+            </span>
+            <h2 className="text-3xl md:text-5xl font-bold text-forest-beige">Why JALA VIVE is Needed</h2>
+            <p className="text-forest-muted text-lg leading-relaxed">
+              Our concept validation research highlights the challenges within today's volunteer ecosystem.
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              { 
+                stat: "85%",
+                title: "Organizer Struggle", 
+                desc: "Organizations spend excessive time managing volunteers across fragmented tools instead of focusing on actual impact.",
+                icon: FileText,
+                color: "text-rose-400",
+                bg: "bg-rose-500/10"
+              },
+              { 
+                stat: "78%",
+                title: "Volunteer Hesitation", 
+                desc: "Potential volunteers struggle to find trustworthy causes that match their skills and availability.",
+                icon: Handshake,
+                color: "text-amber-400",
+                bg: "bg-amber-500/10"
+              },
+              { 
+                stat: "60%",
+                title: "Project Fragmentation", 
+                desc: "Social projects lack a centralized platform to showcase their long-term impact and build sustained communities.",
+                icon: Globe,
+                color: "text-blue-400",
+                bg: "bg-blue-500/10"
+              }
+            ].map((problem, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1, duration: 0.5 }}
+                className="bg-forest-card p-8 rounded-3xl shadow-sm shadow-forest-border/20 border border-forest-border hover:shadow-lg hover:border-forest-accent/50 transition-all"
+              >
+                <div className={`w-16 h-16 rounded-2xl ${problem.bg} ${problem.color} flex items-center justify-center mx-auto mb-6`}>
+                  <problem.icon size={32} />
+                </div>
+                <h3 className="text-5xl font-extrabold text-white mb-2">{problem.stat}</h3>
+                <h4 className="text-xl font-bold text-forest-beige mb-3">{problem.title}</h4>
+                <p className="text-forest-muted leading-relaxed">{problem.desc}</p>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
 
