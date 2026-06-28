@@ -162,7 +162,7 @@ function ImpactKPISection() {
         fetchMetrics();
     }, []);
 
-    const kpis = [
+    const kpis: Array<{ label: string; value: number; suffix: string; icon: any; color: string; format?: (v: number) => string }> = [
         { label: 'Active Volunteers', value: metrics.volunteers, suffix: '', icon: Users, color: 'emerald' },
         { label: 'Verified Organizations', value: metrics.organizations, suffix: '', icon: Building2, color: 'blue' },
         { label: 'Platform Projects', value: metrics.projects, suffix: '', icon: FolderKanban, color: 'amber' },
