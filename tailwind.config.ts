@@ -11,9 +11,16 @@ const config: Config = {
     	extend: {
     		fontFamily: {
     			sans: [
+    				'var(--font-inter)',
     				'Inter',
     				'system-ui',
     				'sans-serif'
+    			],
+    			serif: [
+    				'var(--font-playfair)',
+    				'Playfair Display',
+    				'Georgia',
+    				'serif'
     			]
     		},
     		colors: {
@@ -24,6 +31,12 @@ const config: Config = {
     				muted: '#A3A89D',
     				accent: '#5C6B45',
     				border: '#2A2F22',
+    			},
+    			gold: {
+    				DEFAULT: '#C9A86A',
+    				light: '#E3CFA4',
+    				dark: '#A8884A',
+    				muted: '#8A7448',
     			},
     			primary: {
     				DEFAULT: '#5C6B45',

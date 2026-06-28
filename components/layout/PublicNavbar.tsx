@@ -115,12 +115,12 @@ export function PublicNavbar() {
                     <Link href="/" className="flex items-center gap-3 group">
                         <motion.div
                             whileHover={{ rotate: 10, scale: 1.05 }}
-                            className="w-9 h-9 bg-forest-accent rounded-xl flex items-center justify-center shadow-lg shadow-forest-accent/25"
+                            className="w-9 h-9 bg-gold rounded-xl flex items-center justify-center shadow-lg shadow-gold/25"
                         >
-                            <HandHelping className="w-4 h-4 text-forest-beige" />
+                            <HandHelping className="w-4 h-4 text-forest" />
                         </motion.div>
-                        <span className="font-extrabold text-[20px] tracking-tight text-white hidden sm:block">
-                            JALA<span className="text-forest-accent ml-0.5">VIVE</span>
+                        <span className="font-serif font-bold text-[22px] tracking-tight text-forest-beige hidden sm:block">
+                            JALA<span className="text-gold ml-0.5">VIVE</span>
                         </span>
                     </Link>
                 </div>
@@ -196,7 +196,7 @@ export function PublicNavbar() {
                                 Log in
                             </Link>
                             <Link href="/register">
-                                <Button className="bg-white hover:bg-gray-200 text-black rounded-full px-6 h-10 font-bold transition-transform hover:scale-105 text-[14px]">
+                                <Button className="bg-gold hover:bg-gold-dark text-forest rounded-full px-6 h-10 font-semibold transition-transform hover:scale-105 text-[14px]">
                                     Get Started
                                 </Button>
                             </Link>

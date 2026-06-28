@@ -90,6 +90,25 @@
         @apply bg-gradient-to-r from-emerald-500 to-blue-500 bg-clip-text text-transparent;
     }
 
+    /* Gold gradient text for premium headings */
+    .gold-text {
+        background: linear-gradient(100deg, #E3CFA4 0%, #C9A86A 45%, #A8884A 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        color: transparent;
+    }
+
+    /* Thin uppercase eyebrow label */
+    .eyebrow {
+        @apply inline-flex items-center gap-2.5 text-xs font-medium uppercase tracking-[0.25em] text-gold;
+    }
+
+    /* Hairline divider */
+    .gold-rule {
+        @apply h-px w-16 bg-gradient-to-r from-transparent via-gold/60 to-transparent;
+    }
+
     /* Card hover effect */
     .card-hover {
         @apply transition-all duration-200 hover:shadow-lg hover:shadow-emerald-500/10 hover:-translate-y-0.5;

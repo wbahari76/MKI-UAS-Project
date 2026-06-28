@@ -59,32 +59,44 @@ function AnimatedCounter({ value, suffix = '' }: { value: number; suffix?: strin
 function HeroSection() {
     return (
         <section className="relative min-h-screen flex items-center bg-forest overflow-hidden">
-            {/* Background Pattern */}
-            <div className="absolute inset-0 opacity-30">
-                <div className="absolute top-20 left-10 w-72 h-72 bg-[#1B1E16] rounded-full mix-blend-multiply filter blur-3xl animate-pulse" />
-                <div className="absolute bottom-20 right-10 w-72 h-72 bg-blue-500/20 rounded-full mix-blend-multiply filter blur-3xl animate-pulse" style={{ animationDelay: '500ms' }} />
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-[#22261C] rounded-full mix-blend-multiply filter blur-3xl animate-pulse" style={{ animationDelay: '300ms' }} />
+            {/* Ambient forest + gold glow */}
+            <div className="absolute inset-0 pointer-events-none">
+                <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[42rem] h-[42rem] bg-forest-accent/10 rounded-full blur-[120px]" />
+                <div className="absolute bottom-0 right-1/4 w-[28rem] h-[28rem] bg-gold/5 rounded-full blur-[120px]" />
             </div>
+            {/* Fine grid texture */}
+            <div
+                className="absolute inset-0 opacity-[0.04]"
+                style={{
+                    backgroundImage:
+                        'linear-gradient(to right, #EAE1D1 1px, transparent 1px), linear-gradient(to bottom, #EAE1D1 1px, transparent 1px)',
+                    backgroundSize: '64px 64px',
+                }}
+            />
 
             <div className="container-custom relative z-10">
-                <div className="max-w-4xl mx-auto text-center -translate-y-10 md:-translate-y-16">
+                <div className="max-w-4xl mx-auto text-center -translate-y-6 md:-translate-y-12">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6 }}
+                        transition={{ duration: 0.7 }}
                     >
-                        <Badge className="mb-6 bg-[#2C3322] text-[#829661] border-[#4A5D23]">
-                            <Sparkles className="w-3.5 h-3.5 mr-1.5" />
-                            Social Impact Platform
-                        </Badge>
+                        <div className="flex items-center justify-center gap-4 mb-8">
+                            <span className="gold-rule" />
+                            <span className="eyebrow">
+                                <Sparkles className="w-3.5 h-3.5" />
+                                Social Impact Platform
+                            </span>
+                            <span className="gold-rule" />
+                        </div>
 
-                        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-forest-beige mb-6 leading-tight">
+                        <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl font-medium text-forest-beige mb-8 leading-[1.08] text-balance">
                             Connected Communities.
                             <br />
-                            <span className="text-gradient">Sustained Lives.</span>
+                            <span className="gold-text italic">Sustained Lives.</span>
                         </h1>
 
-                        <p className="text-lg md:text-xl text-forest-muted mb-10 max-w-2xl mx-auto">
+                        <p className="text-lg md:text-xl text-forest-muted/90 mb-12 max-w-2xl mx-auto leading-relaxed">
                             JALA VIVE bridges organizations with volunteers in one collaborative ecosystem.
                             Create impact, join causes, and transform communities together.
                         </p>
@@ -93,18 +105,18 @@ function HeroSection() {
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6, delay: 0.2 }}
+                        transition={{ duration: 0.7, delay: 0.2 }}
                         className="flex flex-col sm:flex-row items-center justify-center gap-4"
                     >
                         <Link href="/register?role=volunteer">
-                            <Button size="lg" className="bg-forest-accent hover:bg-[#4A5D23] text-forest-beige shadow-lg shadow-forest-accent/25 h-14 px-8 text-base rounded-xl group">
+                            <Button size="lg" className="bg-gold hover:bg-gold-dark text-forest shadow-xl shadow-gold/20 h-14 px-8 text-base rounded-full font-semibold group">
                                 <HandHelping className="w-5 h-5 mr-2" />
                                 Become a Volunteer
                                 <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                             </Button>
                         </Link>
                         <Link href="/register?role=organization">
-                            <Button size="lg" variant="outline" className="h-14 px-8 text-base rounded-xl border-2 border-forest-border hover:border-forest-accent hover:text-[#829661]">
+                            <Button size="lg" variant="outline" className="h-14 px-8 text-base rounded-full border border-gold/30 bg-transparent text-forest-beige hover:bg-gold/10 hover:border-gold/60 hover:text-gold-light transition-colors">
                                 <Building2 className="w-5 h-5 mr-2" />
                                 Create a Project
                             </Button>
@@ -199,11 +211,15 @@ function ImpactKPISection() {
             <div className="container-custom relative z-10">
                 <div className="text-center max-w-3xl mx-auto mb-16">
                     <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-                        <Badge className="mb-6 bg-emerald-500/10 text-emerald-400 border-emerald-500/20 px-3 py-1 text-xs tracking-widest uppercase">Live Metrics</Badge>
-                        <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 tracking-tight">
-                            Our Collective <span className="text-forest-accent">Impact</span>
+                        <div className="flex items-center justify-center gap-4 mb-6">
+                            <span className="gold-rule" />
+                            <span className="eyebrow">Live Metrics</span>
+                            <span className="gold-rule" />
+                        </div>
+                        <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl font-medium text-forest-beige mb-6 tracking-tight text-balance">
+                            Our Collective <span className="gold-text italic">Impact</span>
                         </h2>
-                        <p className="text-forest-muted text-lg md:text-xl">
+                        <p className="text-forest-muted text-lg md:text-xl leading-relaxed">
                             Every connection creates measurable social impact.
                         </p>
                     </motion.div>
@@ -222,29 +238,22 @@ function ImpactKPISection() {
                                     viewport={{ once: true }}
                                     transition={{ delay: index * 0.1 }}
                                     whileHover={{ y: -5, transition: { duration: 0.2 } }}
-                                    className="p-6 rounded-[20px] bg-[#181A15]/80 backdrop-blur-md border border-white/5 shadow-lg flex flex-col justify-between group"
+                                    className="p-6 rounded-2xl bg-[#181A15]/70 backdrop-blur-md border border-gold/10 shadow-lg flex flex-col justify-between group hover:border-gold/30 transition-colors duration-300"
                                 >
                                     <div className="flex items-start justify-between mb-8">
-                                        <div className={cn(
-                                            "w-10 h-10 rounded-xl flex items-center justify-center transition-colors duration-300",
-                                            kpi.color === 'emerald' ? "bg-emerald-500/10 text-emerald-400 group-hover:bg-emerald-500/20" :
-                                            kpi.color === 'blue' ? "bg-blue-500/10 text-blue-400 group-hover:bg-blue-500/20" :
-                                            kpi.color === 'amber' ? "bg-amber-500/10 text-amber-400 group-hover:bg-amber-500/20" :
-                                            kpi.color === 'purple' ? "bg-purple-500/10 text-purple-400 group-hover:bg-purple-500/20" :
-                                            "bg-rose-500/10 text-rose-400 group-hover:bg-rose-500/20"
-                                        )}>
+                                        <div className="w-11 h-11 rounded-xl flex items-center justify-center bg-gold/10 text-gold transition-colors duration-300 group-hover:bg-gold/20">
                                             <Icon className="w-5 h-5" />
                                         </div>
                                     </div>
                                     <div>
-                                        <p className="text-3xl md:text-4xl font-extrabold text-white mb-2 tracking-tight">
+                                        <p className="font-serif text-4xl md:text-5xl font-medium text-forest-beige mb-2 tracking-tight">
                                             {kpi.format ? (
                                                 <span>{kpi.format(kpi.value)}{kpi.suffix}</span>
                                             ) : (
                                                 <AnimatedCounter value={kpi.value} suffix={kpi.suffix} />
                                             )}
                                         </p>
-                                        <p className="text-sm font-medium text-forest-muted">{kpi.label}</p>
+                                        <p className="text-sm font-medium text-forest-muted uppercase tracking-wider">{kpi.label}</p>
                                     </div>
                                 </motion.div>
                             );
@@ -257,14 +266,14 @@ function ImpactKPISection() {
                             initial={{ opacity: 0, x: 20 }}
                             whileInView={{ opacity: 1, x: 0 }}
                             viewport={{ once: true }}
-                            className="h-full p-6 md:p-8 rounded-[20px] bg-gradient-to-b from-[#181A15] to-[#131511] border border-white/5 shadow-xl flex flex-col"
+                            className="h-full p-6 md:p-8 rounded-2xl bg-gradient-to-b from-[#181A15] to-[#131511] border border-gold/10 shadow-xl flex flex-col"
                         >
                             <div className="flex items-center gap-3 mb-8">
                                 <div className="relative flex h-3 w-3">
-                                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                                  <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+                                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-gold opacity-75"></span>
+                                  <span className="relative inline-flex rounded-full h-3 w-3 bg-gold"></span>
                                 </div>
-                                <h3 className="text-lg font-semibold text-white">Live Activity</h3>
+                                <h3 className="font-serif text-xl font-medium text-forest-beige">Live Activity</h3>
                             </div>
                             
                             <div className="flex-1 relative overflow-hidden min-h-[200px]">
@@ -294,10 +303,10 @@ function ImpactKPISection() {
                                                 }}
                                                 transition={{ duration: 0.5, ease: "easeOut" }}
                                             >
-                                                <div className="w-8 h-8 rounded-full bg-forest-accent/20 flex items-center justify-center shrink-0">
-                                                    <Activity className="w-4 h-4 text-forest-accent" />
+                                                <div className="w-8 h-8 rounded-full bg-gold/15 flex items-center justify-center shrink-0">
+                                                    <Activity className="w-4 h-4 text-gold" />
                                                 </div>
-                                                <p className="text-sm font-medium text-gray-300 line-clamp-2">
+                                                <p className="text-sm font-medium text-forest-muted line-clamp-2">
                                                     {activity}
                                                 </p>
                                             </motion.div>
@@ -316,8 +325,9 @@ function ImpactKPISection() {
                     className="mt-16 text-center"
                 >
                     <Link href="/impact">
-                        <Button className="rounded-full bg-white text-black hover:bg-gray-200 px-8 h-12 font-bold shadow-lg transition-transform hover:scale-105">
+                        <Button variant="outline" className="rounded-full border border-gold/40 bg-transparent text-gold-light hover:bg-gold/10 hover:border-gold px-8 h-12 font-semibold transition-colors group">
                             View Full Impact Report
+                            <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                         </Button>
                     </Link>
                 </motion.div>
@@ -367,13 +377,17 @@ function FeaturedProjectsSection() {
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    className="text-center max-w-2xl mx-auto mb-12"
+                    className="text-center max-w-2xl mx-auto mb-14"
                 >
-                    <Badge className="mb-4 bg-[#2C3322] text-[#829661]">Featured Projects</Badge>
-                    <h2 className="text-3xl md:text-4xl font-bold text-forest-beige mb-4">
-                        Make an Impact Today
+                    <div className="flex items-center justify-center gap-4 mb-5">
+                        <span className="gold-rule" />
+                        <span className="eyebrow">Featured Projects</span>
+                        <span className="gold-rule" />
+                    </div>
+                    <h2 className="font-serif text-4xl md:text-5xl font-medium text-forest-beige mb-5 text-balance">
+                        Make an Impact <span className="gold-text italic">Today</span>
                     </h2>
-                    <p className="text-forest-muted">
+                    <p className="text-forest-muted text-lg leading-relaxed">
                         Discover meaningful volunteer opportunities and start your journey to create lasting change.
                     </p>
                 </motion.div>
@@ -386,24 +400,24 @@ function FeaturedProjectsSection() {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ delay: index * 0.1 }}
-                            whileHover={{ y: -4 }}
-                            className="group bg-forest-card rounded-2xl overflow-hidden border border-forest-border shadow-sm hover:shadow-xl hover:shadow-forest-accent/10 transition-all duration-300"
+                            whileHover={{ y: -6 }}
+                            className="group bg-forest-card rounded-2xl overflow-hidden border border-gold/10 shadow-sm hover:shadow-xl hover:shadow-black/30 hover:border-gold/30 transition-all duration-300"
                         >
-                            <div className="relative h-48 overflow-hidden">
+                            <div className="relative h-52 overflow-hidden">
                                 <img
                                     src={project.image}
                                     alt={project.title}
-                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                                 />
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-                                <Badge className="absolute top-3 left-3 bg-forest-accent text-forest-beige">
+                                <div className="absolute inset-0 bg-gradient-to-t from-forest via-forest/20 to-transparent" />
+                                <span className="absolute top-4 left-4 inline-flex items-center rounded-full border border-gold/40 bg-forest/70 backdrop-blur-sm px-3 py-1 text-xs font-medium uppercase tracking-wider text-gold-light">
                                     {project.category}
-                                </Badge>
+                                </span>
                             </div>
 
-                            <div className="p-5">
-                                <p className="text-sm text-forest-muted mb-1">{project.organization}</p>
-                                <h3 className="font-semibold text-forest-beige mb-3 line-clamp-2 group-hover:text-[#829661] transition-colors">
+                            <div className="p-6">
+                                <p className="text-xs uppercase tracking-wider text-gold/80 mb-2">{project.organization}</p>
+                                <h3 className="font-serif text-xl font-medium text-forest-beige mb-4 line-clamp-2 group-hover:text-gold-light transition-colors">
                                     {project.title}
                                 </h3>
 
@@ -425,19 +439,19 @@ function FeaturedProjectsSection() {
                                             {project.volunteers.current}/{project.volunteers.needed}
                                         </span>
                                     </div>
-                                    <div className="h-2 bg-[#1E211A] rounded-full overflow-hidden">
+                                    <div className="h-1.5 bg-[#1E211A] rounded-full overflow-hidden">
                                         <motion.div
                                             initial={{ width: 0 }}
                                             whileInView={{ width: `${(project.volunteers.current / project.volunteers.needed) * 100}%` }}
                                             viewport={{ once: true }}
-                                            transition={{ duration: 0.5 }}
-                                            className="h-full bg-forest-accent rounded-full"
+                                            transition={{ duration: 0.6 }}
+                                            className="h-full bg-gradient-to-r from-gold-dark to-gold rounded-full"
                                         />
                                     </div>
                                 </div>
 
                                 <Link href={`/explore/${project.id}`}>
-                                    <Button className="w-full bg-forest-accent hover:bg-[#4A5D23] group/btn">
+                                    <Button variant="outline" className="w-full rounded-full border border-gold/30 bg-transparent text-gold-light hover:bg-gold/10 hover:border-gold/60 group/btn">
                                         View Details
                                         <ChevronRight className="w-4 h-4 ml-1 group-hover/btn:translate-x-1 transition-transform" />
                                     </Button>
@@ -447,11 +461,11 @@ function FeaturedProjectsSection() {
                     ))}
                 </div>
 
-                <div className="text-center mt-10">
+                <div className="text-center mt-12">
                     <Link href="/explore">
-                        <Button variant="outline" size="lg" className="rounded-xl">
+                        <Button variant="outline" size="lg" className="rounded-full border border-gold/30 bg-transparent text-forest-beige hover:bg-gold/10 hover:border-gold/60 hover:text-gold-light px-8 group">
                             View All Projects
-                            <ArrowRight className="w-4 h-4 ml-2" />
+                            <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                         </Button>
                     </Link>
                 </div>
@@ -503,12 +517,17 @@ function CategoriesSection() {
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    className="text-center max-w-2xl mx-auto mb-12"
+                    className="text-center max-w-2xl mx-auto mb-14"
                 >
-                    <h2 className="text-3xl md:text-4xl font-bold text-forest-beige mb-4">
-                        Explore by Category
+                    <div className="flex items-center justify-center gap-4 mb-5">
+                        <span className="gold-rule" />
+                        <span className="eyebrow">Categories</span>
+                        <span className="gold-rule" />
+                    </div>
+                    <h2 className="font-serif text-4xl md:text-5xl font-medium text-forest-beige mb-5 text-balance">
+                        Explore by <span className="gold-text italic">Category</span>
                     </h2>
-                    <p className="text-forest-muted">
+                    <p className="text-forest-muted text-lg leading-relaxed">
                         Find volunteer opportunities that match your passion and skills.
                     </p>
                 </motion.div>
@@ -525,20 +544,12 @@ function CategoriesSection() {
                                 transition={{ delay: index * 0.05 }}
                             >
                                 <Link href={`/explore?category=${category.name.toLowerCase()}`}>
-                                    <Card className="group cursor-pointer border-forest-border hover:border-[#4A5D23] hover:shadow-lg transition-all duration-200">
+                                    <Card className="group cursor-pointer bg-forest border-gold/10 hover:border-gold/30 hover:shadow-lg hover:shadow-black/20 transition-all duration-300">
                                         <CardContent className="p-6 text-center">
-                                            <div className={cn(
-                                                "w-14 h-14 rounded-xl mx-auto mb-3 flex items-center justify-center transition-colors",
-                                                category.color === 'blue' && "bg-blue-500/10 text-blue-400",
-                                                category.color === 'emerald' && "bg-[#2C3322] text-[#829661]",
-                                                category.color === 'red' && "bg-red-500/10 text-red-600",
-                                                category.color === 'amber' && "bg-amber-500/10 text-amber-400",
-                                                category.color === 'purple' && "bg-purple-500/10 text-purple-400",
-                                                category.color === 'indigo' && "bg-indigo-100 text-indigo-600"
-                                            )}>
+                                            <div className="w-14 h-14 rounded-xl mx-auto mb-4 flex items-center justify-center bg-gold/10 text-gold transition-colors duration-300 group-hover:bg-gold/20">
                                                 <Icon className="w-7 h-7" />
                                             </div>
-                                            <h3 className="font-semibold text-forest-beige mb-1 group-hover:text-[#829661] transition-colors">
+                                            <h3 className="font-serif text-lg font-medium text-forest-beige mb-1 group-hover:text-gold-light transition-colors">
                                                 {category.name}
                                             </h3>
                                             <p className="text-sm text-forest-muted">{category.count} projects</p>
@@ -589,13 +600,17 @@ function HowItWorksSection() {
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    className="text-center max-w-2xl mx-auto mb-12"
+                    className="text-center max-w-2xl mx-auto mb-14"
                 >
-                    <Badge className="mb-4 bg-blue-500/10 text-blue-400">How It Works</Badge>
-                    <h2 className="text-3xl md:text-4xl font-bold text-forest-beige mb-4">
-                        Your Journey Starts Here
+                    <div className="flex items-center justify-center gap-4 mb-5">
+                        <span className="gold-rule" />
+                        <span className="eyebrow">How It Works</span>
+                        <span className="gold-rule" />
+                    </div>
+                    <h2 className="font-serif text-4xl md:text-5xl font-medium text-forest-beige mb-5 text-balance">
+                        Your Journey <span className="gold-text italic">Starts Here</span>
                     </h2>
-                    <p className="text-forest-muted">
+                    <p className="text-forest-muted text-lg leading-relaxed">
                         Get started in minutes and begin making an impact today.
                     </p>
                 </motion.div>
@@ -612,23 +627,23 @@ function HowItWorksSection() {
                                 transition={{ delay: index * 0.1 }}
                                 className="relative"
                             >
-                                <Card className="border-forest-border bg-forest-card">
-                                    <CardContent className="p-6 text-center">
+                                <Card className="border-gold/10 bg-forest-card hover:border-gold/30 transition-colors duration-300">
+                                    <CardContent className="p-8 text-center">
                                         <div className="relative">
-                                            <div className="w-16 h-16 rounded-2xl bg-[#2C3322] text-[#829661] flex items-center justify-center mx-auto mb-4">
+                                            <div className="w-16 h-16 rounded-2xl bg-gold/10 text-gold flex items-center justify-center mx-auto mb-5">
                                                 <Icon className="w-8 h-8" />
                                             </div>
-                                            <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-7 h-7 bg-forest-accent rounded-full flex items-center justify-center text-forest-beige font-bold text-sm shadow-lg shadow-forest-accent/25">
+                                            <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-7 h-7 bg-gold rounded-full flex items-center justify-center text-forest font-bold text-sm shadow-lg shadow-gold/25">
                                                 {step.step}
                                             </div>
                                         </div>
-                                        <h3 className="font-semibold text-forest-beige text-lg mb-2">{step.title}</h3>
-                                        <p className="text-forest-muted text-sm">{step.description}</p>
+                                        <h3 className="font-serif text-xl font-medium text-forest-beige mb-2">{step.title}</h3>
+                                        <p className="text-forest-muted text-sm leading-relaxed">{step.description}</p>
                                     </CardContent>
                                 </Card>
 
                                 {index < steps.length - 1 && (
-                                    <div className="hidden lg:block absolute top-1/2 -right-3 w-6 text-forest-border">
+                                    <div className="hidden lg:block absolute top-1/2 -right-3 w-6 text-gold/40">
                                         <ChevronRight className="w-6 h-6" />
                                     </div>
                                 )}
@@ -670,12 +685,17 @@ function TestimonialsSection() {
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    className="text-center max-w-2xl mx-auto mb-12"
+                    className="text-center max-w-2xl mx-auto mb-14"
                 >
-                    <h2 className="text-3xl md:text-4xl font-bold text-forest-beige mb-4">
-                        Stories from Our Community
+                    <div className="flex items-center justify-center gap-4 mb-5">
+                        <span className="gold-rule" />
+                        <span className="eyebrow">Testimonials</span>
+                        <span className="gold-rule" />
+                    </div>
+                    <h2 className="font-serif text-4xl md:text-5xl font-medium text-forest-beige mb-5 text-balance">
+                        Stories from Our <span className="gold-text italic">Community</span>
                     </h2>
-                    <p className="text-forest-muted">
+                    <p className="text-forest-muted text-lg leading-relaxed">
                         Hear from volunteers and organizations who are making a difference.
                     </p>
                 </motion.div>
@@ -689,25 +709,25 @@ function TestimonialsSection() {
                             viewport={{ once: true }}
                             transition={{ delay: index * 0.1 }}
                         >
-                            <Card className="border-forest-border h-full">
-                                <CardContent className="p-6">
-                                    <div className="flex items-center gap-4 mb-4">
+                            <Card className="border-gold/10 bg-forest h-full hover:border-gold/30 transition-colors duration-300">
+                                <CardContent className="p-8">
+                                    <div className="flex gap-0.5 mb-5">
+                                        {[...Array(5)].map((_, i) => (
+                                            <span key={i} className="text-gold text-lg">★</span>
+                                        ))}
+                                    </div>
+                                    <p className="font-serif text-lg italic text-forest-beige/90 leading-relaxed mb-6">&ldquo;{testimonial.content}&rdquo;</p>
+                                    <div className="flex items-center gap-4 pt-5 border-t border-gold/10">
                                         <img
                                             src={testimonial.avatar}
                                             alt={testimonial.name}
-                                            className="w-14 h-14 rounded-full object-cover border-2 border-forest-border"
+                                            className="w-12 h-12 rounded-full object-cover border border-gold/30"
                                         />
                                         <div>
                                             <h4 className="font-semibold text-forest-beige">{testimonial.name}</h4>
-                                            <p className="text-sm text-forest-muted">{testimonial.role}</p>
+                                            <p className="text-sm text-gold/80">{testimonial.role}</p>
                                         </div>
                                     </div>
-                                    <div className="flex gap-0.5 mb-4">
-                                        {[...Array(5)].map((_, i) => (
-                                            <span key={i} className="text-amber-400 text-lg">★</span>
-                                        ))}
-                                    </div>
-                                    <p className="text-forest-muted leading-relaxed">&ldquo;{testimonial.content}&rdquo;</p>
                                 </CardContent>
                             </Card>
                         </motion.div>
@@ -753,11 +773,15 @@ function FAQSection() {
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    className="text-center max-w-2xl mx-auto mb-12"
+                    className="text-center max-w-2xl mx-auto mb-14"
                 >
-                    <Badge className="mb-4 bg-amber-500/10 text-amber-400">FAQ</Badge>
-                    <h2 className="text-3xl md:text-4xl font-bold text-forest-beige mb-4">
-                        Frequently Asked Questions
+                    <div className="flex items-center justify-center gap-4 mb-5">
+                        <span className="gold-rule" />
+                        <span className="eyebrow">FAQ</span>
+                        <span className="gold-rule" />
+                    </div>
+                    <h2 className="font-serif text-4xl md:text-5xl font-medium text-forest-beige mb-5 text-balance">
+                        Frequently Asked <span className="gold-text italic">Questions</span>
                     </h2>
                     <p className="text-forest-muted">
                         Everything you need to know about JALA VIVE.
@@ -776,12 +800,12 @@ function FAQSection() {
                             >
                                 <AccordionItem
                                     value={`item-${index}`}
-                                    className="bg-forest-card rounded-2xl border border-forest-border px-6"
+                                    className="bg-forest-card rounded-2xl border border-gold/10 px-6 hover:border-gold/25 transition-colors"
                                 >
-                                    <AccordionTrigger className="text-left font-semibold text-forest-beige hover:text-[#829661] hover:no-underline">
+                                    <AccordionTrigger className="text-left font-serif text-lg font-medium text-forest-beige hover:text-gold-light hover:no-underline">
                                         {faq.question}
                                     </AccordionTrigger>
-                                    <AccordionContent className="text-forest-muted pb-4">
+                                    <AccordionContent className="text-forest-muted pb-4 leading-relaxed">
                                         {faq.answer}
                                     </AccordionContent>
                                 </AccordionItem>
@@ -796,29 +820,35 @@ function FAQSection() {
 
 function CTASection() {
     return (
-        <section className="py-16 md:py-24 bg-forest-card border-y border-forest-border">
-            <div className="container-custom">
+        <section className="py-20 md:py-28 bg-forest-card border-y border-gold/10 relative overflow-hidden">
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[40rem] h-[40rem] bg-gold/5 rounded-full blur-[120px] pointer-events-none" />
+            <div className="container-custom relative z-10">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     className="text-center max-w-3xl mx-auto"
                 >
-                    <h2 className="text-3xl md:text-4xl font-bold text-forest-beige mb-4">
-                        Ready to Make an Impact?
+                    <div className="flex items-center justify-center gap-4 mb-6">
+                        <span className="gold-rule" />
+                        <span className="eyebrow">Join Us</span>
+                        <span className="gold-rule" />
+                    </div>
+                    <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl font-medium text-forest-beige mb-6 text-balance">
+                        Ready to Make an <span className="gold-text italic">Impact?</span>
                     </h2>
-                    <p className="text-forest-muted text-lg mb-8">
+                    <p className="text-forest-muted text-lg md:text-xl mb-10 leading-relaxed">
                         Join thousands of volunteers and organizations creating positive change in communities across Indonesia.
                     </p>
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                         <Link href="/register">
-                            <Button size="lg" className="bg-forest-card text-[#829661] hover:bg-[#21261B] h-14 px-8 text-base rounded-xl shadow-lg">
+                            <Button size="lg" className="bg-gold text-forest hover:bg-gold-dark h-14 px-8 text-base rounded-full font-semibold shadow-xl shadow-gold/20 group">
                                 Get Started for Free
-                                <ArrowRight className="w-4 h-4 ml-2" />
+                                <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                             </Button>
                         </Link>
                         <Link href="/explore">
-                            <Button size="lg" variant="outline" className="h-14 px-8 text-base rounded-xl border-2 border-forest-border text-forest-beige hover:bg-forest-card/10">
+                            <Button size="lg" variant="outline" className="h-14 px-8 text-base rounded-full border border-gold/30 bg-transparent text-forest-beige hover:bg-gold/10 hover:border-gold/60 hover:text-gold-light">
                                 Browse Projects
                             </Button>
                         </Link>
