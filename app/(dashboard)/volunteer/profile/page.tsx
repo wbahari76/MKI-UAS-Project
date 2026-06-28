@@ -83,7 +83,7 @@ export default function ProfilePage() {
       if (uniSearchQuery && uniSearchQuery.length > 2) {
         setIsSearchingUni(true);
         try {
-          const res = await fetch(`http://universities.hipolabs.com/search?name=${uniSearchQuery}`);
+          const res = await fetch(`/api/universities?query=${uniSearchQuery}`);
           const data = await res.json();
           // Deduplicate by name and limit to 10
           const uniqueUnis = Array.from(new Set(data.map((a: any) => a.name)))
@@ -397,10 +397,10 @@ export default function ProfilePage() {
                         value={formData.gender}
                         onChange={(e) => setFormData({...formData, gender: e.target.value})}
                       >
-                        <option value="" className="text-black">Select Gender</option>
-                        <option value="Male" className="text-black">Male</option>
-                        <option value="Female" className="text-black">Female</option>
-                        <option value="Other" className="text-black">Other</option>
+                        <option value="" className="bg-[#181A15] text-[#DFD5C2]">Select Gender</option>
+                        <option value="Male" className="bg-[#181A15] text-[#DFD5C2]">Male</option>
+                        <option value="Female" className="bg-[#181A15] text-[#DFD5C2]">Female</option>
+                        <option value="Other" className="bg-[#181A15] text-[#DFD5C2]">Other</option>
                       </select>
                     </div>
                   </div>
@@ -442,13 +442,13 @@ export default function ProfilePage() {
                           value={educationLevel}
                           onChange={(e) => setEducationLevel(e.target.value)}
                         >
-                          <option value="" className="text-black">Select Level</option>
-                          <option value="High School" className="text-black">High School / SMA / SMK</option>
-                          <option value="Associate Degree" className="text-black">Associate Degree (D3)</option>
-                          <option value="Bachelor's Degree" className="text-black">Bachelor's Degree (S1)</option>
-                          <option value="Master's Degree" className="text-black">Master's Degree (S2)</option>
-                          <option value="Doctorate" className="text-black">Doctorate (S3)</option>
-                          <option value="Other" className="text-black">Other</option>
+                          <option value="" className="bg-[#181A15] text-[#DFD5C2]">Select Level</option>
+                          <option value="High School" className="bg-[#181A15] text-[#DFD5C2]">High School / SMA / SMK</option>
+                          <option value="Associate Degree" className="bg-[#181A15] text-[#DFD5C2]">Associate Degree (D3)</option>
+                          <option value="Bachelor's Degree" className="bg-[#181A15] text-[#DFD5C2]">Bachelor's Degree (S1)</option>
+                          <option value="Master's Degree" className="bg-[#181A15] text-[#DFD5C2]">Master's Degree (S2)</option>
+                          <option value="Doctorate" className="bg-[#181A15] text-[#DFD5C2]">Doctorate (S3)</option>
+                          <option value="Other" className="bg-[#181A15] text-[#DFD5C2]">Other</option>
                         </select>
                         {educationLevel === "Other" && (
                           <Input 
@@ -467,9 +467,9 @@ export default function ProfilePage() {
                           value={educationStatus}
                           onChange={(e) => setEducationStatus(e.target.value)}
                         >
-                          <option value="" className="text-black">Select Status</option>
-                          <option value="Currently Enrolled" className="text-black">Currently Enrolled / Masih Sekolah/Kuliah</option>
-                          <option value="Graduated" className="text-black">Graduated / Lulus</option>
+                          <option value="" className="bg-[#181A15] text-[#DFD5C2]">Select Status</option>
+                          <option value="Currently Enrolled" className="bg-[#181A15] text-[#DFD5C2]">Currently Enrolled / Masih Sekolah/Kuliah</option>
+                          <option value="Graduated" className="bg-[#181A15] text-[#DFD5C2]">Graduated / Lulus</option>
                         </select>
                       </div>
                     </div>
@@ -483,9 +483,9 @@ export default function ProfilePage() {
                           value={studyProgram}
                           onChange={(e) => setStudyProgram(e.target.value)}
                         >
-                          <option value="" className="text-black">Select Study Program</option>
+                          <option value="" className="bg-[#181A15] text-[#DFD5C2]">Select Study Program</option>
                           {STUDY_PROGRAMS.map(prog => (
-                            <option key={prog} value={prog} className="text-black">{prog}</option>
+                            <option key={prog} value={prog} className="bg-[#181A15] text-[#DFD5C2]">{prog}</option>
                           ))}
                         </select>
                         {studyProgram === "Other" && (
