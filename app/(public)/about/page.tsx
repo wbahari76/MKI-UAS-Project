@@ -112,63 +112,169 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* The Problem Section */}
-      <section className="py-24 bg-[#181A15]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="max-w-3xl mx-auto mb-16 space-y-4">
-            <span className="inline-block py-1 px-3 rounded-full bg-rose-500/10 text-rose-400 text-sm font-semibold tracking-wider uppercase">
-              The Problem
+      {/* The Problem Section - Redesigned */}
+      <section className="py-32 relative bg-[#0D0E0B] overflow-hidden">
+        {/* Background Visual Elements */}
+        <div className="absolute inset-0 z-0 opacity-[0.15] pointer-events-none" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E")', mixBlendMode: 'overlay' }}></div>
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-emerald-500/10 rounded-full blur-[120px] pointer-events-none -z-10"></div>
+        <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-blue-500/5 rounded-full blur-[100px] pointer-events-none -z-10"></div>
+        <div className="absolute top-1/2 left-0 -translate-y-1/2 w-[400px] h-[800px] bg-rose-500/5 rounded-full blur-[120px] pointer-events-none -z-10"></div>
+
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, ease: "easeOut" }}
+            className="text-center max-w-3xl mx-auto mb-24 space-y-6"
+          >
+            <span className="inline-block py-1.5 px-4 rounded-full bg-[#181A15] border border-white/10 text-forest-muted text-xs font-semibold tracking-widest uppercase shadow-sm">
+              Concept Validation
             </span>
-            <h2 className="text-3xl md:text-5xl font-bold text-forest-beige">Why JALA VIVE is Needed</h2>
-            <p className="text-forest-muted text-lg leading-relaxed">
-              Our concept validation research highlights the challenges within today's volunteer ecosystem.
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-tight">
+              The Problem: <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-500">Why JALA VIVE is Needed</span>
+            </h2>
+            <p className="text-forest-muted text-lg md:text-xl leading-relaxed font-light">
+              Our concept validation research highlights the key challenges within today's volunteer ecosystem, revealing why a more connected, transparent, and efficient platform is needed.
             </p>
-          </div>
+          </motion.div>
           
-          <div className="grid md:grid-cols-3 gap-8">
-            {[
-              { 
-                stat: "85%",
-                title: "Organizer Struggle", 
-                desc: "Organizations spend excessive time managing volunteers across fragmented tools instead of focusing on actual impact.",
-                icon: FileText,
-                color: "text-rose-400",
-                bg: "bg-rose-500/10"
-              },
-              { 
-                stat: "78%",
-                title: "Volunteer Hesitation", 
-                desc: "Potential volunteers struggle to find trustworthy causes that match their skills and availability.",
-                icon: Handshake,
-                color: "text-amber-400",
-                bg: "bg-amber-500/10"
-              },
-              { 
-                stat: "60%",
-                title: "Project Fragmentation", 
-                desc: "Social projects lack a centralized platform to showcase their long-term impact and build sustained communities.",
-                icon: Globe,
-                color: "text-blue-400",
-                bg: "bg-blue-500/10"
-              }
-            ].map((problem, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1, duration: 0.5 }}
-                className="bg-forest-card p-8 rounded-3xl shadow-sm shadow-forest-border/20 border border-forest-border hover:shadow-lg hover:border-forest-accent/50 transition-all"
-              >
-                <div className={`w-16 h-16 rounded-2xl ${problem.bg} ${problem.color} flex items-center justify-center mx-auto mb-6`}>
-                  <problem.icon size={32} />
+          <div className="space-y-12 md:space-y-24">
+            {/* Card 1 */}
+            <motion.div 
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.6 }}
+              className="group flex flex-col md:flex-row items-center gap-8 md:gap-16 bg-[#181A15]/60 backdrop-blur-xl border border-white/5 hover:border-emerald-500/30 rounded-[32px] p-8 md:p-12 transition-all duration-500 hover:shadow-[0_0_40px_-10px_rgba(16,185,129,0.15)]"
+            >
+              <div className="flex-1 w-full md:pr-8 border-b md:border-b-0 md:border-r border-white/5 pb-8 md:pb-0">
+                <div className="flex justify-between items-center mb-8">
+                  <div className="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center text-forest-muted group-hover:scale-110 group-hover:text-emerald-400 group-hover:bg-emerald-500/10 transition-all duration-500">
+                    <FileText size={28} className="transform group-hover:rotate-6 transition-transform duration-500" />
+                  </div>
+                  <div className="flex items-center text-emerald-400 opacity-0 group-hover:opacity-100 group-hover:translate-x-2 transition-all duration-500">
+                    <ArrowRight size={24} />
+                  </div>
                 </div>
-                <h3 className="text-5xl font-extrabold text-white mb-2">{problem.stat}</h3>
-                <h4 className="text-xl font-bold text-forest-beige mb-3">{problem.title}</h4>
-                <p className="text-forest-muted leading-relaxed">{problem.desc}</p>
-              </motion.div>
-            ))}
+                <motion.div className="overflow-hidden">
+                  <h3 className="text-7xl md:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-br from-white to-white/40 tracking-tighter mb-2 group-hover:scale-[1.02] origin-left transition-transform duration-500">
+                    85%
+                  </h3>
+                  <p className="text-forest-muted text-xs tracking-widest font-bold uppercase">Of Event Organizers</p>
+                </motion.div>
+              </div>
+
+              <div className="flex-[1.5] space-y-6">
+                <h4 className="text-2xl md:text-3xl font-bold text-white tracking-tight">The Organizer's Struggle</h4>
+                <p className="text-forest-muted text-lg leading-relaxed font-light">
+                  Managing volunteer recruitment through Google Forms, spreadsheets, and messaging applications is time-consuming, difficult to monitor, and inefficient.
+                </p>
+                
+                <div className="flex flex-wrap gap-3 pt-4">
+                  {["Google Forms", "Manual Tracking", "Scattered Communication"].map((tag, idx) => (
+                    <span key={idx} className="px-4 py-2 rounded-xl bg-white/5 border border-white/5 text-sm text-[#DFD5C2] font-medium group-hover:border-emerald-500/30 group-hover:bg-emerald-500/5 transition-all duration-300">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Card 2 */}
+            <motion.div 
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.6 }}
+              className="group flex flex-col-reverse md:flex-row items-center gap-8 md:gap-16 bg-[#181A15]/60 backdrop-blur-xl border border-white/5 hover:border-emerald-500/30 rounded-[32px] p-8 md:p-12 transition-all duration-500 hover:shadow-[0_0_40px_-10px_rgba(16,185,129,0.15)]"
+            >
+              <div className="flex-[1.5] space-y-6 border-t md:border-t-0 md:border-r border-white/5 pt-8 md:pt-0 pr-0 md:pr-16">
+                <h4 className="text-2xl md:text-3xl font-bold text-white tracking-tight">The Volunteer's Hesitation</h4>
+                <p className="text-forest-muted text-lg leading-relaxed font-light">
+                  Many volunteers hesitate to participate because project goals, expected impact, and responsibilities are often unclear.
+                </p>
+                
+                <div className="flex flex-wrap gap-3 pt-4">
+                  {["Unclear Impact", "Missing Information", "Low Trust"].map((tag, idx) => (
+                    <span key={idx} className="px-4 py-2 rounded-xl bg-white/5 border border-white/5 text-sm text-[#DFD5C2] font-medium group-hover:border-emerald-500/30 group-hover:bg-emerald-500/5 transition-all duration-300">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <div className="flex-1 w-full md:w-auto">
+                <div className="flex justify-between md:justify-end items-center gap-4 mb-8">
+                  <div className="flex items-center text-emerald-400 opacity-0 group-hover:opacity-100 group-hover:-translate-x-2 transition-all duration-500 order-2 md:order-1 md:mr-auto">
+                    <ArrowRight size={24} className="rotate-180" />
+                  </div>
+                  <div className="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center text-forest-muted group-hover:scale-110 group-hover:text-emerald-400 group-hover:bg-emerald-500/10 transition-all duration-500 order-1 md:order-2">
+                    <Users size={28} className="transform group-hover:-rotate-6 transition-transform duration-500" />
+                  </div>
+                </div>
+                <motion.div className="text-left md:text-right">
+                  <h3 className="text-7xl md:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-bl from-white to-white/40 tracking-tighter mb-2 group-hover:scale-[1.02] origin-left md:origin-right transition-transform duration-500">
+                    78%
+                  </h3>
+                  <p className="text-forest-muted text-xs tracking-widest font-bold uppercase">Of Potential Volunteers</p>
+                </motion.div>
+              </div>
+            </motion.div>
+
+            {/* Card 3 */}
+            <motion.div 
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.6 }}
+              className="group flex flex-col md:flex-row items-center gap-8 md:gap-16 bg-[#181A15]/60 backdrop-blur-xl border border-white/5 hover:border-emerald-500/30 rounded-[32px] p-8 md:p-12 transition-all duration-500 hover:shadow-[0_0_40px_-10px_rgba(16,185,129,0.15)]"
+            >
+              <div className="flex-1 w-full md:pr-8 border-b md:border-b-0 md:border-r border-white/5 pb-8 md:pb-0">
+                <div className="flex justify-between items-center mb-8">
+                  <div className="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center text-forest-muted group-hover:scale-110 group-hover:text-emerald-400 group-hover:bg-emerald-500/10 transition-all duration-500">
+                    <Globe size={28} className="transform group-hover:rotate-6 transition-transform duration-500" />
+                  </div>
+                  <div className="flex items-center text-emerald-400 opacity-0 group-hover:opacity-100 group-hover:translate-x-2 transition-all duration-500">
+                    <ArrowRight size={24} />
+                  </div>
+                </div>
+                <motion.div className="overflow-hidden">
+                  <h3 className="text-7xl md:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-br from-white to-white/40 tracking-tighter mb-2 group-hover:scale-[1.02] origin-left transition-transform duration-500">
+                    60%
+                  </h3>
+                  <p className="text-forest-muted text-xs tracking-widest font-bold uppercase">Of Social Projects</p>
+                </motion.div>
+              </div>
+
+              <div className="flex-[1.5] space-y-6">
+                <h4 className="text-2xl md:text-3xl font-bold text-white tracking-tight">The Impact of Fragmentation</h4>
+                <p className="text-forest-muted text-lg leading-relaxed font-light">
+                  Volunteer opportunities are spread across different social media platforms, making projects harder to discover and reducing volunteer participation.
+                </p>
+                
+                <div className="flex flex-wrap gap-3 pt-4">
+                  {["Instagram", "WhatsApp", "Telegram", "Facebook"].map((tag, idx) => (
+                    <span key={idx} className="px-4 py-2 rounded-xl bg-white/5 border border-white/5 text-sm text-[#DFD5C2] font-medium group-hover:border-emerald-500/30 group-hover:bg-emerald-500/5 transition-all duration-300">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
           </div>
+
+          <motion.div 
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.4, duration: 1 }}
+            className="mt-24 pt-8 border-t border-white/5 text-center"
+          >
+            <p className="text-[11px] text-forest-muted/60 max-w-2xl mx-auto tracking-widest uppercase">
+              Concept Validation Survey conducted by the JALA VIVE Team with prospective volunteers, community organizers, and event committees.
+            </p>
+          </motion.div>
         </div>
       </section>
 
