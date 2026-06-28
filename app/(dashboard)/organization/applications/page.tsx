@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
-import { Search, CheckCircle, XCircle, Filter, FileText, Mail, Phone, MapPin, Star, Award, Calendar } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import Link from "next/link";
+import { Search, CheckCircle, XCircle, Filter, FileText, Mail, Phone, MapPin, Star, Award, Calendar, Crown, Zap } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -23,96 +24,120 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
-const MOCK_APPLICATIONS = [
-  { 
-    id: 1, 
-    name: "Andi Saputra", 
-    project: "Coastal Cleanup Initiative", 
-    role: "Field Volunteer", 
-    status: "pending", 
-    date: "Jul 10, 2026",
-    email: "andi.s@example.com",
-    phone: "+62 812-3456-7890",
-    location: "Bali, Indonesia",
-    rating: 4.8,
-    completedProjects: 12,
-    volunteerHours: 48,
-    skills: ["Beach Cleanup", "Teamwork", "First Aid"],
-    bio: "Saya sangat menyukai kegiatan lingkungan dan aktif melakukan aksi bersih-bersih pantai secara sukarela sejak 2 tahun lalu."
-  },
-  { 
-    id: 2, 
-    name: "Budi Santoso", 
-    project: "Coastal Cleanup Initiative", 
-    role: "Logistics", 
-    status: "pending", 
-    date: "Jul 10, 2026",
-    email: "budi.santoso@example.com",
-    phone: "+62 812-9876-5432",
-    location: "Surabaya, Indonesia",
-    rating: 5.0,
-    completedProjects: 5,
-    volunteerHours: 20,
-    skills: ["Logistics", "Event Operations", "Inventory Control"],
-    bio: "Berpengalaman dalam koordinasi logistik lapangan untuk acara komunitas berskala menengah."
-  },
-  { 
-    id: 3, 
-    name: "Citra Kirana", 
-    project: "Food Bank Distribution", 
-    role: "Coordinator", 
-    status: "pending", 
-    date: "Jul 09, 2026",
-    email: "citra.k@example.com",
-    phone: "+62 813-1111-2222",
-    location: "Jakarta, Indonesia",
-    rating: 4.5,
-    completedProjects: 2,
-    volunteerHours: 8,
-    skills: ["Project Management", "Food Handling", "Communication"],
-    bio: "Senang merencanakan dan mengatur alur distribusi makanan sehat untuk masyarakat yang membutuhkan."
-  },
-  { 
-    id: 4, 
-    name: "Dewi Lestari", 
-    project: "Tree Planting Day", 
-    role: "Field Volunteer", 
-    status: "approved", 
-    date: "Jul 05, 2026",
-    email: "dewi.l@example.com",
-    phone: "+62 813-4444-5555",
-    location: "Bandung, Indonesia",
-    rating: 4.2,
-    completedProjects: 7,
-    volunteerHours: 28,
-    skills: ["Gardening", "Species Identification", "Physical Labor"],
-    bio: "Pecinta alam yang aktif menanam pohon dan merawat tanaman hias di waktu luang."
-  },
-  { 
-    id: 5, 
-    name: "Eko Prasetyo", 
-    project: "Digital Literacy", 
-    role: "Mentor", 
-    status: "rejected", 
-    date: "Jul 02, 2026",
-    email: "eko.p@example.com",
-    phone: "+62 812-8888-9999",
-    location: "Jakarta, Indonesia",
-    rating: 4.9,
-    completedProjects: 15,
-    volunteerHours: 60,
-    skills: ["Web Development", "Teaching", "Public Speaking"],
-    bio: "Pengajar IT dengan passion membagi pengetahuan literasi digital dasar kepada anak-anak di daerah pelosok."
-  }
-];
+import { supabase } from "@/lib/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function OrganizationApplicationsPage() {
-  const [applications, setApplications] = useState(MOCK_APPLICATIONS);
+  const { user } = useAuth();
+  const [applications, setApplications] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedProject, setSelectedProject] = useState("All Projects");
   const [selectedApp, setSelectedApp] = useState<any>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [subscriptionTier, setSubscriptionTier] = useState("free");
+  const [showUpgradeDialog, setShowUpgradeDialog] = useState(false);
+  const [upgradeReason, setUpgradeReason] = useState("");
+
+  useEffect(() => {
+    async function fetchApplications() {
+      if (!user) return;
+      try {
+        setLoading(true);
+        const { data: org, error: orgError } = await supabase
+          .from('organizations')
+          .select('id, subscription_tier')
+          .eq('owner_id', user.id)
+          .single();
+
+        if (orgError) throw orgError;
+        setSubscriptionTier(org.subscription_tier || "free");
+
+        const { data: appsData, error: appsError } = await supabase
+          .from('project_applications')
+          .select(`
+            id,
+            status,
+            created_at,
+            user_id,
+            project_id,
+            projects!inner (
+              title,
+              organization_id
+            )
+          `)
+          .eq('projects.organization_id', org.id)
+          .order('created_at', { ascending: false });
+
+        if (appsError) throw appsError;
+        
+        if (!appsData || appsData.length === 0) {
+          setApplications([]);
+          setLoading(false);
+          return;
+        }
+
+        // Fetch profiles separately because there's no direct foreign key
+        const userIds = [...new Set(appsData.map(a => a.user_id))];
+        const { data: profilesData, error: profilesError } = await supabase
+          .from('profiles')
+          .select('id, user_id, full_name, bio, phone, location, skills, volunteer_hours')
+          .in('user_id', userIds);
+
+        if (profilesError) throw profilesError;
+
+        const profileIds = [...new Set((profilesData || []).map(p => p.id))];
+        const { data: volProfilesData, error: volProfilesError } = await supabase
+          .from('volunteer_profiles')
+          .select('profile_id, cv_url, portfolio_url')
+          .in('profile_id', profileIds);
+
+        if (volProfilesError) throw volProfilesError;
+
+        const volProfilesMap = (volProfilesData || []).reduce((acc, vp) => {
+          acc[vp.profile_id] = vp;
+          return acc;
+        }, {} as Record<string, any>);
+
+        const profilesMap = (profilesData || []).reduce((acc, profile) => {
+          acc[profile.user_id] = { ...profile, ...volProfilesMap[profile.id] };
+          return acc;
+        }, {} as Record<string, any>);
+
+        // Transform data to match the UI format
+        const formattedData = appsData.map((app: any) => {
+          const profile = profilesMap[app.user_id] || {};
+          return {
+            id: app.id,
+            name: profile.full_name || 'Unknown Volunteer',
+            project: app.projects?.title || 'Unknown Project',
+            role: "Volunteer",
+            status: app.status,
+            date: new Date(app.created_at).toLocaleDateString(),
+            email: "hidden@example.com", 
+            phone: profile.phone || "Not provided",
+            location: profile.location || "Not specified",
+            rating: 5.0, // Defaulting to 5 for now
+            completedProjects: 0,
+            volunteerHours: profile.volunteer_hours || 0,
+            skills: profile.skills || [],
+            bio: profile.bio || "No bio provided.",
+            cv_url: profile.cv_url,
+            portfolio_url: profile.portfolio_url
+          };
+        });
+        
+        setApplications(formattedData);
+      } catch (error) {
+        console.error("Error fetching applications:", error);
+        toast.error("Failed to load applications");
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchApplications();
+  }, [user]);
 
   const handleViewProfile = (app: any) => {
     setSelectedApp(app);
@@ -128,9 +153,40 @@ export default function OrganizationApplicationsPage() {
     return matchesSearch && matchesProject;
   });
 
-  const handleStatusChange = (id: number, status: string) => {
-    setApplications(apps => apps.map(a => a.id === id ? { ...a, status } : a));
-    toast.success(`Application ${status} successfully`);
+  const handleStatusChange = async (id: number, status: string) => {
+    if (status === 'approved' && subscriptionTier === 'free') {
+      const appToApprove = applications.find(a => a.id === id);
+      if (appToApprove) {
+        const approvedForProject = applications.filter(a => a.project === appToApprove.project && a.status === 'approved').length;
+        if (approvedForProject >= 20) {
+          setUpgradeReason("You have reached the maximum limit of 20 volunteers per project on the Free plan.");
+          setShowUpgradeDialog(true);
+          return;
+        }
+
+        const pendingCount = applications.filter(a => a.status === 'pending').length;
+        if (pendingCount >= 50) {
+          setUpgradeReason("You have reached the maximum limit of 50 active applications on the Free plan.");
+          setShowUpgradeDialog(true);
+          return;
+        }
+      }
+    }
+
+    try {
+      const { error } = await supabase
+        .from('project_applications')
+        .update({ status })
+        .eq('id', id);
+
+      if (error) throw error;
+
+      setApplications(apps => apps.map(a => a.id === id ? { ...a, status } : a));
+      toast.success(`Application ${status} successfully`);
+    } catch (error: any) {
+      console.error(error);
+      toast.error(error.message || "Failed to update application status");
+    }
   };
 
   const getStatusBadge = (status: string) => {
@@ -145,6 +201,10 @@ export default function OrganizationApplicationsPage() {
         return <Badge>{status}</Badge>;
     }
   };
+
+  if (loading) {
+      return <div className="flex justify-center py-20"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-forest-accent"></div></div>;
+  }
 
   return (
     <div className="space-y-6 pb-20">
@@ -357,11 +417,35 @@ export default function OrganizationApplicationsPage() {
             <div className="space-y-2">
               <h4 className="text-sm font-semibold text-forest-beige">Skills</h4>
               <div className="flex flex-wrap gap-2">
-                {selectedApp?.skills?.map((skill: string, idx: number) => (
+                {selectedApp?.skills?.length ? selectedApp.skills.map((skill: string, idx: number) => (
                   <Badge key={idx} variant="secondary" className="bg-blue-500/10 text-blue-400 hover:bg-blue-500/10 border-0">
                     {skill}
                   </Badge>
-                ))}
+                )) : <span className="text-xs text-forest-muted">No specific skills listed.</span>}
+              </div>
+            </div>
+
+            {/* Attachments */}
+            <div className="space-y-2">
+              <h4 className="text-sm font-semibold text-forest-beige">Attachments</h4>
+              <div className="flex flex-wrap gap-3">
+                {selectedApp?.cv_url ? (
+                  <a href={selectedApp.cv_url} target="_blank" rel="noreferrer" className="flex items-center gap-2 px-3 py-2 bg-[#2C3322] border border-[#4A5D23] rounded-lg text-sm text-[#829661] hover:bg-[#38402D] transition-colors">
+                    <FileText className="w-4 h-4" />
+                    View CV
+                  </a>
+                ) : (
+                  <span className="text-sm text-forest-muted italic">No CV uploaded</span>
+                )}
+                
+                {selectedApp?.portfolio_url ? (
+                  <a href={selectedApp.portfolio_url} target="_blank" rel="noreferrer" className="flex items-center gap-2 px-3 py-2 bg-indigo-900/30 border border-indigo-700/50 rounded-lg text-sm text-indigo-400 hover:bg-indigo-900/50 transition-colors">
+                    <FileText className="w-4 h-4" />
+                    View Portfolio
+                  </a>
+                ) : (
+                  <span className="text-sm text-forest-muted italic">No Portfolio</span>
+                )}
               </div>
             </div>
           </div>
@@ -396,6 +480,44 @@ export default function OrganizationApplicationsPage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* Upgrade Modal */}
+      <Dialog open={showUpgradeDialog} onOpenChange={setShowUpgradeDialog}>
+        <DialogContent className="bg-forest-card border-forest-border sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-xl text-forest-beige flex items-center gap-2">
+              <Crown className="w-6 h-6 text-amber-500" />
+              Upgrade to Pro
+            </DialogTitle>
+            <DialogDescription className="text-forest-muted pt-2">
+              {upgradeReason}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="py-4">
+            <h4 className="text-sm font-medium text-forest-beige mb-3">Pro Plan Benefits:</h4>
+            <ul className="space-y-2">
+              {["Unlimited Volunteers per Project", "Unlimited Active Applications", "AI Volunteer Matching", "Export Volunteer Data"].map((feature, i) => (
+                <li key={i} className="flex items-center gap-2 text-sm text-[#DFD5C2]">
+                  <CheckCircle className="w-4 h-4 text-forest-accent" />
+                  {feature}
+                </li>
+              ))}
+            </ul>
+          </div>
+          <DialogFooter className="sm:justify-between">
+            <Button variant="ghost" onClick={() => setShowUpgradeDialog(false)} className="text-forest-muted">
+              Cancel
+            </Button>
+            <Link href="/organization/subscription">
+              <Button className="btn-primary group w-full sm:w-auto">
+                <Zap className="w-4 h-4 mr-2 group-hover:animate-pulse" />
+                View Subscription
+              </Button>
+            </Link>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
+

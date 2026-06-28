@@ -12,7 +12,7 @@ interface AuthContextType {
     loading: boolean;
     error: string | null;
     signIn: (email: string, password: string) => Promise<{ error: string | null; role?: string | null }>;
-    signUp: (email: string, password: string, metadata?: { role?: string; full_name?: string }) => Promise<{ error: string | null }>;
+    signUp: (email: string, password: string, metadata?: { role?: string; full_name?: string }) => Promise<{ error: string | null; session?: any | null }>;
     signOut: () => Promise<void>;
     refreshProfile: () => Promise<void>;
     updateProfile: (updates: Partial<Profile>) => Promise<{ error: string | null }>;
@@ -170,7 +170,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     ) => {
         try {
             setError(null);
-            const { error: signUpError } = await supabase.auth.signUp({
+            const { data, error: signUpError } = await supabase.auth.signUp({
                 email,
                 password,
                 options: {
@@ -182,14 +182,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             });
 
             if (signUpError) {
-                return { error: signUpError.message };
+                return { error: signUpError.message, session: null };
             }
 
-            return { error: null };
+            return { error: null, session: data.session };
         } catch (err) {
             const message = err instanceof Error ? err.message : 'An error occurred';
             setError(message);
-            return { error: message };
+            return { error: message, session: null };
         }
     };
 

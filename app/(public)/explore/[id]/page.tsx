@@ -22,60 +22,120 @@ import {
   DialogTrigger,
   DialogFooter,
 } from "@/components/ui/dialog";
-
-// Mock data to match what we had in Explore
-const PROJECT = {
-  id: 1,
-  title: "Coastal Cleanup Initiative",
-  org: "Ocean Care ID",
-  category: "Environment",
-  location: "Kuta Beach, Bali, Indonesia",
-  deadline: "2026-07-15",
-  date: "2026-07-20 to 2026-07-21",
-  volunteersNeeded: 50,
-  volunteersApplied: 32,
-  image: "https://images.unsplash.com/photo-1618477461853-cf6ed80fabe9?auto=format&fit=crop&w=1200&q=80",
-  isSaved: true,
-  description: "Join us in our mission to keep our oceans clean and protect marine life. We will be organizing a massive coastal cleanup along Kuta Beach. This initiative aims to remove plastic waste and debris from the shoreline before it enters the ocean ecosystem.",
-  requirements: [
-    "Age 17 or above",
-    "Physically fit for outdoor activities",
-    "Commitment to attend the full 2-day event",
-    "Bring your own reusable water bottle"
-  ],
-  benefits: [
-    "E-Certificate of Participation",
-    "Lunch and snacks provided",
-    "Cleanup tools (gloves, trash bags) provided",
-    "Networking with fellow environmental enthusiasts"
-  ]
-};
+import { supabase } from "@/lib/supabase/client";
 
 export default function PublicProjectDetailsPage() {
   const router = useRouter();
   const { id } = useParams();
   const { user } = useAuth();
-  const [isSaved, setIsSaved] = useState(PROJECT.isSaved);
+  const [project, setProject] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [isSaved, setIsSaved] = useState(false);
   const [isApplying, setIsApplying] = useState(false);
   const [hasApplied, setHasApplied] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const handleApply = () => {
+  React.useEffect(() => {
+    async function fetchProject() {
+      if (!id) return;
+      try {
+        const { data: projectData, error: projectError } = await supabase
+          .from('projects')
+          .select('*, organizations(name)')
+          .eq('id', id)
+          .single();
+
+        if (projectError) throw projectError;
+        setProject(projectData);
+
+        if (user) {
+          // Check if already applied
+          const { data: applicationData } = await supabase
+            .from('project_applications')
+            .select('id')
+            .eq('project_id', id)
+            .eq('user_id', user.id)
+            .maybeSingle();
+            
+          if (applicationData) setHasApplied(true);
+
+          // Check if saved
+          const { data: savedData } = await supabase
+            .from('saved_projects')
+            .select('id')
+            .eq('project_id', id)
+            .eq('user_id', user.id)
+            .maybeSingle();
+          if (savedData) setIsSaved(true);
+        }
+      } catch (error) {
+        console.error("Error fetching project:", error);
+        toast.error("Failed to load project details.");
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchProject();
+  }, [id, user]);
+
+  const handleApply = async () => {
     if (!user) {
         toast("Please log in to apply for this project.");
         router.push("/login");
         return;
     }
+    
+    // We import profile from useAuth at the top, need to get it:
+    // Actually, `profile` is not extracted from useAuth in PublicProjectDetailsPage
+    // Let's assume it was extracted, I will add it to useAuth destructuring if needed.
+    // Wait, let's look at the context: `const { user } = useAuth();` on line 30.
+    // Let's modify the replace chunk to just use a fetch if profile isn't available, or I'll just change line 30 in another step.
+    
+    // For now I'll just fetch it directly to be safe if `profile` isn't in scope.
+    const { data: userProfile } = await supabase.from('profiles').select('profile_completion').eq('user_id', user.id).single();
+
+    if (!userProfile || userProfile.profile_completion < 80) {
+        toast.error("You must complete your profile (at least 80%) and upload your CV before applying.");
+        router.push('/volunteer/profile');
+        return;
+    }
 
     setIsApplying(true);
-    // Simulate API call
-    setTimeout(() => {
-      setIsApplying(false);
+    try {
+      const { error } = await supabase
+        .from('project_applications')
+        .insert({
+          project_id: id,
+          user_id: user.id,
+          status: 'pending'
+        });
+        
+      if (error) throw error;
+      
       setHasApplied(true);
       setIsDialogOpen(false);
       toast.success("Application submitted successfully!");
-    }, 1500);
+    } catch (error: any) {
+      console.error(error);
+      toast.error(error.message || "Failed to submit application");
+    } finally {
+      setIsApplying(false);
+    }
   };
+
+  if (loading) {
+      return <div className="flex justify-center py-20"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-forest-accent"></div></div>;
+  }
+
+  if (!project) {
+      return <div className="text-center py-20 text-forest-muted">Project not found.</div>;
+  }
+
+  const volunteersNeeded = project.volunteer_needed || 1;
+  const volunteersApplied = project.volunteer_count || 0;
+  const requirements = project.requirements || [];
+  const benefits = project.benefits || [];
+  const bannerImage = project.banner_url || "https://images.unsplash.com/photo-1618477461853-cf6ed80fabe9?auto=format&fit=crop&w=1200&q=80";
 
   return (
     <div className="space-y-6 pb-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
@@ -95,28 +155,28 @@ export default function PublicProjectDetailsPage() {
         className="relative w-full h-[300px] md:h-[400px] rounded-2xl overflow-hidden shadow-lg shadow-forest-border/20"
       >
         <img
-          src={PROJECT.image}
-          alt={PROJECT.title}
+          src={bannerImage}
+          alt={project.title}
           className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/20 to-transparent" />
 
         <div className="absolute bottom-0 left-0 w-full p-6 md:p-10">
           <Badge className="mb-4 bg-forest-accent text-forest-beige border-0 hover:bg-[#4A5D23]">
-            {PROJECT.category}
+            {project.category || 'General'}
           </Badge>
           <h1 className="text-3xl md:text-5xl font-bold text-forest-beige mb-2 leading-tight">
-            {PROJECT.title}
+            {project.title}
           </h1>
           <div className="flex items-center gap-4 text-emerald-50">
             <div className="flex items-center gap-2">
               <Building2 className="w-5 h-5" />
-              <span className="font-medium">{PROJECT.org}</span>
+              <span className="font-medium">{project.organizations?.name || 'Organization'}</span>
             </div>
             <span className="w-1.5 h-1.5 rounded-full bg-forest-accent" />
             <div className="flex items-center gap-2">
               <MapPin className="w-5 h-5" />
-              <span>{PROJECT.location}</span>
+              <span>{project.location || 'Remote'}</span>
             </div>
           </div>
         </div>
@@ -151,35 +211,39 @@ export default function PublicProjectDetailsPage() {
           <section>
             <h3 className="text-xl font-bold text-forest-beige mb-4">About the Project</h3>
             <p className="text-forest-muted leading-relaxed">
-              {PROJECT.description}
+              {project.description || 'No description provided.'}
             </p>
           </section>
 
           {/* Requirements */}
-          <section>
-            <h3 className="text-xl font-bold text-forest-beige mb-4">Requirements</h3>
-            <ul className="space-y-3">
-              {PROJECT.requirements.map((req, index) => (
-                <li key={index} className="flex items-start gap-3 text-forest-muted">
-                  <CheckCircle2 className="w-5 h-5 text-forest-accent shrink-0 mt-0.5" />
-                  <span>{req}</span>
-                </li>
-              ))}
-            </ul>
-          </section>
+          {requirements.length > 0 && (
+            <section>
+              <h3 className="text-xl font-bold text-forest-beige mb-4">Requirements</h3>
+              <ul className="space-y-3">
+                {requirements.map((req: string, index: number) => (
+                  <li key={index} className="flex items-start gap-3 text-forest-muted">
+                    <CheckCircle2 className="w-5 h-5 text-forest-accent shrink-0 mt-0.5" />
+                    <span>{req}</span>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
 
           {/* Benefits */}
-          <section>
-            <h3 className="text-xl font-bold text-forest-beige mb-4">What you will get</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {PROJECT.benefits.map((benefit, index) => (
-                <div key={index} className="flex items-center gap-3 p-4 rounded-xl bg-[#181A15] border border-forest-border">
-                  <Award className="w-5 h-5 text-forest-accent shrink-0" />
-                  <span className="text-sm font-medium text-[#DFD5C2]">{benefit}</span>
-                </div>
-              ))}
-            </div>
-          </section>
+          {benefits.length > 0 && (
+            <section>
+              <h3 className="text-xl font-bold text-forest-beige mb-4">What you will get</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {benefits.map((benefit: string, index: number) => (
+                  <div key={index} className="flex items-center gap-3 p-4 rounded-xl bg-[#181A15] border border-forest-border">
+                    <Award className="w-5 h-5 text-forest-accent shrink-0" />
+                    <span className="text-sm font-medium text-[#DFD5C2]">{benefit}</span>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
         </motion.div>
 
         {/* Right Column (Sidebar) */}
@@ -199,8 +263,10 @@ export default function PublicProjectDetailsPage() {
                     <CalendarDays className="w-5 h-5" />
                   </div>
                   <div>
-                    <p className="text-sm text-forest-muted font-medium mb-1">Event Date</p>
-                    <p className="font-semibold text-forest-beige">{PROJECT.date}</p>
+                    <p className="text-sm text-forest-muted font-medium mb-1">Start Date</p>
+                    <p className="font-semibold text-forest-beige">
+                      {project.start_date ? new Date(project.start_date).toLocaleDateString() : 'TBA'}
+                    </p>
                   </div>
                 </div>
 
@@ -210,7 +276,9 @@ export default function PublicProjectDetailsPage() {
                   </div>
                   <div>
                     <p className="text-sm text-forest-muted font-medium mb-1">Application Deadline</p>
-                    <p className="font-semibold text-forest-beige">{new Date(PROJECT.deadline).toLocaleDateString()}</p>
+                    <p className="font-semibold text-forest-beige">
+                      {project.deadline ? new Date(project.deadline).toLocaleDateString() : 'No Deadline'}
+                    </p>
                   </div>
                 </div>
 
@@ -220,16 +288,16 @@ export default function PublicProjectDetailsPage() {
                 <div>
                   <div className="flex items-center justify-between text-sm font-medium mb-2">
                     <span className="text-forest-muted">Volunteers Needed</span>
-                    <span className="text-forest-beige">{PROJECT.volunteersApplied} / {PROJECT.volunteersNeeded}</span>
+                    <span className="text-forest-beige">{volunteersApplied} / {volunteersNeeded}</span>
                   </div>
                   <div className="h-2 w-full bg-[#1E211A] rounded-full overflow-hidden mb-2">
                     <div
                       className="h-full bg-forest-accent rounded-full"
-                      style={{ width: `${(PROJECT.volunteersApplied / PROJECT.volunteersNeeded) * 100}%` }}
+                      style={{ width: `${Math.min((volunteersApplied / volunteersNeeded) * 100, 100)}%` }}
                     />
                   </div>
                   <p className="text-xs text-forest-muted text-right">
-                    {PROJECT.volunteersNeeded - PROJECT.volunteersApplied} spots remaining
+                    {Math.max(volunteersNeeded - volunteersApplied, 0)} spots remaining
                   </p>
                 </div>
 
@@ -250,7 +318,7 @@ export default function PublicProjectDetailsPage() {
                       <DialogHeader>
                         <DialogTitle>Confirm Application</DialogTitle>
                         <DialogDescription>
-                          Are you sure you want to apply for "{PROJECT.title}"? By applying, you commit to attending the event.
+                          Are you sure you want to apply for "{project.title}"? By applying, you commit to attending the event.
                         </DialogDescription>
                       </DialogHeader>
                       <div className="py-4">

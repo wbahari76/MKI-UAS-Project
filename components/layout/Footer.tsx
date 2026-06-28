@@ -60,7 +60,7 @@ export function Footer() {
                         <ul className="space-y-2">
                             <li><Link href="/register" className="text-[#7A8072] hover:text-forest-beige transition-colors">Sign Up as Volunteer</Link></li>
                             <li><Link href="/explore" className="text-[#7A8072] hover:text-forest-beige transition-colors">Find Projects</Link></li>
-                            <li><Link href="/faq" onClick={handleComingSoon} className="text-[#7A8072] hover:text-forest-beige transition-colors">FAQ</Link></li>
+                            <li><Link href="/help" className="text-[#7A8072] hover:text-forest-beige transition-colors">Help Center & FAQ</Link></li>
                             <li><Link href="/volunteer-guide" onClick={handleComingSoon} className="text-[#7A8072] hover:text-forest-beige transition-colors">Volunteer Guide</Link></li>
                         </ul>
                     </div>
@@ -82,9 +82,10 @@ export function Footer() {
                     <p className="text-forest-muted text-sm">
                         © 2024 JALA VIVE. All rights reserved.
                     </p>
-                    <div className="flex items-center gap-6 text-sm">
-                        <Link href="/privacy" onClick={handleComingSoon} className="text-forest-muted hover:text-forest-beige transition-colors">Privacy Policy</Link>
-                        <Link href="/terms" onClick={handleComingSoon} className="text-forest-muted hover:text-forest-beige transition-colors">Terms of Service</Link>
+                    <div className="flex flex-wrap items-center gap-4 sm:gap-6 text-sm">
+                        <Link href="/guidelines" className="text-forest-muted hover:text-forest-beige transition-colors">Community Guidelines</Link>
+                        <Link href="/privacy" className="text-forest-muted hover:text-forest-beige transition-colors">Privacy Policy</Link>
+                        <Link href="/terms" className="text-forest-muted hover:text-forest-beige transition-colors">Terms of Service</Link>
                         <Link href="/cookies" onClick={handleComingSoon} className="text-forest-muted hover:text-forest-beige transition-colors">Cookie Policy</Link>
                     </div>
                 </div>

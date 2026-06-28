@@ -13,7 +13,10 @@ import { supabase } from "@/lib/supabase/client";
 
 const CATEGORIES = ["All", "Environment", "Education", "Health", "Animal Welfare", "Community"];
 
+import { useAuth } from "@/contexts/AuthContext";
+
 function ExplorePublicContent() {
+  const { user, profile } = useAuth();
   const searchParams = useSearchParams();
   const initialQuery = searchParams.get("q") || "";
   
@@ -43,6 +46,21 @@ function ExplorePublicContent() {
     }
 
     fetchProjects();
+
+    const channel = supabase
+      .channel('projects_changes_public')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'projects' },
+        (payload) => {
+          fetchProjects();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, []);
 
   const filteredProjects = projects.filter(project => {
@@ -123,12 +141,14 @@ function ExplorePublicContent() {
                 >
                   <div className="h-full bg-forest-card rounded-3xl border border-forest-border shadow-sm overflow-hidden group hover:shadow-xl transition-all duration-300 flex flex-col">
                     <div className="relative h-56 w-full overflow-hidden">
-                      <img 
-                        src={image} 
-                        alt={project.title}
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                      />
-                      <div className="absolute top-4 left-4 flex gap-2">
+                      <Link href={`/explore/${project.id}`}>
+                        <img 
+                          src={image} 
+                          alt={project.title}
+                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                        />
+                      </Link>
+                      <div className="absolute top-4 left-4 flex gap-2 pointer-events-none">
                         <Badge className="bg-forest-card/90 text-forest-beige backdrop-blur-sm border-0 font-medium hover:bg-forest-card px-3 py-1">
                           {project.category || 'General'}
                         </Badge>
@@ -140,7 +160,7 @@ function ExplorePublicContent() {
                       </div>
                       
                       {project.status === 'completed' && (
-                        <div className="absolute top-4 right-4">
+                        <div className="absolute top-4 right-4 pointer-events-none">
                           <Badge className="bg-blue-500 text-white border-0 font-medium px-3 py-1">
                             Completed
                           </Badge>
@@ -154,9 +174,11 @@ function ExplorePublicContent() {
                         {project.organizations?.name || 'Organization'}
                       </div>
                       
-                      <h3 className="font-bold text-xl text-forest-beige mb-4 line-clamp-2 group-hover:text-[#829661] transition-colors">
-                        {project.title}
-                      </h3>
+                      <Link href={`/explore/${project.id}`}>
+                        <h3 className="font-bold text-xl text-forest-beige mb-4 line-clamp-2 hover:text-forest-accent transition-colors">
+                          {project.title}
+                        </h3>
+                      </Link>
                       
                       <div className="space-y-3 mb-6 flex-1">
                         <div className="flex items-center gap-3 text-sm text-forest-muted">
@@ -184,15 +206,27 @@ function ExplorePublicContent() {
                         </div>
                       </div>
 
-                      <Link href="/login" className="block w-full">
-                        <Button 
-                          className="w-full h-12 rounded-xl text-base font-medium"
-                          variant={isFull ? "outline" : "default"}
-                          disabled={isFull}
-                        >
-                          {isFull ? 'Project Full' : 'Sign in to Apply'}
-                        </Button>
-                      </Link>
+                      {user ? (
+                        <Link href={`/${profile?.role || 'volunteer'}/explore/${project.id}`} className="block w-full">
+                          <Button 
+                            className="w-full h-12 rounded-xl text-base font-medium"
+                            variant={isFull ? "outline" : "default"}
+                            disabled={isFull}
+                          >
+                            {isFull ? 'Project Full' : 'Apply Now'}
+                          </Button>
+                        </Link>
+                      ) : (
+                        <Link href="/login" className="block w-full">
+                          <Button 
+                            className="w-full h-12 rounded-xl text-base font-medium"
+                            variant={isFull ? "outline" : "default"}
+                            disabled={isFull}
+                          >
+                            {isFull ? 'Project Full' : 'Sign in to Apply'}
+                          </Button>
+                        </Link>
+                      )}
                     </div>
                   </div>
                 </motion.div>

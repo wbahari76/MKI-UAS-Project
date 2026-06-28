@@ -2,11 +2,12 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import { useSocket } from "@/contexts/SocketContext";
-import { Search, Send, Image as ImageIcon, Paperclip, MoreVertical, Phone, Video } from "lucide-react";
+import { supabase } from "@/lib/supabase/client";
+import { Search, Send, Image as ImageIcon, Paperclip, MoreVertical, Phone, Video, Loader2, FileText, Download } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { toast } from "sonner";
 
 const CONTACTS = [
   { id: 1, name: "Budi Santoso", role: "Volunteer", unread: 2, isOnline: true },
@@ -29,11 +30,12 @@ const INITIAL_CHATS: Record<number, any[]> = {
 };
 
 export default function OrganizationMessagesPage() {
-  const { socket } = useSocket();
   const [chats, setChats] = useState(INITIAL_CHATS);
   const [newMessage, setNewMessage] = useState("");
   const [activeContact, setActiveContact] = useState(CONTACTS[0]);
+  const [isUploading, setIsUploading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -44,21 +46,22 @@ export default function OrganizationMessagesPage() {
   }, [chats, activeContact]);
 
   useEffect(() => {
-    if (!socket) return;
-    
-    socket.on("new-message", (message: any) => {
-      // In a real app we'd determine which contact sent this. 
-      // For the mock, we just append to the active contact.
+    const channel = supabase.channel('chat:global', {
+      config: { broadcast: { self: false } }
+    });
+
+    channel.on('broadcast', { event: 'new-message' }, (payload) => {
+      const message = payload.payload;
       setChats((prev) => ({
         ...prev,
-        [activeContact.id]: [...(prev[activeContact.id] || []), { ...message, isMe: false }]
+        [message.contactId]: [...(prev[message.contactId] || []), { ...message, isMe: false }]
       }));
-    });
-    
+    }).subscribe();
+
     return () => {
-      socket.off("new-message");
+      supabase.removeChannel(channel);
     };
-  }, [socket, activeContact.id]);
+  }, []);
 
   const handleSend = (e: React.FormEvent) => {
     e.preventDefault();
@@ -77,7 +80,11 @@ export default function OrganizationMessagesPage() {
       [activeContact.id]: [...(prev[activeContact.id] || []), msg]
     }));
     
-    socket?.emit("send-message", { ...msg, sender: "Organization" });
+    supabase.channel('chat:global').send({
+      type: 'broadcast',
+      event: 'new-message',
+      payload: { ...msg, contactId: activeContact.id }
+    });
     setNewMessage("");
 
     // Auto-reply
@@ -94,6 +101,49 @@ export default function OrganizationMessagesPage() {
         [activeContact.id]: [...(prev[activeContact.id] || []), reply]
       }));
     }, 1500);
+  };
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    try {
+      if (!e.target.files || e.target.files.length === 0) return;
+      const file = e.target.files[0];
+      const fileExt = file.name.split('.').pop();
+      const fileName = `chat-${Date.now()}.${fileExt}`;
+      
+      setIsUploading(true);
+      
+      const { error: uploadError } = await supabase.storage.from('community').upload(fileName, file, { upsert: true });
+      if (uploadError) throw uploadError;
+
+      const { data } = supabase.storage.from('community').getPublicUrl(fileName);
+      
+      const msg = {
+        id: Date.now(),
+        sender: "Me",
+        isMe: true,
+        text: `Sent an attachment: ${file.name}`,
+        fileUrl: data.publicUrl,
+        fileName: file.name,
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      };
+
+      setChats((prev) => ({
+        ...prev,
+        [activeContact.id]: [...(prev[activeContact.id] || []), msg]
+      }));
+      
+      supabase.channel('chat:global').send({
+        type: 'broadcast',
+        event: 'new-message',
+        payload: { ...msg, contactId: activeContact.id }
+      });
+      
+    } catch (error: any) {
+      toast.error("Failed to upload file: " + error.message);
+    } finally {
+      setIsUploading(false);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+    }
   };
 
   const currentMessages = chats[activeContact.id] || [];
@@ -209,6 +259,13 @@ export default function OrganizationMessagesPage() {
                     ? 'bg-forest-accent text-forest-beige rounded-br-sm' 
                     : 'bg-forest-card border border-forest-border text-forest-beige rounded-bl-sm shadow-sm shadow-forest-border/10'
                 }`}>
+                  {msg.fileUrl ? (
+                    <a href={msg.fileUrl} target="_blank" rel="noreferrer" className="flex items-center gap-2 p-2 rounded bg-black/20 hover:bg-black/30 transition-colors mb-1">
+                      <FileText className="w-5 h-5 shrink-0" />
+                      <span className="text-sm truncate max-w-[150px]">{msg.fileName}</span>
+                      <Download className="w-4 h-4 ml-1 opacity-70" />
+                    </a>
+                  ) : null}
                   <p className="text-sm leading-relaxed">{msg.text}</p>
                 </div>
               </div>
@@ -221,8 +278,21 @@ export default function OrganizationMessagesPage() {
         {/* Input Area */}
         <div className="p-4 bg-forest-card border-t border-forest-border">
           <form onSubmit={handleSend} className="flex items-center gap-2">
-            <Button type="button" variant="ghost" size="icon" className="text-[#7A8072] hover:text-forest-muted rounded-full shrink-0">
-              <Paperclip className="w-5 h-5" />
+            <input 
+              type="file" 
+              className="hidden" 
+              ref={fileInputRef} 
+              onChange={handleFileUpload}
+            />
+            <Button 
+              type="button" 
+              variant="ghost" 
+              size="icon" 
+              className="text-[#7A8072] hover:text-forest-muted rounded-full shrink-0 relative"
+              onClick={() => fileInputRef.current?.click()}
+              disabled={isUploading}
+            >
+              {isUploading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Paperclip className="w-5 h-5" />}
             </Button>
             <Button type="button" variant="ghost" size="icon" className="text-[#7A8072] hover:text-forest-muted rounded-full shrink-0 hidden sm:flex">
               <ImageIcon className="w-5 h-5" />

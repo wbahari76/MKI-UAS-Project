@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useAuth } from "@/contexts/AuthContext";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   LayoutDashboard,
@@ -24,6 +25,8 @@ import {
   BarChart,
   ShieldAlert,
   HandHelping,
+  Crown,
+  Headset,
 } from "lucide-react";
 
 // Definitions based on PRD roles
@@ -45,6 +48,8 @@ const organizationLinks = [
   { name: "Events", href: "/organization/events", icon: CalendarDays },
   { name: "Analytics", href: "/organization/analytics", icon: BarChart },
   { name: "Messages", href: "/organization/messages", icon: MessageSquare },
+  { name: "Assistant", href: "/organization/assistant", icon: HandHelping }, // Using HandHelping or we can import Bot
+  { name: "Subscription", href: "/organization/subscription", icon: Crown },
   { name: "Settings", href: "/organization/settings", icon: Settings },
 ];
 
@@ -54,6 +59,7 @@ const adminLinks = [
   { name: "Projects", href: "/admin/projects", icon: FolderHeart },
   { name: "Users", href: "/admin/users", icon: Users },
   { name: "Reports", href: "/admin/reports", icon: ShieldAlert },
+  { name: "Support", href: "/admin/support", icon: Headset },
   { name: "Analytics", href: "/admin/analytics", icon: BarChart },
   { name: "Settings", href: "/admin/settings", icon: Settings },
 ];
@@ -66,12 +72,13 @@ export default function DashboardSidebar({
   setMobileOpen: (open: boolean) => void;
 }) {
   const pathname = usePathname();
+  const { profile } = useAuth();
   const [isCollapsed, setIsCollapsed] = useState(false);
 
-  // Auto-detect role from URL
+  // Auto-detect role from URL or profile
   let links = volunteerLinks;
-  if (pathname?.startsWith("/organization")) links = organizationLinks;
-  if (pathname?.startsWith("/admin")) links = adminLinks;
+  if (pathname?.startsWith("/organization") || profile?.role === "organization") links = organizationLinks;
+  if (pathname?.startsWith("/admin") || profile?.role === "admin") links = adminLinks;
 
   // Handle mobile collapse logic
   useEffect(() => {

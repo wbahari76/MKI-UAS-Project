@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
-import { useSocket } from "@/contexts/SocketContext";
+import { supabase } from "@/lib/supabase/client";
 import { 
   MessageSquare, Heart, Share2, Image as ImageIcon, Send, 
   MoreHorizontal, Flag, MessageCircle
@@ -47,76 +47,110 @@ const INITIAL_POSTS = [
 
 export default function CommunityPage() {
   const { user, profile } = useAuth();
-  const { socket } = useSocket();
-  const [posts, setPosts] = useState(INITIAL_POSTS);
+  const userName = profile?.full_name || user?.email?.split("@")[0] || "Volunteer";
+  
+  const [posts, setPosts] = useState<any[]>(INITIAL_POSTS);
   const [newPost, setNewPost] = useState("");
-  const [expandedComments, setExpandedComments] = useState<Record<number, boolean>>({});
-  const [commentInput, setCommentInput] = useState<Record<number, string>>({});
   const [isPosting, setIsPosting] = useState(false);
-
-  const userName = profile?.full_name || user?.email?.split("@")[0] || "User";
+  const [activeCommentPost, setActiveCommentPost] = useState<number | null>(null);
+  const [commentInput, setCommentInput] = useState<Record<number, string>>({});
+  const [expandedComments, setExpandedComments] = useState<Record<number, boolean>>({});
 
   useEffect(() => {
-    if (!socket) return;
-    
-    socket.on("new-post", (post: any) => {
-      setPosts((prev) => [post, ...prev]);
-    });
-    
-    socket.on("like-post", (data: any) => {
-      setPosts((current) => current.map(post => 
-        post.id === data.id ? { ...post, likes: data.likes } : post
-      ));
-    });
-    
-    return () => {
-      socket.off("new-post");
-      socket.off("like-post");
-    };
-  }, [socket]);
+    async function fetchPosts() {
+      try {
+        const { data, error } = await supabase
+          .from('posts')
+          .select('*, profiles(full_name, role)')
+          .order('created_at', { ascending: false });
+        
+        if (data) {
+          const formatted = data.map((p: any) => ({
+            id: p.id,
+            author: { 
+              name: p.profiles?.full_name || 'User', 
+              role: p.profiles?.role || 'Volunteer', 
+              avatar: "", 
+              isVerified: p.profiles?.role === 'organization' 
+            },
+            content: p.content,
+            image: p.image_url,
+            likes: p.likes_count,
+            comments: p.comments_count,
+            time: new Date(p.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+            isLiked: false,
+          }));
+          setPosts([...formatted, ...INITIAL_POSTS]);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+    fetchPosts();
 
-  const handlePost = (e: React.FormEvent) => {
+    const channel = supabase
+      .channel('public:posts')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'posts' }, (payload) => {
+        fetchPosts();
+      })
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
+
+  const handlePost = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newPost.trim()) return;
+    if (!newPost.trim() || !user?.id) return;
 
     setIsPosting(true);
-    // Simulate API call
-    setTimeout(() => {
-      const post = {
-        id: Date.now(),
-        author: { name: userName, role: "Volunteer", avatar: "", isVerified: false },
+    try {
+      const { error } = await supabase.from('posts').insert({
+        user_id: user.id,
         content: newPost,
-        likes: 0,
-        comments: 0,
-        time: "Just now",
-        isLiked: false,
-      };
-      setPosts([post, ...posts]);
-      socket?.emit("new-post", post);
+        likes_count: 0,
+        comments_count: 0
+      });
+      
+      if (error) throw error;
       setNewPost("");
-      setIsPosting(false);
       toast.success("Post created successfully!");
-    }, 1000);
+    } catch (err) {
+      toast.error("Failed to post");
+    } finally {
+      setIsPosting(false);
+    }
   };
 
-  const handleLike = (id: number) => {
-    setPosts(current => current.map(post => {
-      if (post.id === id) {
-        const newIsLiked = !post.isLiked;
-        const newLikes = newIsLiked ? post.likes + 1 : post.likes - 1;
-        socket?.emit("like-post", { id, likes: newLikes });
+  const handleLike = async (id: number) => {
+    const post = posts.find(p => p.id === id);
+    if (!post) return;
+    
+    // We only update mock likes locally for simplicity, or we can update the DB for real posts
+    if (id > 100) { // Assuming mock IDs are small (1, 2) and real DB IDs are larger or UUIDs, but here ID is BIGINT
+      const newLikes = post.isLiked ? post.likes - 1 : post.likes + 1;
+      await supabase.from('posts').update({ likes_count: newLikes }).eq('id', id);
+    }
+    
+    setPosts(current => current.map(p => {
+      if (p.id === id) {
         return {
-          ...post,
-          isLiked: newIsLiked,
-          likes: newLikes
+          ...p,
+          isLiked: !p.isLiked,
+          likes: !p.isLiked ? p.likes + 1 : p.likes - 1
         };
       }
-      return post;
+      return p;
     }));
   };
 
   const toggleComments = (id: number) => {
     setExpandedComments(prev => ({ ...prev, [id]: !prev[id] }));
+  };
+
+  const handleComment = (e: React.FormEvent, postId: number) => {
+    setExpandedComments(prev => ({ ...prev, [postId]: !prev[postId] }));
   };
 
   const handleCommentSubmit = (e: React.FormEvent, postId: number) => {
@@ -251,7 +285,11 @@ export default function CommunityPage() {
                       <Heart className={`w-5 h-5 ${post.isLiked ? 'fill-current' : ''}`} />
                       <span>{post.likes}</span>
                     </Button>
-                    <Button variant="ghost" className="gap-2 text-forest-muted hover:text-blue-500 hover:bg-blue-500/10 rounded-full">
+                    <Button 
+                      variant="ghost" 
+                      className={`gap-2 hover:bg-blue-500/10 rounded-full ${expandedComments[post.id] ? 'text-blue-500' : 'text-forest-muted hover:text-blue-500'}`}
+                      onClick={() => toggleComments(post.id)}
+                    >
                       <MessageCircle className="w-5 h-5" />
                       <span>{post.comments}</span>
                     </Button>

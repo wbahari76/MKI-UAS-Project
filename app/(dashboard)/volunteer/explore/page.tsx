@@ -44,6 +44,21 @@ function ExploreContent() {
     }
 
     fetchProjects();
+
+    const channel = supabase
+      .channel('projects_changes')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'projects' },
+        (payload) => {
+          fetchProjects();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, []);
 
   const filteredProjects = projects.filter(project => {
@@ -123,12 +138,14 @@ function ExploreContent() {
               >
                 <Card className="h-full border-forest-border bg-forest-card overflow-hidden group hover:border-[#4A5D23] transition-colors flex flex-col">
                   <div className="relative h-48 w-full overflow-hidden">
-                    <img 
-                      src={image} 
-                      alt={project.title}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                    <div className="absolute top-3 left-3 flex gap-2">
+                    <Link href={`/volunteer/explore/${project.id}`}>
+                      <img 
+                        src={image} 
+                        alt={project.title}
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      />
+                    </Link>
+                    <div className="absolute top-3 left-3 flex gap-2 pointer-events-none">
                       <Badge className="bg-forest-card/90 text-forest-beige backdrop-blur-sm border-0 font-medium">
                         {project.category || 'General'}
                       </Badge>
@@ -139,13 +156,13 @@ function ExploreContent() {
                       )}
                     </div>
                     {project.status === 'completed' && (
-                      <div className="absolute top-3 right-3">
+                      <div className="absolute top-3 right-3 pointer-events-none">
                         <Badge className="bg-blue-500 text-white border-0 font-medium">
                           Completed
                         </Badge>
                       </div>
                     )}
-                    <button className="absolute top-3 right-3 p-2 bg-forest-card/90 backdrop-blur-sm rounded-full text-forest-muted hover:text-red-400 transition-colors opacity-0 group-hover:opacity-100">
+                    <button className="absolute top-3 right-3 p-2 bg-forest-card/90 backdrop-blur-sm rounded-full text-forest-muted hover:text-red-400 transition-colors opacity-0 group-hover:opacity-100 z-10">
                       <Heart className="w-4 h-4" />
                     </button>
                   </div>
@@ -156,9 +173,11 @@ function ExploreContent() {
                       {project.organizations?.name || 'Organization'}
                     </div>
                     
-                    <h3 className="font-semibold text-lg text-forest-beige mb-3 line-clamp-2">
-                      {project.title}
-                    </h3>
+                    <Link href={`/volunteer/explore/${project.id}`}>
+                      <h3 className="font-semibold text-lg text-forest-beige mb-3 line-clamp-2 hover:text-forest-accent transition-colors">
+                        {project.title}
+                      </h3>
+                    </Link>
                     
                     <div className="space-y-2.5 mb-6 flex-1">
                       <div className="flex items-center gap-2 text-sm text-forest-muted">
@@ -188,13 +207,15 @@ function ExploreContent() {
                       </div>
 
                       <div className="flex gap-2">
-                        <Button 
-                          className="flex-1 text-sm font-medium h-9" 
-                          variant={isFull ? "outline" : "default"}
-                          disabled={isFull}
-                        >
-                          {isFull ? 'Project Full' : 'Apply Now'}
-                        </Button>
+                        <Link href={`/volunteer/explore/${project.id}`} className="flex-1 block">
+                          <Button 
+                            className="w-full text-sm font-medium h-9" 
+                            variant={isFull ? "outline" : "default"}
+                            disabled={isFull}
+                          >
+                            {isFull ? 'Project Full' : 'Apply Now'}
+                          </Button>
+                        </Link>
                         <Button variant="outline" size="icon" className="h-9 w-9 shrink-0 border-forest-border hover:bg-[#181A15]">
                           <Heart className="w-4 h-4" />
                         </Button>

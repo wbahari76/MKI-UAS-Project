@@ -2,8 +2,9 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import { useSocket } from "@/contexts/SocketContext";
-import { Search, Send, Image as ImageIcon, Paperclip, MoreVertical, Phone, Video } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/lib/supabase/client";
+import { Search, Send, Image as ImageIcon, Paperclip, MoreVertical, Phone, Video, FileText, Download } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -29,11 +30,24 @@ const INITIAL_CHATS: Record<number, any[]> = {
 };
 
 export default function MessagesPage() {
-  const { socket } = useSocket();
+  const { profile } = useAuth();
+  const [cvUrl, setCvUrl] = useState<string | null>(null);
   const [chats, setChats] = useState(INITIAL_CHATS);
   const [newMessage, setNewMessage] = useState("");
   const [activeContact, setActiveContact] = useState(CONTACTS[0]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    async function fetchCv() {
+      if (profile?.id) {
+        const { data } = await supabase.from('volunteer_profiles').select('cv_url').eq('profile_id', profile.id).maybeSingle();
+        if (data?.cv_url) {
+          setCvUrl(data.cv_url);
+        }
+      }
+    }
+    fetchCv();
+  }, [profile]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -44,21 +58,22 @@ export default function MessagesPage() {
   }, [chats, activeContact]);
 
   useEffect(() => {
-    if (!socket) return;
-    
-    socket.on("new-message", (message: any) => {
-      // In a real app we'd determine which contact sent this. 
-      // For the mock, we just append to the active contact.
+    const channel = supabase.channel('chat:global', {
+      config: { broadcast: { self: false } }
+    });
+
+    channel.on('broadcast', { event: 'new-message' }, (payload) => {
+      const message = payload.payload;
       setChats((prev) => ({
         ...prev,
-        [activeContact.id]: [...(prev[activeContact.id] || []), { ...message, isMe: false }]
+        [message.contactId]: [...(prev[message.contactId] || []), { ...message, isMe: false }]
       }));
-    });
-    
+    }).subscribe();
+
     return () => {
-      socket.off("new-message");
+      supabase.removeChannel(channel);
     };
-  }, [socket, activeContact.id]);
+  }, []);
 
   const handleSend = (e: React.FormEvent) => {
     e.preventDefault();
@@ -77,7 +92,11 @@ export default function MessagesPage() {
       [activeContact.id]: [...(prev[activeContact.id] || []), msg]
     }));
     
-    socket?.emit("send-message", { ...msg, sender: "User" });
+    supabase.channel('chat:global').send({
+      type: 'broadcast',
+      event: 'new-message',
+      payload: { ...msg, contactId: activeContact.id }
+    });
     setNewMessage("");
 
     // Auto-reply
@@ -87,6 +106,45 @@ export default function MessagesPage() {
         sender: activeContact.name,
         isMe: false,
         text: `Thanks for reaching out! This is an automated response from ${activeContact.name}.`,
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      };
+      setChats((prev) => ({
+        ...prev,
+        [activeContact.id]: [...(prev[activeContact.id] || []), reply]
+      }));
+    }, 1500);
+  };
+
+  const handleSendCv = () => {
+    if (!cvUrl) return;
+    const msg = {
+      id: Date.now(),
+      sender: "Me",
+      isMe: true,
+      text: "Hello! Here is my CV for your review.",
+      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      fileUrl: cvUrl,
+      fileName: "My_CV.pdf",
+    };
+
+    setChats((prev) => ({
+      ...prev,
+      [activeContact.id]: [...(prev[activeContact.id] || []), msg]
+    }));
+    
+    supabase.channel('chat:global').send({
+      type: 'broadcast',
+      event: 'new-message',
+      payload: { ...msg, contactId: activeContact.id }
+    });
+
+    // Auto-reply
+    setTimeout(() => {
+      const reply = {
+        id: Date.now() + 1,
+        sender: activeContact.name,
+        isMe: false,
+        text: `Thanks for sharing your CV! We will review it shortly.`,
         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       };
       setChats((prev) => ({
@@ -209,6 +267,13 @@ export default function MessagesPage() {
                     ? 'bg-forest-accent text-forest-beige rounded-br-sm' 
                     : 'bg-forest-card border border-forest-border text-forest-beige rounded-bl-sm shadow-sm shadow-forest-border/10'
                 }`}>
+                  {msg.fileUrl && (
+                    <a href={msg.fileUrl} target="_blank" rel="noreferrer" className="flex items-center gap-2 p-2 rounded bg-black/20 hover:bg-black/30 transition-colors mb-2">
+                      <FileText className="w-5 h-5 shrink-0" />
+                      <span className="text-sm font-medium">{msg.fileName || "File"}</span>
+                      <Download className="w-4 h-4 ml-1 opacity-70" />
+                    </a>
+                  )}
                   <p className="text-sm leading-relaxed">{msg.text}</p>
                 </div>
               </div>
@@ -219,14 +284,19 @@ export default function MessagesPage() {
         </div>
 
         {/* Input Area */}
-        <div className="p-4 bg-forest-card border-t border-forest-border">
-          <form onSubmit={handleSend} className="flex items-center gap-2">
-            <Button type="button" variant="ghost" size="icon" className="text-[#7A8072] hover:text-forest-muted rounded-full shrink-0">
-              <Paperclip className="w-5 h-5" />
+        <div className="p-4 bg-forest-card border-t border-forest-border flex items-center gap-2">
+          {cvUrl && (
+            <Button 
+              type="button" 
+              variant="outline" 
+              onClick={handleSendCv}
+              className="text-forest-accent border-forest-accent hover:bg-forest-accent hover:text-white rounded-full shrink-0 px-4"
+            >
+              <FileText className="w-4 h-4 mr-2" />
+              Send CV
             </Button>
-            <Button type="button" variant="ghost" size="icon" className="text-[#7A8072] hover:text-forest-muted rounded-full shrink-0 hidden sm:flex">
-              <ImageIcon className="w-5 h-5" />
-            </Button>
+          )}
+          <form onSubmit={handleSend} className="flex items-center gap-2 flex-1">
             <Input 
               value={newMessage}
               onChange={(e) => setNewMessage(e.target.value)}

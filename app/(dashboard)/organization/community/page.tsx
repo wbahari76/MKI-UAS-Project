@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
-import { useSocket } from "@/contexts/SocketContext";
+import { supabase } from "@/lib/supabase/client";
 import { 
   MessageSquare, Heart, Share2, Image as ImageIcon, Send, 
   MoreHorizontal, Flag, MessageCircle
@@ -47,71 +47,97 @@ const INITIAL_POSTS = [
 
 export default function OrganizationCommunityPage() {
   const { user, profile } = useAuth();
-  const { socket } = useSocket();
-  const [posts, setPosts] = useState(INITIAL_POSTS);
+  const [posts, setPosts] = useState<any[]>([]);
   const [newPost, setNewPost] = useState("");
+  const [isPosting, setIsPosting] = useState(false);
   const [expandedComments, setExpandedComments] = useState<Record<number, boolean>>({});
   const [commentInput, setCommentInput] = useState<Record<number, string>>({});
-  const [isPosting, setIsPosting] = useState(false);
-
-  const userName = profile?.full_name || user?.email?.split("@")[0] || "Organization";
 
   useEffect(() => {
-    if (!socket) return;
-    
-    socket.on("new-post", (post: any) => {
-      setPosts((prev) => [post, ...prev]);
-    });
-    
-    socket.on("like-post", (data: any) => {
-      setPosts((current) => current.map(post => 
-        post.id === data.id ? { ...post, likes: data.likes } : post
-      ));
-    });
-    
-    return () => {
-      socket.off("new-post");
-      socket.off("like-post");
-    };
-  }, [socket]);
+    async function fetchPosts() {
+      try {
+        const { data, error } = await supabase
+          .from('posts')
+          .select('*, profiles(full_name, role)')
+          .order('created_at', { ascending: false });
+        
+        if (data) {
+          const formatted = data.map((p: any) => ({
+            id: p.id,
+            author: { 
+              name: p.profiles?.full_name || 'Organization', 
+              role: p.profiles?.role || 'Organization', 
+              avatar: "", 
+              isVerified: p.profiles?.role === 'organization' 
+            },
+            content: p.content,
+            image: p.image_url,
+            likes: p.likes_count,
+            comments: p.comments_count,
+            time: new Date(p.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+            isLiked: false,
+          }));
+          setPosts([...formatted, ...INITIAL_POSTS]);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+    fetchPosts();
 
-  const handlePost = (e: React.FormEvent) => {
+    const channel = supabase
+      .channel('public:posts')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'posts' }, (payload) => {
+        fetchPosts();
+      })
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
+
+  const handlePost = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newPost.trim()) return;
+    if (!newPost.trim() || !user?.id) return;
 
     setIsPosting(true);
-    // Simulate API call
-    setTimeout(() => {
-      const post = {
-        id: Date.now(),
-        author: { name: userName, role: "Organization", avatar: "", isVerified: true },
+    try {
+      const { error } = await supabase.from('posts').insert({
+        user_id: user.id,
         content: newPost,
-        likes: 0,
-        comments: 0,
-        time: "Just now",
-        isLiked: false,
-      };
-      setPosts([post, ...posts]);
-      socket?.emit("new-post", post);
+        likes_count: 0,
+        comments_count: 0
+      });
+      
+      if (error) throw error;
       setNewPost("");
-      setIsPosting(false);
       toast.success("Update posted successfully!");
-    }, 1000);
+    } catch (err) {
+      toast.error("Failed to post");
+    } finally {
+      setIsPosting(false);
+    }
   };
 
-  const handleLike = (id: number) => {
-    setPosts(current => current.map(post => {
-      if (post.id === id) {
-        const newIsLiked = !post.isLiked;
-        const newLikes = newIsLiked ? post.likes + 1 : post.likes - 1;
-        socket?.emit("like-post", { id, likes: newLikes });
+  const handleLike = async (id: number) => {
+    const post = posts.find(p => p.id === id);
+    if (!post) return;
+    
+    if (id > 100) { 
+      const newLikes = post.isLiked ? post.likes - 1 : post.likes + 1;
+      await supabase.from('posts').update({ likes_count: newLikes }).eq('id', id);
+    }
+    
+    setPosts(current => current.map(p => {
+      if (p.id === id) {
         return {
-          ...post,
-          isLiked: newIsLiked,
-          likes: newLikes
+          ...p,
+          isLiked: !p.isLiked,
+          likes: !p.isLiked ? p.likes + 1 : p.likes - 1
         };
       }
-      return post;
+      return p;
     }));
   };
 
@@ -152,7 +178,7 @@ export default function OrganizationCommunityPage() {
             <div className="flex gap-4">
               <Avatar className="w-10 h-10 border border-forest-border">
                 <AvatarFallback className="bg-[#2C3322] text-[#829661]">
-                  {userName.charAt(0).toUpperCase()}
+                  {(profile?.full_name || 'O').charAt(0).toUpperCase()}
                 </AvatarFallback>
               </Avatar>
               <div className="flex-1 space-y-4">
@@ -275,7 +301,7 @@ export default function OrganizationCommunityPage() {
                       <div className="p-4 sm:p-6 space-y-4">
                         <div className="flex gap-3">
                           <Avatar className="w-8 h-8 shrink-0">
-                            <AvatarFallback className="bg-[#2C3322] text-xs">{userName.charAt(0)}</AvatarFallback>
+                            <AvatarFallback className="bg-[#2C3322] text-xs">{(profile?.full_name || 'O').charAt(0).toUpperCase()}</AvatarFallback>
                           </Avatar>
                           <form onSubmit={(e) => handleCommentSubmit(e, post.id)} className="flex-1 flex gap-2">
                             <Input 

@@ -55,7 +55,7 @@ export default function RegisterPage() {
         }
 
         setIsLoading(true);
-        const { error } = await signUp(formData.email, formData.password, {
+        const { error, session } = await signUp(formData.email, formData.password, {
             role: role || 'volunteer',
             full_name: formData.fullName
         });
@@ -64,10 +64,15 @@ export default function RegisterPage() {
         if (error) {
             toast.error(error);
         } else {
-            toast.success("Account created successfully!");
             setStep(3); // Success step
             setTimeout(() => {
-                router.push(role === 'organization' ? '/organization/dashboard' : '/volunteer/dashboard');
+                if (!session) {
+                    toast.info("Please check your email to confirm your account before logging in.", { duration: 5000 });
+                    router.push('/login');
+                } else {
+                    toast.success("Account created successfully!");
+                    router.push(role === 'organization' ? '/organization/dashboard' : '/volunteer/dashboard');
+                }
             }, 2000);
         }
     };

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Menu, Bell, Search, MessageSquare, User, Settings, LogOut } from "lucide-react";
+import { Menu, Bell, Search, MessageSquare, User, Settings, LogOut, HelpCircle } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -110,6 +110,12 @@ export default function DashboardHeader({
               <DropdownMenuItem className="cursor-pointer rounded-lg px-3 py-2">
                 <Settings className="mr-2 h-4 w-4" />
                 <span>Settings</span>
+              </DropdownMenuItem>
+            </Link>
+            <Link href="/help">
+              <DropdownMenuItem className="cursor-pointer rounded-lg px-3 py-2">
+                <HelpCircle className="mr-2 h-4 w-4" />
+                <span>Help Center</span>
               </DropdownMenuItem>
             </Link>
             <DropdownMenuItem onClick={handleLogout} className="cursor-pointer text-red-500 focus:text-red-400 focus:bg-red-500/10 rounded-lg px-3 py-2 mt-1">

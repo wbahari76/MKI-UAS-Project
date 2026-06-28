@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { useSocket } from "@/contexts/SocketContext";
+import { supabase } from "@/lib/supabase/client";
 import { 
   Users, Building2, CalendarDays, Activity, Send, Megaphone, Server 
 } from "lucide-react";
@@ -13,7 +13,6 @@ import { toast } from "sonner";
 import { StatsCard } from "@/components/ui/stats-card";
 
 export default function AdminDashboardPage() {
-  const { socket } = useSocket();
   const [announcement, setAnnouncement] = useState("");
   const [isSending, setIsSending] = useState(false);
 
@@ -23,7 +22,11 @@ export default function AdminDashboardPage() {
 
     setIsSending(true);
     // Emit broadcast event
-    socket?.emit("admin-broadcast", announcement);
+    supabase.channel('public:notifications').send({
+      type: 'broadcast',
+      event: 'admin-broadcast',
+      payload: { message: announcement }
+    });
     
     setTimeout(() => {
       setIsSending(false);

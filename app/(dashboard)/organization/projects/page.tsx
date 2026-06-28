@@ -14,6 +14,14 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { supabase } from "@/lib/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { format } from "date-fns";
@@ -24,6 +32,8 @@ export default function OrganizationProjectsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [filterType, setFilterType] = useState<"all" | "paid" | "unpaid">("all");
+  const [projectToDelete, setProjectToDelete] = useState<string | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     async function fetchProjects() {
@@ -65,18 +75,21 @@ export default function OrganizationProjectsPage() {
     return matchesSearch;
   });
 
-  const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this project?")) return;
-    
+  const confirmDelete = async () => {
+    if (!projectToDelete) return;
+    setIsDeleting(true);
     try {
-      const { error } = await supabase.from('projects').delete().eq('id', id);
+      const { error } = await supabase.rpc('delete_project', { p_id: projectToDelete });
       if (error) throw error;
       
-      setProjects(projects.filter(p => p.id !== id));
+      setProjects(projects.filter(p => p.id !== projectToDelete));
       toast.success("Project deleted successfully");
     } catch (error) {
       console.error(error);
       toast.error("Failed to delete project");
+    } finally {
+      setIsDeleting(false);
+      setProjectToDelete(null);
     }
   };
 
@@ -243,7 +256,7 @@ export default function OrganizationProjectsPage() {
                             </Link>
                             <DropdownMenuItem 
                               className="cursor-pointer text-red-600 focus:text-red-600 focus:bg-red-500/10"
-                              onClick={() => handleDelete(project.id)}
+                              onClick={() => setProjectToDelete(project.id)}
                             >
                               <Trash2 className="w-4 h-4 mr-2" /> Delete
                             </DropdownMenuItem>
@@ -258,6 +271,33 @@ export default function OrganizationProjectsPage() {
           </div>
         </CardContent>
       </Card>
+
+      <Dialog open={!!projectToDelete} onOpenChange={(open) => !open && setProjectToDelete(null)}>
+        <DialogContent className="bg-[#181A15] border-forest-border sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle className="text-forest-beige">Are you sure?</DialogTitle>
+            <DialogDescription className="text-forest-muted">
+              This will permanently delete the project and all of its associated data (applications, events, etc.). This action cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="mt-4">
+            <Button 
+              variant="outline" 
+              onClick={() => setProjectToDelete(null)}
+              className="bg-transparent border-forest-border text-forest-beige hover:bg-forest-border/50"
+            >
+              Cancel
+            </Button>
+            <Button 
+              onClick={confirmDelete}
+              className="bg-red-600 text-white hover:bg-red-700 border-0"
+              disabled={isDeleting}
+            >
+              {isDeleting ? "Deleting..." : "Delete"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

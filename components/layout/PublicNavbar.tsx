@@ -218,10 +218,11 @@ export function PublicNavbar() {
             <AnimatePresence>
                 {isMobileMenuOpen && (
                     <motion.div
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: 'auto' }}
-                        exit={{ opacity: 0, height: 0 }}
-                        className="lg:hidden bg-forest-card border-t border-forest-border"
+                        initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                        transition={{ duration: 0.2 }}
+                        className="fixed top-[88px] left-4 right-4 sm:left-6 sm:right-6 z-40 lg:hidden bg-[#181A15]/95 backdrop-blur-xl border border-white/10 rounded-3xl shadow-2xl overflow-hidden pointer-events-auto"
                     >
                         <div className="px-4 py-4 space-y-1">
                             {publicNavItems.map((item) => (
@@ -233,26 +234,26 @@ export function PublicNavbar() {
                                         "block px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200",
                                         isActive(item.href)
                                             ? "text-[#829661] bg-[#21261B]"
-                                            : "text-forest-muted hover:text-forest-beige hover:bg-[#181A15]"
+                                            : "text-gray-400 hover:text-white hover:bg-white/5"
                                     )}
                                 >
                                     {item.name}
                                 </Link>
                             ))}
-                            <div className="pt-4 border-t border-forest-border space-y-2">
+                            <div className="pt-4 mt-2 border-t border-white/10 space-y-2">
                                 {user ? (
                                     <>
                                         <Link
                                             href={getDashboardLink()}
                                             onClick={() => setIsMobileMenuOpen(false)}
-                                            className="block px-4 py-3 rounded-xl text-sm font-medium text-forest-muted hover:text-forest-beige hover:bg-[#181A15]"
+                                            className="block px-4 py-3 rounded-xl text-sm font-medium text-gray-400 hover:text-white hover:bg-white/5 transition-colors"
                                         >
                                             Dashboard
                                         </Link>
                                         <Link
                                             href="/profile"
                                             onClick={() => setIsMobileMenuOpen(false)}
-                                            className="block px-4 py-3 rounded-xl text-sm font-medium text-forest-muted hover:text-forest-beige hover:bg-[#181A15]"
+                                            className="block px-4 py-3 rounded-xl text-sm font-medium text-gray-400 hover:text-white hover:bg-white/5 transition-colors"
                                         >
                                             Profile
                                         </Link>
@@ -261,24 +262,24 @@ export function PublicNavbar() {
                                                 signOut();
                                                 setIsMobileMenuOpen(false);
                                             }}
-                                            className="w-full text-left px-4 py-3 rounded-xl text-sm font-medium text-red-600 hover:bg-red-500/10"
+                                            className="w-full text-left px-4 py-3 rounded-xl text-sm font-medium text-red-500 hover:bg-red-500/10 transition-colors"
                                         >
                                             Sign Out
                                         </button>
                                     </>
                                 ) : (
-                                    <>
+                                    <div className="flex flex-col gap-3 px-2 py-2">
                                         <Link href="/login" onClick={() => setIsMobileMenuOpen(false)}>
-                                            <Button variant="outline" className="w-full">
+                                            <Button variant="outline" className="w-full rounded-full border-white/10 text-white hover:bg-white/5 h-12 font-semibold">
                                                 Log In
                                             </Button>
                                         </Link>
                                         <Link href="/register" onClick={() => setIsMobileMenuOpen(false)}>
-                                            <Button className="w-full bg-forest-accent hover:bg-[#4A5D23]">
+                                            <Button className="w-full rounded-full bg-white text-black hover:bg-gray-200 h-12 font-semibold">
                                                 Get Started
                                             </Button>
                                         </Link>
-                                    </>
+                                    </div>
                                 )}
                             </div>
                         </div>
