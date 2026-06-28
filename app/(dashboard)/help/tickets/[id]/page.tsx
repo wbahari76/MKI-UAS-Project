@@ -77,7 +77,7 @@ export default function TicketDetailsPage() {
         table: 'support_tickets',
         filter: `id=eq.${id}`
       }, payload => {
-        setTicket(current => ({ ...current, ...payload.new }));
+        setTicket((current: any) => ({ ...current, ...payload.new }));
       })
       .subscribe();
 

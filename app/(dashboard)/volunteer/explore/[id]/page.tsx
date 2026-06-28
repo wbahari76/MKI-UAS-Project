@@ -27,7 +27,7 @@ import { useAuth } from "@/contexts/AuthContext";
 export default function ProjectDetailsPage() {
   const router = useRouter();
   const { id } = useParams();
-  const { user } = useAuth();
+  const { user, profile } = useAuth();
   const [project, setProject] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [isSaved, setIsSaved] = useState(false);

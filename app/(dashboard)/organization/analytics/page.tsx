@@ -78,7 +78,7 @@ export default function OrganizationAnalyticsPage() {
         if (!apps) return;
 
         const approvedApps = apps.filter(a => a.status === 'approved');
-        const uniqueVolunteers = [...new Set(approvedApps.map(a => a.user_id))];
+        const uniqueVolunteers = Array.from(new Set(approvedApps.map(a => a.user_id)));
         const totalVolunteers = uniqueVolunteers.length;
         const totalImpactHours = approvedApps.length * 10; // Assumed 10 hours per approved app
 

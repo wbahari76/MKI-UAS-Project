@@ -78,7 +78,7 @@ export default function OrganizationApplicationsPage() {
         }
 
         // Fetch profiles separately because there's no direct foreign key
-        const userIds = [...new Set(appsData.map(a => a.user_id))];
+        const userIds = Array.from(new Set(appsData.map(a => a.user_id)));
         const { data: profilesData, error: profilesError } = await supabase
           .from('profiles')
           .select('id, user_id, full_name, bio, phone, location, skills, volunteer_hours')
@@ -86,7 +86,7 @@ export default function OrganizationApplicationsPage() {
 
         if (profilesError) throw profilesError;
 
-        const profileIds = [...new Set((profilesData || []).map(p => p.id))];
+        const profileIds = Array.from(new Set((profilesData || []).map(p => p.id)));
         const { data: volProfilesData, error: volProfilesError } = await supabase
           .from('volunteer_profiles')
           .select('profile_id, cv_url, portfolio_url')

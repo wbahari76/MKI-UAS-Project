@@ -117,7 +117,7 @@ export default function AdminTicketDetailsPage() {
         .eq('id', id);
 
       if (error) throw error;
-      setTicket(prev => ({ ...prev, status: newStatus }));
+      setTicket((prev: any) => ({ ...prev, status: newStatus }));
       setTicketStatus(newStatus);
       if (newStatus !== ticket.status) {
         toast.success(`Ticket status updated to ${newStatus}.`);
