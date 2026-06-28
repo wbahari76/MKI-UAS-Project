@@ -155,6 +155,45 @@ function ImpactKPISection() {
                     lives: totalHours > 0 ? totalHours * 10 : 0, // simple heuristic
                     successRate: 100
                 });
+
+                // Fetch recent profiles for Live Activity
+                const { data: recentProfiles } = await supabase
+                    .from('profiles')
+                    .select('full_name, role, created_at')
+                    .order('created_at', { ascending: false })
+                    .limit(5);
+                    
+                // Fetch recent projects for Live Activity
+                const { data: recentProjects } = await supabase
+                    .from('projects')
+                    .select('title, category, created_at')
+                    .order('created_at', { ascending: false })
+                    .limit(5);
+                
+                let combined: any[] = [];
+                if (recentProfiles) {
+                    recentProfiles.forEach(p => {
+                        combined.push({
+                            time: new Date(p.created_at).getTime(),
+                            text: `${p.full_name || 'A new user'} joined as a ${p.role}`
+                        });
+                    });
+                }
+                if (recentProjects) {
+                    recentProjects.forEach(p => {
+                        combined.push({
+                            time: new Date(p.created_at).getTime(),
+                            text: `New ${p.category} project published: '${p.title}'`
+                        });
+                    });
+                }
+                
+                if (combined.length > 0) {
+                    combined.sort((a, b) => b.time - a.time);
+                    setRealActivities(combined.map(c => c.text));
+                } else {
+                    setRealActivities(["JALA VIVE platform is live!"]);
+                }
             } catch(e) {
                 console.error("Failed to fetch real-time metrics", e);
             }
@@ -171,24 +210,16 @@ function ImpactKPISection() {
         { label: 'Project Success Rate', value: metrics.successRate, suffix: '%', icon: Award, color: 'emerald' },
     ];
 
-    const activities = [
-        "Sarah joined 'Coastal Cleanup 2026'",
-        "GreenEarth Org was verified",
-        "'Tech for Kids' project reached 80% funding",
-        "Community 'Urban Gardeners' was created",
-        "David logged 5 volunteer hours",
-        "Global Wildlife Fund published a new event",
-        "'Clean Water Initiative' was completed successfully!"
-    ];
-
+    const [realActivities, setRealActivities] = useState<string[]>(["Loading live activity..."]);
     const [activeFeedIndex, setActiveFeedIndex] = useState(0);
 
     useEffect(() => {
+        if (realActivities.length === 0) return;
         const interval = setInterval(() => {
-            setActiveFeedIndex((prev) => (prev + 1) % activities.length);
+            setActiveFeedIndex((prev) => (prev + 1) % realActivities.length);
         }, 3000);
         return () => clearInterval(interval);
-    }, [activities.length]);
+    }, [realActivities.length]);
 
     return (
         <section className="py-24 bg-[#131511] relative overflow-hidden border-y border-white/5">
@@ -269,10 +300,10 @@ function ImpactKPISection() {
                             
                             <div className="flex-1 relative overflow-hidden min-h-[200px]">
                                 <div className="absolute inset-0 flex flex-col justify-center">
-                                    {activities.map((activity, index) => {
+                                    {realActivities.map((activity, index) => {
                                         const isActive = index === activeFeedIndex;
-                                        const isPrev = index === (activeFeedIndex - 1 + activities.length) % activities.length;
-                                        const isNext = index === (activeFeedIndex + 1) % activities.length;
+                                        const isPrev = index === (activeFeedIndex - 1 + realActivities.length) % realActivities.length;
+                                        const isNext = index === (activeFeedIndex + 1) % realActivities.length;
                                         
                                         let yOffset = 100;
                                         let opacity = 0;
