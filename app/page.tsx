@@ -23,6 +23,7 @@ import {
 import { cn } from '@/lib/utils';
 import { PublicNavbar } from '@/components/layout/PublicNavbar';
 import { Footer } from "@/components/layout/Footer";
+import { supabase } from '@/lib/supabase/client';
 
 // Animated Counter Component
 function AnimatedCounter({ value, suffix = '' }: { value: number; suffix?: string }) {
@@ -117,13 +118,57 @@ function HeroSection() {
 }
 
 function ImpactKPISection() {
+    const [metrics, setMetrics] = useState({
+        volunteers: 0,
+        organizations: 0,
+        projects: 0,
+        hours: 0,
+        lives: 0,
+        successRate: 100
+    });
+
+    useEffect(() => {
+        async function fetchMetrics() {
+            try {
+                // Fetch profiles for volunteers, organizations, and hours
+                const { data: profiles } = await supabase.from('profiles').select('role, volunteer_hours');
+                let vols = 0;
+                let orgs = 0;
+                let totalHours = 0;
+                
+                if (profiles) {
+                    profiles.forEach(p => {
+                        if (p.role === 'volunteer') vols++;
+                        if (p.role === 'organization') orgs++;
+                        if (p.volunteer_hours) totalHours += p.volunteer_hours;
+                    });
+                }
+
+                // Fetch total projects
+                const { count: projectsCount } = await supabase.from('projects').select('*', { count: 'exact', head: true });
+                
+                setMetrics({
+                    volunteers: vols,
+                    organizations: orgs,
+                    projects: projectsCount || 0,
+                    hours: totalHours,
+                    lives: totalHours > 0 ? totalHours * 10 : 0, // simple heuristic
+                    successRate: 100
+                });
+            } catch(e) {
+                console.error("Failed to fetch real-time metrics", e);
+            }
+        }
+        fetchMetrics();
+    }, []);
+
     const kpis = [
-        { label: 'Active Volunteers', value: 15240, suffix: '+', icon: Users, color: 'emerald' },
-        { label: 'Verified Organizations', value: 328, suffix: '+', icon: Building2, color: 'blue' },
-        { label: 'Completed Projects', value: 1486, suffix: '+', icon: FolderKanban, color: 'amber' },
-        { label: 'Volunteer Hours', value: 182000, suffix: '+', icon: Clock, color: 'purple', format: (v: number) => (v/1000).toFixed(0) + 'K' },
-        { label: 'Lives Impacted', value: 67500, suffix: '+', icon: Heart, color: 'rose', format: (v: number) => (v/1000).toFixed(1) + 'K' },
-        { label: 'Project Success Rate', value: 96, suffix: '%', icon: Award, color: 'emerald' },
+        { label: 'Active Volunteers', value: metrics.volunteers, suffix: '', icon: Users, color: 'emerald' },
+        { label: 'Verified Organizations', value: metrics.organizations, suffix: '', icon: Building2, color: 'blue' },
+        { label: 'Platform Projects', value: metrics.projects, suffix: '', icon: FolderKanban, color: 'amber' },
+        { label: 'Volunteer Hours', value: metrics.hours, suffix: '', icon: Clock, color: 'purple' },
+        { label: 'Lives Impacted', value: metrics.lives, suffix: '+', icon: Heart, color: 'rose' },
+        { label: 'Project Success Rate', value: metrics.successRate, suffix: '%', icon: Award, color: 'emerald' },
     ];
 
     const activities = [
