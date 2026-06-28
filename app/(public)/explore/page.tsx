@@ -71,47 +71,50 @@ function ExplorePublicContent() {
   });
 
   return (
-    <div className="min-h-screen bg-[#181A15] pt-24 pb-20">
-      <div className="absolute top-0 inset-x-0 h-[400px] bg-gradient-to-b from-forest-accent/10 to-transparent -z-10" />
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+    <div className="min-h-screen bg-canvas pb-20 pt-12">
+      <div className="container-custom space-y-10">
         {/* Header Section */}
-        <div className="text-center max-w-3xl mx-auto space-y-4">
-          <h1 className="text-4xl md:text-5xl font-extrabold text-forest-beige tracking-tight">
-            Explore Open <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-500">Projects</span>
+        <div className="max-w-2xl">
+          <span className="mews-eyebrow">
+            <span className="h-1.5 w-1.5 rounded-full bg-bubblegum" />
+            Open projects
+          </span>
+          <h1 className="mews-display mt-4 text-4xl text-ink md:text-5xl text-balance">
+            Explore open projects
           </h1>
-          <p className="text-lg text-forest-muted">
-            Find the perfect cause to contribute your skills and time. Discover volunteering opportunities from organizations worldwide.
+          <p className="mt-4 text-[16px] leading-relaxed text-charcoal">
+            Find the perfect cause to contribute your skills and time. Discover volunteering
+            opportunities from organizations worldwide.
           </p>
         </div>
 
         {/* Search & Filter */}
-        <div className="flex flex-col sm:flex-row gap-4 max-w-3xl mx-auto">
+        <div className="flex flex-col gap-3 sm:flex-row">
           <div className="relative flex-1">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#7A8072]" />
-            <Input 
-              placeholder="Search projects or organizations..." 
-              className="pl-12 h-14 rounded-full border-forest-border bg-forest-card focus-visible:ring-forest-accent shadow-sm text-base"
+            <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-fog" />
+            <Input
+              placeholder="Search projects or organizations..."
+              className="h-14 rounded-full border-lilac bg-cream pl-12 text-base text-ink placeholder:text-fog focus-visible:ring-bubblegum"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
-          <Button variant="outline" className="h-14 px-8 rounded-full border-forest-border bg-forest-card text-[#DFD5C2] hover:bg-[#181A15] shadow-sm">
-            <Filter className="w-5 h-5 mr-2" />
+          <Button variant="outline" className="h-14 rounded-full border-ink bg-transparent px-8 text-ink hover:bg-ink hover:text-canvas">
+            <Filter className="mr-2 h-5 w-5" />
             Filter
           </Button>
         </div>
 
         {/* Categories */}
-        <div className="flex items-center justify-center gap-2 overflow-x-auto pb-4 scrollbar-hide">
+        <div className="scrollbar-hide flex items-center gap-2 overflow-x-auto pb-2">
           {CATEGORIES.map(category => (
             <button
               key={category}
               onClick={() => setActiveCategory(category)}
-              className={`px-6 py-2.5 rounded-full whitespace-nowrap text-sm font-semibold transition-all shadow-sm ${
-                activeCategory === category 
-                  ? "bg-forest text-forest-beige" 
-                  : "bg-forest-card text-forest-muted border border-forest-border hover:border-[#38402D] hover:bg-[#181A15]"
+              className={`whitespace-nowrap rounded-full px-5 py-2.5 text-[14px] font-semibold transition-all ${
+                activeCategory === category
+                  ? "bg-bubblegum text-ink"
+                  : "border border-lilac bg-cream text-charcoal hover:bg-blush hover:text-ink"
               }`}
             >
               {category}
@@ -122,10 +125,10 @@ function ExplorePublicContent() {
         {/* Project Grid */}
         {loading ? (
            <div className="flex justify-center py-20">
-             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-forest-accent"></div>
+             <div className="h-12 w-12 animate-spin rounded-full border-b-2 border-bubblegum"></div>
            </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pt-4">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             {filteredProjects.map((project, index) => {
               const applied = project.volunteer_count || 0;
               const needed = project.volunteer_needed || 1;
@@ -135,96 +138,96 @@ function ExplorePublicContent() {
               return (
                 <motion.div
                   key={project.id}
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
+                  initial={{ opacity: 0, y: 24 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: Math.min(index * 0.06, 0.3) }}
+                  whileHover={{ y: -4 }}
                 >
-                  <div className="h-full bg-forest-card rounded-3xl border border-forest-border shadow-sm overflow-hidden group hover:shadow-xl transition-all duration-300 flex flex-col">
-                    <div className="relative h-56 w-full overflow-hidden">
+                  <div className="group flex h-full flex-col overflow-hidden rounded border border-lilac bg-cream">
+                    <div className="relative h-52 w-full overflow-hidden">
                       <Link href={`/explore/${project.id}`}>
-                        <img 
-                          src={image} 
+                        <img
+                          src={image}
                           alt={project.title}
-                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                          className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                         />
                       </Link>
-                      <div className="absolute top-4 left-4 flex gap-2 pointer-events-none">
-                        <Badge className="bg-forest-card/90 text-forest-beige backdrop-blur-sm border-0 font-medium hover:bg-forest-card px-3 py-1">
+                      <div className="pointer-events-none absolute left-4 top-4 flex gap-2">
+                        <span className="inline-flex items-center rounded-full bg-canvas px-3 py-1 text-[12px] font-semibold text-ink">
                           {project.category || 'General'}
-                        </Badge>
+                        </span>
                         {project.is_paid && (
-                          <Badge className="bg-amber-500/90 text-amber-950 backdrop-blur-sm border-0 font-bold hover:bg-amber-500 px-3 py-1">
+                          <span className="inline-flex items-center rounded-full bg-lime px-3 py-1 text-[12px] font-bold text-ink">
                             Paid
-                          </Badge>
+                          </span>
                         )}
                       </div>
-                      
+
                       {project.status === 'completed' && (
-                        <div className="absolute top-4 right-4 pointer-events-none">
-                          <Badge className="bg-blue-500 text-white border-0 font-medium px-3 py-1">
+                        <div className="pointer-events-none absolute right-4 top-4">
+                          <span className="inline-flex items-center rounded-full bg-ice px-3 py-1 text-[12px] font-semibold text-ink">
                             Completed
-                          </Badge>
+                          </span>
                         </div>
                       )}
                     </div>
-                    
-                    <div className="p-6 flex flex-col flex-1">
-                      <div className="flex items-center gap-2 text-sm font-semibold text-[#829661] mb-3">
-                        <Building2 className="w-4 h-4" />
+
+                    <div className="flex flex-1 flex-col p-6">
+                      <div className="mb-3 flex items-center gap-2 text-[13px] font-semibold text-bubblegum">
+                        <Building2 className="h-4 w-4" />
                         {project.organizations?.name || 'Organization'}
                       </div>
-                      
+
                       <Link href={`/explore/${project.id}`}>
-                        <h3 className="font-bold text-xl text-forest-beige mb-4 line-clamp-2 hover:text-forest-accent transition-colors">
+                        <h3 className="mb-4 line-clamp-2 text-[20px] font-bold leading-snug text-ink transition-colors hover:text-bubblegum">
                           {project.title}
                         </h3>
                       </Link>
-                      
-                      <div className="space-y-3 mb-6 flex-1">
-                        <div className="flex items-center gap-3 text-sm text-forest-muted">
-                          <MapPin className="w-4 h-4 text-[#7A8072] shrink-0" />
+
+                      <div className="mb-6 flex-1 space-y-3">
+                        <div className="flex items-center gap-3 text-[14px] text-charcoal">
+                          <MapPin className="h-4 w-4 shrink-0 text-fog" />
                           <span className="line-clamp-1">{project.location || 'Remote'}</span>
                         </div>
                         {project.deadline && (
-                          <div className="flex items-center gap-3 text-sm text-forest-muted">
-                            <Clock className="w-4 h-4 text-[#7A8072] shrink-0" />
+                          <div className="flex items-center gap-3 text-[14px] text-charcoal">
+                            <Clock className="h-4 w-4 shrink-0 text-fog" />
                             Apply by {new Date(project.deadline).toLocaleDateString()}
                           </div>
                         )}
                       </div>
 
-                      <div className="flex flex-col gap-2 mb-6">
-                        <div className="flex items-center justify-between text-sm font-medium">
-                          <span className="text-forest-muted">Volunteers Needed</span>
-                          <span className="text-forest-beige">{applied} / {needed}</span>
+                      <div className="mb-6 flex flex-col gap-2">
+                        <div className="flex items-center justify-between text-[13px] font-medium">
+                          <span className="text-charcoal">Volunteers needed</span>
+                          <span className="font-semibold text-ink">{applied} / {needed}</span>
                         </div>
-                        <div className="h-2 w-full bg-[#1E211A] rounded-full overflow-hidden">
-                          <div 
-                            className={`h-full rounded-full ${isFull ? 'bg-amber-500' : 'bg-forest-accent'}`} 
-                            style={{ width: `${Math.min((applied / needed) * 100, 100)}%` }} 
+                        <div className="h-1.5 w-full overflow-hidden rounded-full bg-blush/60">
+                          <div
+                            className={`h-full rounded-full ${isFull ? 'bg-lime' : 'bg-bubblegum'}`}
+                            style={{ width: `${Math.min((applied / needed) * 100, 100)}%` }}
                           />
                         </div>
                       </div>
 
                       {user ? (
                         <Link href={`/${profile?.role || 'volunteer'}/explore/${project.id}`} className="block w-full">
-                          <Button 
-                            className="w-full h-12 rounded-xl text-base font-medium"
-                            variant={isFull ? "outline" : "default"}
+                          <button
+                            className={`h-12 w-full rounded-full text-[14px] font-bold transition-all ${isFull ? 'cursor-not-allowed border border-mist text-fog' : 'bg-bubblegum text-ink hover:-translate-y-0.5'}`}
                             disabled={isFull}
                           >
                             {isFull ? 'Project Full' : 'Apply Now'}
-                          </Button>
+                          </button>
                         </Link>
                       ) : (
                         <Link href="/login" className="block w-full">
-                          <Button 
-                            className="w-full h-12 rounded-xl text-base font-medium"
-                            variant={isFull ? "outline" : "default"}
+                          <button
+                            className={`h-12 w-full rounded-full text-[14px] font-bold transition-all ${isFull ? 'cursor-not-allowed border border-mist text-fog' : 'bg-bubblegum text-ink hover:-translate-y-0.5'}`}
                             disabled={isFull}
                           >
                             {isFull ? 'Project Full' : 'Sign in to Apply'}
-                          </Button>
+                          </button>
                         </Link>
                       )}
                     </div>
@@ -234,15 +237,15 @@ function ExplorePublicContent() {
             })}
           </div>
         )}
-        
+
         {!loading && filteredProjects.length === 0 && (
-          <div className="text-center py-20">
-            <div className="w-20 h-20 bg-[#1E211A] rounded-full flex items-center justify-center mx-auto mb-4">
-              <FolderKanban className="w-10 h-10 text-[#7A8072]" />
+          <div className="py-20 text-center">
+            <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-blush">
+              <FolderKanban className="h-10 w-10 text-ink" />
             </div>
-            <h3 className="text-xl font-bold text-forest-beige mb-2">No projects found</h3>
-            <p className="text-forest-muted">
-              Try adjusting your search or filters to find what you're looking for.
+            <h3 className="mb-2 text-[20px] font-bold text-ink">No projects found</h3>
+            <p className="text-charcoal">
+              Try adjusting your search or filters to find what you&apos;re looking for.
             </p>
           </div>
         )}

@@ -10,9 +10,9 @@ export default function PublicLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex min-h-screen flex-col bg-forest-card">
+    <div className="mews-page flex min-h-screen flex-col">
       <PublicNavbar />
-      <main className="flex-1 pt-16 md:pt-20">
+      <main className="flex-1 pt-[104px]">
         {children}
       </main>
       <Footer />
