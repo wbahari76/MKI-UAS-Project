@@ -5,7 +5,7 @@ import React, { useState, useEffect, useRef, Suspense } from "react";
 import { motion } from "framer-motion";
 import { supabase } from "@/lib/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { Search, Send, Image as ImageIcon, Paperclip, MoreVertical, Phone, Video, Loader2, FileText, Download } from "lucide-react";
+import { Search, Send, Image as ImageIcon, Paperclip, MoreVertical, Phone, Video, Loader2, FileText, Download, ChevronLeft } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -255,7 +255,7 @@ function OrganizationMessagesContent() {
   return (
     <div className="h-[calc(100vh-120px)] flex bg-forest-card rounded-2xl border border-forest-border overflow-hidden shadow-lg shadow-black/20">
       {/* Sidebar Contacts */}
-      <div className="w-80 border-r border-forest-border flex flex-col bg-[#131511]">
+      <div className={`${activeContact ? 'hidden md:flex' : 'flex'} w-full md:w-80 border-r border-forest-border flex-col bg-[#131511]`}>
         <div className="p-4 border-b border-forest-border bg-[#181A15]">
           <h2 className="text-xl font-bold text-forest-beige mb-4">Messages</h2>
           <div className="relative">
@@ -308,10 +308,18 @@ function OrganizationMessagesContent() {
 
       {/* Main Chat Area */}
       {activeContact ? (
-        <div className="flex-1 flex flex-col bg-[#181A15]">
+        <div className={`${activeContact ? 'flex' : 'hidden md:flex'} flex-1 flex-col bg-[#181A15]`}>
           {/* Chat Header */}
-          <div className="h-20 border-b border-forest-border flex items-center justify-between px-6 bg-[#181A15]/80 backdrop-blur-md sticky top-0 z-10">
+          <div className="h-20 border-b border-forest-border flex items-center justify-between px-4 md:px-6 bg-[#181A15]/80 backdrop-blur-md sticky top-0 z-10">
             <div className="flex items-center">
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="md:hidden mr-2 -ml-2 text-[#7A8072] hover:text-forest-beige hover:bg-[#21261B] rounded-full"
+                onClick={() => setActiveContact(null)}
+              >
+                <ChevronLeft className="w-6 h-6" />
+              </Button>
               <Avatar className="w-10 h-10 mr-4 shadow-sm">
                 {activeContact.avatar_url ? (
                   <img src={activeContact.avatar_url} alt={activeContact.name} className="object-cover" />
@@ -446,7 +454,7 @@ function OrganizationMessagesContent() {
           </div>
         </div>
       ) : (
-        <div className="flex-1 flex flex-col items-center justify-center bg-[#181A15] text-forest-muted">
+        <div className="hidden md:flex flex-1 flex-col items-center justify-center bg-[#181A15] text-forest-muted">
           <div className="w-20 h-20 bg-[#21261B] rounded-full flex items-center justify-center mb-6 shadow-inner">
             <Send className="w-8 h-8 text-[#7A8072]" />
           </div>
