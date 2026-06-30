@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { Toaster } from '@/components/ui/sonner';
 import { AuthProvider } from '@/contexts/AuthContext';
+import { I18nProvider } from "@/components/providers/I18nProvider";
 
 
 const inter = Inter({
@@ -44,21 +45,28 @@ export const metadata: Metadata = {
   },
 };
 
+import { cookies } from 'next/headers';
+
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const cookieStore = cookies();
+  const locale = cookieStore.get('NEXT_LOCALE')?.value || 'en';
+
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang={locale} suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
       <body className={`${inter.variable} font-sans antialiased`}>
         <AuthProvider>
-          {children}
-          <Toaster position="top-right" richColors closeButton />
+          <I18nProvider initialLocale={locale}>
+            {children}
+            <Toaster position="top-right" richColors closeButton />
+          </I18nProvider>
         </AuthProvider>
       </body>
     </html>

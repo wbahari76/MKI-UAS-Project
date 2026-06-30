@@ -12,8 +12,10 @@ import Link from "next/link";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Skeleton } from "@/components/ui/skeleton";
 import { supabase } from "@/lib/supabase/client";
+import { useTranslation } from "react-i18next";
 
 export default function VolunteerDashboard() {
+  const { t } = useTranslation("common");
   const { user, profile, loading: authLoading } = useAuth();
   const [isMounted, setIsMounted] = useState(false);
   const [applications, setApplications] = useState<any[]>([]);
@@ -94,10 +96,10 @@ export default function VolunteerDashboard() {
           className="space-y-1"
         >
           <h1 className="text-3xl font-bold text-forest-beige tracking-tight">
-            Welcome back, {firstName}! 👋
+            {t("dashboard.welcome_back", { name: firstName, defaultValue: `Welcome back, ${firstName}! 👋` })}
           </h1>
           <p className="text-forest-muted">
-            Here's what's happening with your projects today.
+            {t("dashboard.subtitle", { defaultValue: "Here's what's happening with your projects today." })}
           </p>
         </motion.div>
         <motion.div
@@ -107,7 +109,7 @@ export default function VolunteerDashboard() {
         >
           <Link href="/volunteer/explore">
             <Button className="btn-primary">
-              Explore Projects
+              {t("vol_dash.explore_projects", "Explore Projects")}
               <ArrowRight className="ml-2 w-4 h-4" />
             </Button>
           </Link>
@@ -122,25 +124,25 @@ export default function VolunteerDashboard() {
         className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4"
       >
         <StatsCard
-          title="Total Hours"
+          title={t("vol_dash.total_hours")}
           value={totalHours.toString()}
           icon={Clock}
           iconClassName="bg-blue-500/10 text-blue-400"
         />
         <StatsCard
-          title="Active Projects"
+          title={t("vol_dash.active_projects")}
           value={activeApps.length.toString()}
           icon={FolderKanban}
           iconClassName="bg-[#2C3322] text-[#829661]"
         />
         <StatsCard
-          title="Certificates"
+          title={t("vol_dash.certificates")}
           value={completedApps.filter(a => a.status === 'certified').length.toString()}
           icon={Award}
           iconClassName="bg-amber-500/10 text-amber-400"
         />
         <StatsCard
-          title="Impact Points"
+          title={t("vol_dash.impact_points")}
           value={impactPoints.toString()}
           icon={Star}
           iconClassName="bg-purple-500/10 text-purple-400"
@@ -158,10 +160,10 @@ export default function VolunteerDashboard() {
         >
           <Card className="h-full border-0 shadow-sm shadow-forest-border/20">
             <CardHeader className="flex flex-row items-center justify-between border-b border-forest-border pb-4">
-              <CardTitle className="text-xl">Your Projects</CardTitle>
+              <CardTitle className="text-xl">{t("vol_dash.your_projects")}</CardTitle>
               <Link href="/volunteer/events">
                 <Button variant="ghost" size="sm" className="text-[#829661] font-medium hover:text-[#829661] hover:bg-[#21261B]">
-                  View All
+                  {t("vol_dash.view_all")}
                 </Button>
               </Link>
             </CardHeader>
@@ -177,15 +179,15 @@ export default function VolunteerDashboard() {
                           </div>
                           <div>
                             <h4 className="font-semibold text-forest-beige group-hover:text-[#829661] transition-colors">
-                              {app.projects?.title || "Unknown Project"}
+                              {app.projects?.title || t("vol_dash.unknown_project")}
                             </h4>
-                            <p className="text-sm text-forest-muted">{app.projects?.organizations?.name || "Unknown Organization"}</p>
+                            <p className="text-sm text-forest-muted">{app.projects?.organizations?.name || t("vol_dash.unknown_org")}</p>
                           </div>
                         </div>
                         <div className="flex items-center justify-between sm:justify-end gap-6 sm:w-1/3">
                           <div className="w-full sm:w-24">
                             <div className="flex items-center justify-between text-xs mb-1">
-                              <span className="text-forest-muted">Status</span>
+                              <span className="text-forest-muted">{t("vol_dash.status")}</span>
                               <span className="font-medium capitalize">{app.status}</span>
                             </div>
                             <div className="h-1.5 w-full bg-[#1E211A] rounded-full overflow-hidden">
@@ -206,10 +208,10 @@ export default function VolunteerDashboard() {
               ) : (
                 <EmptyState
                   icon={FolderKanban}
-                  title="No Active Projects"
-                  description="You haven't applied to any projects yet. Start exploring to make an impact!"
+                  title={t("vol_dash.no_active_projects")}
+                  description={t("vol_dash.no_active_projects_desc")}
                   primaryAction={{
-                    label: "Explore Projects",
+                    label: t("vol_dash.explore_projects"),
                     onClick: () => window.location.href = '/volunteer/explore'
                   }}
                 />
@@ -234,10 +236,10 @@ export default function VolunteerDashboard() {
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center text-amber-400">
                   <CalendarDays className="w-4 h-4 mr-2" />
-                  <span className="font-medium">Next Event</span>
+                  <span className="font-medium">{t("vol_dash.next_event")}</span>
                 </div>
                 <Badge variant="outline" className="bg-amber-400/20 text-amber-200 border-none text-xs">
-                  Tomorrow
+                  {t("vol_dash.tomorrow")}
                 </Badge>
               </div>
               <CardTitle className="text-xl text-forest-beige">Coastal Cleanup Briefing</CardTitle>
@@ -245,7 +247,7 @@ export default function VolunteerDashboard() {
             <CardContent>
               <p className="text-forest-muted mb-4">Zoom Meeting • 09:00 AM</p>
               <Button className="w-full bg-[#829661] hover:bg-[#6A7B4F] text-[#11140D] font-semibold border-none">
-                Join Event
+                {t("vol_dash.join_event")}
               </Button>
             </CardContent>
           </Card>
@@ -253,7 +255,7 @@ export default function VolunteerDashboard() {
           {/* Recent Activity */}
           <Card className="border-0 shadow-sm shadow-forest-border/20">
             <CardHeader className="border-b border-forest-border pb-4">
-              <CardTitle className="text-xl">Recent Activity</CardTitle>
+              <CardTitle className="text-xl">{t("vol_dash.recent_activity")}</CardTitle>
             </CardHeader>
             <CardContent className="pt-6">
               <div className="space-y-6">
@@ -264,7 +266,7 @@ export default function VolunteerDashboard() {
                       <div className="absolute top-4 left-1 w-0.5 h-12 bg-forest-border -z-0" />
                       <div>
                         <p className="font-medium text-forest-beige">
-                          {app.status === 'pending' ? 'Applied for' : 'Status updated for'}
+                          {app.status === 'pending' ? t("vol_dash.applied_for") : t("vol_dash.status_updated")}
                         </p>
                         <p className="text-sm text-forest-muted">{app.projects?.title}</p>
                         <p className="text-xs text-forest-muted mt-1">
@@ -277,9 +279,9 @@ export default function VolunteerDashboard() {
                   <div className="flex gap-4 relative">
                     <div className="w-2 h-2 rounded-full bg-forest-border mt-2 shrink-0 relative z-10" />
                     <div>
-                      <p className="font-medium text-forest-beige">Welcome to JALA VIVE!</p>
-                      <p className="text-sm text-forest-muted">Your journey starts here.</p>
-                      <p className="text-xs text-forest-muted mt-1">Today</p>
+                      <p className="font-medium text-forest-beige">{t("vol_dash.welcome_jala")}</p>
+                      <p className="text-sm text-forest-muted">{t("vol_dash.journey_starts")}</p>
+                      <p className="text-xs text-forest-muted mt-1">{t("vol_dash.today")}</p>
                     </div>
                   </div>
                 )}

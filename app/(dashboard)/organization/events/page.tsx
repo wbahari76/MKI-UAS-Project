@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 
 // Mock data for organization's events
 const EVENTS = [
@@ -51,6 +52,7 @@ const EVENTS = [
 ];
 
 export default function OrganizationEventsPage() {
+  const { t } = useTranslation("common");
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState("upcoming");
 
@@ -63,13 +65,13 @@ export default function OrganizationEventsPage() {
     <div className="space-y-8 pb-20">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-forest-beige tracking-tight">Manage Events</h1>
-          <p className="text-forest-muted mt-1">Organize and track your upcoming and past events.</p>
+          <h1 className="text-3xl font-bold text-forest-beige tracking-tight">{t("events.title", "Manage Events")}</h1>
+          <p className="text-forest-muted mt-1">{t("events.desc", "Organize and track your upcoming and past events.")}</p>
         </div>
         <Link href="/organization/projects/new">
           <Button className="btn-primary">
             <Plus className="w-5 h-5 mr-2" />
-            Create New Event
+            {t("projects.create_new", "Create New Event")}
           </Button>
         </Link>
       </div>
@@ -77,8 +79,8 @@ export default function OrganizationEventsPage() {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-forest-card p-4 rounded-2xl border border-forest-border shadow-sm">
         <Tabs defaultValue="upcoming" className="w-full sm:w-[400px]" onValueChange={setActiveTab}>
           <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="upcoming">Upcoming</TabsTrigger>
-            <TabsTrigger value="completed">Completed</TabsTrigger>
+            <TabsTrigger value="upcoming">{t("events.upcoming", "Upcoming")}</TabsTrigger>
+            <TabsTrigger value="completed">{t("events.past", "Completed")}</TabsTrigger>
           </TabsList>
         </Tabs>
         
@@ -104,7 +106,7 @@ export default function OrganizationEventsPage() {
             <div className="w-16 h-16 bg-[#181A15] rounded-full flex items-center justify-center mb-4">
               <CalendarDays className="w-8 h-8 text-[#7A8072]" />
             </div>
-            <h3 className="text-xl font-bold text-forest-beige mb-2">No {activeTab} events found</h3>
+            <h3 className="text-xl font-bold text-forest-beige mb-2">{t("events.no_events", "No events found").replace("upcoming events", activeTab + " events")}</h3>
             <p className="text-forest-muted max-w-md mx-auto mb-6">
               {activeTab === 'upcoming' 
                 ? "You don't have any upcoming events scheduled. Create one to start engaging volunteers!"
@@ -144,7 +146,7 @@ export default function OrganizationEventsPage() {
                       <div className="absolute top-4 right-4">
                         <Badge className="bg-forest-accent text-forest-beige border-0">
                           <CheckCircle2 className="w-3 h-3 mr-1" />
-                          Completed
+                          {t("events.past", "Completed")}
                         </Badge>
                       </div>
                     )}
@@ -180,7 +182,7 @@ export default function OrganizationEventsPage() {
 
                     <Link href={`/organization/projects`}>
                       <Button className="w-full bg-[#181A15] text-[#DFD5C2] hover:bg-[#21261B] hover:text-[#829661] transition-colors">
-                        Manage Event
+                        {t("projects.manage_projects", "Manage Event")}
                         <ArrowUpRight className="w-4 h-4 ml-2" />
                       </Button>
                     </Link>

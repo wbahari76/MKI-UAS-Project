@@ -21,6 +21,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 // Mock Data
 const INITIAL_POSTS = [
@@ -46,6 +47,7 @@ const INITIAL_POSTS = [
 ];
 
 export default function OrganizationCommunityPage() {
+  const { t } = useTranslation("common");
   const { user, profile } = useAuth();
   const [posts, setPosts] = useState<any[]>([]);
   const [newPost, setNewPost] = useState("");
@@ -164,10 +166,10 @@ export default function OrganizationCommunityPage() {
       {/* Header */}
       <div>
         <h1 className="text-3xl font-bold text-forest-beige tracking-tight">
-          Community Updates
+          {t("community.title", "Community Updates")}
         </h1>
         <p className="text-forest-muted mt-1">
-          Share announcements and interact with your community of volunteers.
+          {t("community.desc", "Share announcements and interact with your community of volunteers.")}
         </p>
       </div>
 
@@ -183,7 +185,7 @@ export default function OrganizationCommunityPage() {
               </Avatar>
               <div className="flex-1 space-y-4">
                 <Textarea 
-                  placeholder="Share an update or announcement..." 
+                  placeholder={t("community.start_post", "Share an update or announcement...")} 
                   className="min-h-[100px] resize-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0 bg-transparent px-0 text-base"
                   value={newPost}
                   onChange={(e) => setNewPost(e.target.value)}
@@ -199,7 +201,7 @@ export default function OrganizationCommunityPage() {
                     className="btn-primary rounded-full px-6"
                     disabled={!newPost.trim() || isPosting}
                   >
-                    {isPosting ? "Posting..." : "Post Update"}
+                    {isPosting ? t("explore.processing", "Posting...") : t("explore.submit_application", "Post Update").replace(" Application", "")}
                   </Button>
                 </div>
               </div>

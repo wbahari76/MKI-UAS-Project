@@ -27,8 +27,10 @@ import {
 } from "@/components/ui/dialog";
 import { supabase } from "@/lib/supabase/client";
 import { format } from "date-fns";
+import { useTranslation } from "react-i18next";
 
 export default function OrganizationDashboard() {
+  const { t } = useTranslation("common");
   const { user, profile, loading } = useAuth();
   const [isMounted, setIsMounted] = useState(false);
   const [projects, setProjects] = useState<any[]>([]);
@@ -174,11 +176,11 @@ export default function OrganizationDashboard() {
       case "published":
       case "recruiting":
       case "active":
-        return <Badge className="bg-[#2C3322] text-[#829661] border-[#4A5D23]">Active</Badge>;
+        return <Badge className="bg-[#2C3322] text-[#829661] border-[#4A5D23]">{t("org_dash.status_active")}</Badge>;
       case "draft":
-        return <Badge className="bg-[#1E211A] text-[#DFD5C2] border-forest-border">Draft</Badge>;
+        return <Badge className="bg-[#1E211A] text-[#DFD5C2] border-forest-border">{t("org_dash.status_draft")}</Badge>;
       case "completed":
-        return <Badge className="bg-blue-500/10 text-blue-400 border-blue-500/20">Completed</Badge>;
+        return <Badge className="bg-blue-500/10 text-blue-400 border-blue-500/20">{t("org_dash.status_completed")}</Badge>;
       default:
         return <Badge className="capitalize">{status}</Badge>;
     }
@@ -195,12 +197,12 @@ export default function OrganizationDashboard() {
         >
           <div className="flex items-center gap-2">
             <h1 className="text-3xl font-bold text-forest-beige tracking-tight">
-              {orgName} Dashboard
+              {orgName} {t("nav.dashboard")}
             </h1>
-            <Badge className="bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 border-0">Verified</Badge>
+            <Badge className="bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 border-0">{t("org_dash.verified")}</Badge>
           </div>
           <p className="text-forest-muted">
-            Manage your projects and volunteers efficiently.
+            {t("dashboard.org_subtitle", { defaultValue: "Manage your projects and volunteers efficiently." })}
           </p>
         </motion.div>
         <motion.div
@@ -211,7 +213,7 @@ export default function OrganizationDashboard() {
           <Link href="/organization/projects/new">
             <Button className="btn-primary">
               <Plus className="mr-2 w-4 h-4" />
-              Create Project
+              {t("org_dash.create_project")}
             </Button>
           </Link>
         </motion.div>
@@ -225,26 +227,26 @@ export default function OrganizationDashboard() {
         className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4"
       >
         <StatsCard
-          title="Total Volunteers"
+          title={t("org_dash.total_volunteers")}
           value={stats.totalVolunteers.toString()}
           icon={Users}
           iconClassName="bg-blue-500/10 text-blue-400"
         />
         <StatsCard
-          title="Active Projects"
+          title={t("org_dash.active_projects")}
           value={stats.activeProjects.toString()}
           icon={FolderKanban}
           iconClassName="bg-[#2C3322] text-[#829661]"
         />
         <StatsCard
-          title="Total Hours Logged"
+          title={t("org_dash.total_hours_logged")}
           value={stats.totalHours.toString()}
           icon={Clock}
           iconClassName="bg-amber-500/10 text-amber-400"
           trend={{ value: 5, isPositive: true }}
         />
         <StatsCard
-          title="Profile Views"
+          title={t("org_dash.profile_views")}
           value={stats.profileViews.toString()}
           icon={TrendingUp}
           iconClassName="bg-purple-500/10 text-purple-400"
@@ -263,10 +265,10 @@ export default function OrganizationDashboard() {
         >
           <Card className="h-full border-0 shadow-sm shadow-forest-border/20">
             <CardHeader className="flex flex-row items-center justify-between border-b border-forest-border pb-4">
-              <CardTitle className="text-xl">Recent Projects</CardTitle>
+              <CardTitle className="text-xl">{t("org_dash.recent_projects")}</CardTitle>
               <Link href="/organization/projects">
                 <Button variant="ghost" size="sm" className="text-blue-400 font-medium hover:text-blue-400 hover:bg-blue-500/10">
-                  Manage All
+                  {t("org_dash.manage_all")}
                 </Button>
               </Link>
             </CardHeader>
@@ -275,7 +277,7 @@ export default function OrganizationDashboard() {
                 {projects.length === 0 ? (
                   <div className="text-center py-8 text-forest-muted">
                     <FolderKanban className="w-12 h-12 mx-auto mb-3 opacity-20" />
-                    <p>No projects found. Create one to get started!</p>
+                    <p>{t("org_dash.no_projects")}</p>
                   </div>
                 ) : projects.map((project, i) => (
                   <div key={i} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-xl border border-forest-border hover:border-blue-500/20 hover:shadow-md transition-all group bg-forest-card">
@@ -287,7 +289,7 @@ export default function OrganizationDashboard() {
                         <h4 className="font-semibold text-forest-beige group-hover:text-blue-400 transition-colors flex items-center gap-2">
                           {project.title}
                           {project.is_paid && (
-                            <Badge className="bg-amber-500/10 text-amber-500 border-amber-500/20 text-[10px] px-1.5 py-0">Paid</Badge>
+                            <Badge className="bg-amber-500/10 text-amber-500 border-amber-500/20 text-[10px] px-1.5 py-0">{t("org_dash.paid")}</Badge>
                           )}
                         </h4>
                         <div className="flex items-center gap-3 mt-1">
@@ -311,9 +313,9 @@ export default function OrganizationDashboard() {
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" className="w-40 rounded-xl">
-                          <DropdownMenuItem className="cursor-pointer">View Details</DropdownMenuItem>
-                          <DropdownMenuItem className="cursor-pointer">Edit Project</DropdownMenuItem>
-                          <DropdownMenuItem className="cursor-pointer">Manage Volunteers</DropdownMenuItem>
+                          <DropdownMenuItem className="cursor-pointer">{t("org_dash.view_details")}</DropdownMenuItem>
+                          <DropdownMenuItem className="cursor-pointer">{t("org_dash.edit_project")}</DropdownMenuItem>
+                          <DropdownMenuItem className="cursor-pointer">{t("org_dash.manage_volunteers")}</DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </div>
@@ -334,11 +336,11 @@ export default function OrganizationDashboard() {
           {/* New Applications */}
           <Card className="border-0 shadow-sm shadow-forest-border/20">
             <CardHeader className="border-b border-forest-border pb-4 flex flex-row items-center justify-between">
-              <CardTitle className="text-lg">New Applications</CardTitle>
+              <CardTitle className="text-lg">{t("org_dash.new_applications")}</CardTitle>
               {pendingApps.length > 0 ? (
-                <Badge className="bg-amber-500 hover:bg-amber-600">{pendingApps.length} Pending</Badge>
+                <Badge className="bg-amber-500 hover:bg-amber-600">{pendingApps.length} {t("org_dash.pending")}</Badge>
               ) : (
-                <Badge className="bg-[#2A2F22] text-forest-muted hover:bg-[#38402D]">0 Pending</Badge>
+                <Badge className="bg-[#2A2F22] text-forest-muted hover:bg-[#38402D]">0 {t("org_dash.pending")}</Badge>
               )}
             </CardHeader>
             <CardContent className="pt-4 px-0">
@@ -347,21 +349,21 @@ export default function OrganizationDashboard() {
                   <div key={app.id} className="p-4 hover:bg-[#181A15] transition-colors flex items-center justify-between">
                     <div>
                       <h5 className="font-medium text-forest-beige text-sm">{app.name}</h5>
-                      <p className="text-forest-muted text-xs mt-0.5">Applied to {app.project}</p>
+                      <p className="text-forest-muted text-xs mt-0.5">{t("org_dash.applied_to")} {app.project}</p>
                       <p className="text-[#7A8072] text-xs mt-1">{app.time}</p>
                     </div>
-                    <Button size="sm" variant="outline" className="text-xs h-8 px-3" onClick={() => handleReviewClick(app)}>Review</Button>
+                    <Button size="sm" variant="outline" className="text-xs h-8 px-3" onClick={() => handleReviewClick(app)}>{t("org_dash.review")}</Button>
                   </div>
                 ))}
                 {pendingApps.length === 0 && (
                   <div className="p-6 text-center text-sm text-forest-muted">
-                    No pending applications.
+                    {t("org_dash.no_pending")}
                   </div>
                 )}
               </div>
               <div className="px-4 pt-2">
                 <Link href="/organization/applications">
-                  <Button variant="ghost" className="w-full text-sm text-blue-400">View All Applications</Button>
+                  <Button variant="ghost" className="w-full text-sm text-blue-400">{t("org_dash.view_all_apps")}</Button>
                 </Link>
               </div>
             </CardContent>
@@ -372,7 +374,7 @@ export default function OrganizationDashboard() {
             <CardHeader className="border-b border-forest-border pb-4">
               <CardTitle className="text-lg flex items-center gap-2">
                 <Activity className="w-5 h-5 text-[#7A8072]" />
-                Recent Activity
+                {t("org_dash.recent_activity")}
               </CardTitle>
             </CardHeader>
             <CardContent className="pt-6">
@@ -398,9 +400,9 @@ export default function OrganizationDashboard() {
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="sm:max-w-[500px] rounded-2xl">
           <DialogHeader>
-            <DialogTitle className="text-xl font-bold text-forest-beige">Review Application</DialogTitle>
+            <DialogTitle className="text-xl font-bold text-forest-beige">{t("org_dash.review_application")}</DialogTitle>
             <DialogDescription className="text-forest-muted">
-              Review volunteer details and application statement.
+              {t("org_dash.review_desc")}
             </DialogDescription>
           </DialogHeader>
 
@@ -413,7 +415,7 @@ export default function OrganizationDashboard() {
                 </div>
                 <div>
                   <h4 className="font-semibold text-forest-beige">{selectedApp.name}</h4>
-                  <p className="text-sm text-forest-muted">{selectedApp.role} Role</p>
+                  <p className="text-sm text-forest-muted">{selectedApp.role} {t("org_dash.role")}</p>
                 </div>
               </div>
 
@@ -421,25 +423,25 @@ export default function OrganizationDashboard() {
               <div className="space-y-3">
                 <div className="flex items-center gap-3 text-sm text-forest-muted">
                   <FolderKanban className="w-4 h-4 text-[#7A8072]" />
-                  <span className="font-medium text-forest-beige">Project:</span> {selectedApp.project}
+                  <span className="font-medium text-forest-beige">{t("org_dash.project")}:</span> {selectedApp.project}
                 </div>
                 <div className="flex items-center gap-3 text-sm text-forest-muted">
                   <Mail className="w-4 h-4 text-[#7A8072]" />
-                  <span className="font-medium text-forest-beige">Email:</span> {selectedApp.email}
+                  <span className="font-medium text-forest-beige">{t("org_dash.email")}:</span> {selectedApp.email}
                 </div>
                 <div className="flex items-center gap-3 text-sm text-forest-muted">
                   <Phone className="w-4 h-4 text-[#7A8072]" />
-                  <span className="font-medium text-forest-beige">Phone:</span> {selectedApp.phone}
+                  <span className="font-medium text-forest-beige">{t("org_dash.phone")}:</span> {selectedApp.phone}
                 </div>
                 <div className="flex items-center gap-3 text-sm text-forest-muted">
                   <Clock className="w-4 h-4 text-[#7A8072]" />
-                  <span className="font-medium text-forest-beige">Applied:</span> {selectedApp.time} ({selectedApp.date})
+                  <span className="font-medium text-forest-beige">{t("org_dash.applied")}:</span> {selectedApp.time} ({selectedApp.date})
                 </div>
               </div>
 
               {/* Cover Letter / Motivation */}
               <div className="space-y-2">
-                <h5 className="text-sm font-semibold text-forest-beige">Motivation Letter</h5>
+                <h5 className="text-sm font-semibold text-forest-beige">{t("org_dash.motivation_letter")}</h5>
                 <p className="text-sm text-forest-muted bg-[#181A15] p-4 rounded-xl border border-forest-border leading-relaxed italic">
                   "{selectedApp.coverLetter}"
                 </p>
@@ -453,13 +455,13 @@ export default function OrganizationDashboard() {
               onClick={() => handleReject(selectedApp?.id)}
               className="text-red-600 hover:text-red-400 hover:bg-red-500/10 border-red-500/20"
             >
-              Reject
+              {t("org_dash.reject")}
             </Button>
             <Button
               onClick={() => handleApprove(selectedApp?.id)}
               className="bg-[#4A5D23] hover:bg-[#38402D] text-forest-beige"
             >
-              Approve
+              {t("org_dash.approve")}
             </Button>
           </DialogFooter>
         </DialogContent>

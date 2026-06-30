@@ -19,8 +19,10 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
 import { supabase } from "@/lib/supabase/client";
+import { useTranslation } from "react-i18next";
 
 export default function AdminProjectsPage() {
+  const { t } = useTranslation("common");
   const [projects, setProjects] = useState<any[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState("all");
@@ -49,28 +51,38 @@ export default function AdminProjectsPage() {
   }, []);
 
   const handleApprove = async (id: string) => {
+    // Optimistic update
+    setProjects(prev => prev.map(p => p.id === id ? { ...p, status: 'published' } : p));
+    
     const { error } = await supabase
       .from('projects')
       .update({ status: 'published' })
       .eq('id', id);
 
     if (error) {
-      toast.error("Failed to approve project.");
+      toast.error(t("admin.projects.approve_fail", "Failed to approve project."));
+      // Revert on error
+      setProjects(prev => prev.map(p => p.id === id ? { ...p, status: 'pending' } : p));
     } else {
-      toast.success("Project approved and published.");
+      toast.success(t("admin.projects.approve_success", "Project approved and published."));
     }
   };
 
   const handleReject = async (id: string) => {
+    // Optimistic update
+    setProjects(prev => prev.map(p => p.id === id ? { ...p, status: 'cancelled' } : p));
+    
     const { error } = await supabase
       .from('projects')
-      .update({ status: 'archived' })
+      .update({ status: 'cancelled' })
       .eq('id', id);
 
     if (error) {
-      toast.error("Failed to reject project.");
+      toast.error(t("admin.projects.reject_fail", "Failed to reject project."));
+      // Revert on error
+      setProjects(prev => prev.map(p => p.id === id ? { ...p, status: 'pending' } : p));
     } else {
-      toast.error("Project rejected (archived).");
+      toast.success(t("admin.projects.reject_success", "Project rejected."));
     }
   };
 
@@ -80,8 +92,8 @@ export default function AdminProjectsPage() {
                           orgName.toLowerCase().includes(searchQuery.toLowerCase());
     
     const matchesTab = activeTab === 'all' || 
-                       (activeTab === 'pending' && p.status === 'draft') ||
-                       (activeTab === 'flagged' && false); // no flag logic yet
+                       (activeTab === 'pending' && (p.status === 'draft' || p.status === 'pending')) ||
+                       (activeTab === 'flagged' && p.status === 'reported');
     
     return matchesSearch && matchesTab;
   });
@@ -90,13 +102,13 @@ export default function AdminProjectsPage() {
     <div className="space-y-8 pb-20">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-forest-beige tracking-tight">Manage Projects</h1>
-          <p className="text-forest-muted mt-1">Review new projects, manage events, and handle reported content.</p>
+          <h1 className="text-3xl font-bold text-forest-beige tracking-tight">{t("admin.projects.title")}</h1>
+          <p className="text-forest-muted mt-1">{t("admin.projects.desc")}</p>
         </div>
         <div className="relative w-full sm:w-72">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#7A8072]" />
           <Input
-            placeholder="Search projects..."
+            placeholder={t("admin.projects.search")}
             className="pl-9 bg-forest-card border-forest-border"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -108,9 +120,9 @@ export default function AdminProjectsPage() {
         <Tabs defaultValue="all" className="w-full" onValueChange={setActiveTab}>
           <div className="border-b border-forest-border p-4">
             <TabsList>
-              <TabsTrigger value="all">All Projects</TabsTrigger>
-              <TabsTrigger value="pending">Pending Review (Drafts)</TabsTrigger>
-              <TabsTrigger value="flagged" className="text-red-600 data-[state=active]:text-red-400">Reported</TabsTrigger>
+              <TabsTrigger value="all">{t("admin.projects.tab_all")}</TabsTrigger>
+              <TabsTrigger value="pending">{t("admin.projects.tab_pending")}</TabsTrigger>
+              <TabsTrigger value="flagged" className="text-red-600 data-[state=active]:text-red-400">{t("admin.projects.tab_reported")}</TabsTrigger>
             </TabsList>
           </div>
 
@@ -119,18 +131,18 @@ export default function AdminProjectsPage() {
               <table className="w-full text-sm text-left">
                 <thead className="text-xs text-forest-muted bg-[#181A15] uppercase">
                   <tr>
-                    <th className="px-6 py-4 font-semibold">Project Details</th>
-                    <th className="px-6 py-4 font-semibold">Organization</th>
-                    <th className="px-6 py-4 font-semibold">Date</th>
-                    <th className="px-6 py-4 font-semibold">Status</th>
-                    <th className="px-6 py-4 font-semibold text-right">Actions</th>
+                    <th className="px-6 py-4 font-semibold">{t("admin.projects.col_details")}</th>
+                    <th className="px-6 py-4 font-semibold">{t("admin.projects.col_org")}</th>
+                    <th className="px-6 py-4 font-semibold">{t("admin.projects.col_date")}</th>
+                    <th className="px-6 py-4 font-semibold">{t("admin.projects.col_status")}</th>
+                    <th className="px-6 py-4 font-semibold text-right">{t("admin.projects.col_actions")}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
                   {filteredProjects.length === 0 ? (
                     <tr>
                       <td colSpan={5} className="px-6 py-8 text-center text-forest-muted">
-                        No projects found.
+                        {t("admin.projects.no_projects")}
                       </td>
                     </tr>
                   ) : filteredProjects.map((project) => (
@@ -161,11 +173,13 @@ export default function AdminProjectsPage() {
                         <Badge variant="outline" className={
                           project.status === 'published' 
                             ? 'border-emerald-500/30 text-emerald-500 bg-emerald-500/5'
-                            : project.status === 'draft'
+                            : (project.status === 'draft' || project.status === 'pending')
                             ? 'border-yellow-500/30 text-yellow-500 bg-yellow-500/5'
+                            : project.status === 'cancelled'
+                            ? 'border-red-500/30 text-red-500 bg-red-500/5'
                             : 'border-slate-500/30 text-slate-400 bg-slate-500/5'
                         }>
-                          {project.status.toUpperCase()}
+                          {project.status === 'pending' ? t("admin.projects.status_pending", "PENDING") : project.status.toUpperCase()}
                         </Badge>
                       </td>
                       <td className="px-6 py-4 text-right">
@@ -176,30 +190,31 @@ export default function AdminProjectsPage() {
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end" className="bg-[#181A15] border-forest-border">
-                            {project.status === 'draft' && (
+                            {(project.status === 'draft' || project.status === 'pending') && (
                               <>
                                 <DropdownMenuItem 
                                   className="text-emerald-500 hover:text-emerald-400 focus:text-emerald-400 focus:bg-[#21261B] cursor-pointer"
                                   onSelect={() => handleApprove(project.id)}
                                 >
                                   <CheckCircle2 className="w-4 h-4 mr-2" />
-                                  Approve & Publish
+                                  {t("admin.projects.approve")}
                                 </DropdownMenuItem>
                                 <DropdownMenuItem 
                                   className="text-red-500 hover:text-red-400 focus:text-red-400 focus:bg-[#21261B] cursor-pointer"
                                   onSelect={() => handleReject(project.id)}
                                 >
                                   <XCircle className="w-4 h-4 mr-2" />
-                                  Reject Project
+                                  {t("admin.projects.reject")}
                                 </DropdownMenuItem>
                               </>
                             )}
-                            <DropdownMenuItem 
-                              className="text-forest-beige focus:bg-[#21261B] focus:text-forest-beige cursor-pointer"
-                              onSelect={() => toast.info("Project details view coming soon.")}
-                            >
-                              View Details
-                            </DropdownMenuItem>
+                            <Link href={`/admin/projects/${project.id}`}>
+                              <DropdownMenuItem 
+                                className="text-forest-beige focus:bg-[#21261B] focus:text-forest-beige cursor-pointer"
+                              >
+                                {t("admin.projects.view_details")}
+                              </DropdownMenuItem>
+                            </Link>
                           </DropdownMenuContent>
                         </DropdownMenu>
                       </td>

@@ -11,9 +11,11 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { toast } from "sonner";
 import { useSearchParams } from "next/navigation";
+import { useTranslation } from "react-i18next";
 
 // 2. Ubah nama dari 'export default function OrganizationMessagesPage' menjadi komponen internal biasa
 function OrganizationMessagesContent() {
+  const { t } = useTranslation("common");
   const { user } = useAuth();
   const searchParams = useSearchParams();
   const initialUserId = searchParams.get('user');
@@ -257,11 +259,11 @@ function OrganizationMessagesContent() {
       {/* Sidebar Contacts */}
       <div className={`${activeContact ? 'hidden md:flex' : 'flex'} w-full md:w-80 border-r border-forest-border flex-col bg-[#131511]`}>
         <div className="p-4 border-b border-forest-border bg-[#181A15]">
-          <h2 className="text-xl font-bold text-forest-beige mb-4">Messages</h2>
+          <h2 className="text-xl font-bold text-forest-beige mb-4">{t("messages.title", "Messages")}</h2>
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#7A8072]" />
             <Input
-              placeholder="Search contacts..."
+              placeholder={t("messages.search", "Search contacts...")}
               className="pl-9 bg-[#21261B] border-transparent focus-visible:ring-forest-accent rounded-xl text-forest-beige"
             />
           </div>
@@ -270,7 +272,7 @@ function OrganizationMessagesContent() {
         <div className="flex-1 overflow-y-auto custom-scrollbar">
           {contacts.length === 0 ? (
             <div className="p-8 text-center text-forest-muted">
-              <p>No approved volunteers yet.</p>
+              <p>{t("messages.no_contacts", "No approved volunteers yet.")}</p>
             </div>
           ) : (
             contacts.map((contact) => (
@@ -331,7 +333,7 @@ function OrganizationMessagesContent() {
                 <h3 className="font-bold text-forest-beige">{activeContact.name}</h3>
                 <p className="text-xs text-emerald-500 font-medium flex items-center">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5"></span>
-                  Online
+                  {t("messages.online", "Online")}
                 </p>
               </div>
             </div>
@@ -356,7 +358,7 @@ function OrganizationMessagesContent() {
               </div>
             ) : chats.length === 0 ? (
               <div className="flex justify-center items-center h-full text-forest-muted">
-                <p>Say hi to {activeContact.name}!</p>
+                <p>{t("messages.say_hi", "Say hi to")} {activeContact.name}!</p>
               </div>
             ) : (
               chats.map((msg, idx) => {
@@ -436,7 +438,7 @@ function OrganizationMessagesContent() {
 
               <div className="flex-1 relative">
                 <Input
-                  placeholder="Write a message..."
+                  placeholder={t("messages.write_message", "Write a message...")}
                   className="w-full h-12 bg-[#21261B] border-transparent focus-visible:ring-forest-accent rounded-full pl-6 pr-12 text-forest-beige placeholder:text-forest-muted/70 shadow-inner"
                   value={newMessage}
                   onChange={(e) => setNewMessage(e.target.value)}
@@ -458,8 +460,8 @@ function OrganizationMessagesContent() {
           <div className="w-20 h-20 bg-[#21261B] rounded-full flex items-center justify-center mb-6 shadow-inner">
             <Send className="w-8 h-8 text-[#7A8072]" />
           </div>
-          <h2 className="text-xl font-bold text-forest-beige mb-2">No Contact Selected</h2>
-          <p>Choose a contact from the list to start messaging.</p>
+          <h2 className="text-xl font-bold text-forest-beige mb-2">{t("messages.no_contact_selected", "No Contact Selected")}</h2>
+          <p>{t("messages.choose_contact", "Choose a contact from the list to start messaging.")}</p>
         </div>
       )}
     </div>

@@ -17,6 +17,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { StatsCard } from "@/components/ui/stats-card";
+import { useTranslation } from "react-i18next";
 
 // Mock Data
 const MONTHLY_VOLUNTEERS = [
@@ -47,6 +48,7 @@ const RETENTION_DATA = [
 ];
 
 export default function OrganizationAnalyticsPage() {
+  const { t } = useTranslation("common");
   const { user } = useAuth();
   const [timeRange, setTimeRange] = useState("6m");
   
@@ -149,17 +151,17 @@ export default function OrganizationAnalyticsPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-forest-beige tracking-tight">Analytics & Reports</h1>
-          <p className="text-forest-muted mt-1">Track your organization's impact and volunteer engagement.</p>
+          <h1 className="text-3xl font-bold text-forest-beige tracking-tight">{t("analytics.title", "Analytics & Reports")}</h1>
+          <p className="text-forest-muted mt-1">{t("analytics.desc", "Track your organization's impact and volunteer engagement.")}</p>
         </div>
         <div className="flex items-center gap-2">
           <Button variant="outline" className="bg-forest-card border-forest-border">
             <Filter className="w-4 h-4 mr-2" />
-            Filter
+            {t("analytics.filter", "Filter")}
           </Button>
           <Button className="btn-primary">
             <Download className="w-4 h-4 mr-2" />
-            Export Report
+            {t("analytics.export", "Export Report")}
           </Button>
         </div>
       </div>
@@ -168,10 +170,10 @@ export default function OrganizationAnalyticsPage() {
       <div className="bg-forest-card p-2 rounded-xl border border-forest-border shadow-sm inline-block">
         <Tabs value={timeRange} onValueChange={setTimeRange}>
           <TabsList className="bg-transparent">
-            <TabsTrigger value="1m" className="data-[state=active]:bg-[#21261B] data-[state=active]:text-[#829661]">1 Month</TabsTrigger>
-            <TabsTrigger value="3m" className="data-[state=active]:bg-[#21261B] data-[state=active]:text-[#829661]">3 Months</TabsTrigger>
-            <TabsTrigger value="6m" className="data-[state=active]:bg-[#21261B] data-[state=active]:text-[#829661]">6 Months</TabsTrigger>
-            <TabsTrigger value="1y" className="data-[state=active]:bg-[#21261B] data-[state=active]:text-[#829661]">1 Year</TabsTrigger>
+            <TabsTrigger value="1m" className="data-[state=active]:bg-[#21261B] data-[state=active]:text-[#829661]">{t("analytics.time_range.1m", "1 Month")}</TabsTrigger>
+            <TabsTrigger value="3m" className="data-[state=active]:bg-[#21261B] data-[state=active]:text-[#829661]">{t("analytics.time_range.3m", "3 Months")}</TabsTrigger>
+            <TabsTrigger value="6m" className="data-[state=active]:bg-[#21261B] data-[state=active]:text-[#829661]">{t("analytics.time_range.6m", "6 Months")}</TabsTrigger>
+            <TabsTrigger value="1y" className="data-[state=active]:bg-[#21261B] data-[state=active]:text-[#829661]">{t("analytics.time_range.1y", "1 Year")}</TabsTrigger>
           </TabsList>
         </Tabs>
       </div>
@@ -184,28 +186,28 @@ export default function OrganizationAnalyticsPage() {
         className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
       >
         <StatsCard
-          title="Total Volunteers"
+          title={t("analytics.stats.volunteers", "Total Volunteers")}
           value={stats.totalVolunteers.toString()}
           icon={Users}
           iconClassName="bg-blue-500/10 text-blue-400"
           trend={{ value: 24, isPositive: true }}
         />
         <StatsCard
-          title="Total Impact Hours"
+          title={t("analytics.stats.hours", "Total Impact Hours")}
           value={stats.totalImpactHours.toString()}
           icon={Clock}
           iconClassName="bg-[#2C3322] text-[#829661]"
           trend={{ value: 12, isPositive: true }}
         />
         <StatsCard
-          title="Volunteer Retention"
+          title={t("analytics.stats.retention", "Volunteer Retention")}
           value={`${stats.retentionRate}%`}
           icon={Award}
           iconClassName="bg-purple-500/10 text-purple-400"
           trend={{ value: 4, isPositive: true }}
         />
         <StatsCard
-          title="Avg. Cost per Project"
+          title={t("analytics.stats.cost", "Avg. Cost per Project")}
           value={`$${stats.avgCost}`}
           icon={TrendingUp}
           iconClassName="bg-amber-500/10 text-amber-400"
@@ -224,8 +226,8 @@ export default function OrganizationAnalyticsPage() {
         >
           <Card className="border-0 shadow-sm shadow-forest-border/20 h-full">
             <CardHeader className="pb-2">
-              <CardTitle className="text-lg">Volunteer Growth</CardTitle>
-              <CardDescription>Number of active volunteers over time</CardDescription>
+              <CardTitle className="text-lg">{t("analytics.charts.growth_title", "Volunteer Growth")}</CardTitle>
+              <CardDescription>{t("analytics.charts.growth_desc", "Number of active volunteers over time")}</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="h-[300px] mt-4 w-full">
@@ -260,8 +262,8 @@ export default function OrganizationAnalyticsPage() {
         >
           <Card className="border-0 shadow-sm shadow-forest-border/20 h-full">
             <CardHeader className="pb-2">
-              <CardTitle className="text-lg">Hours by Project</CardTitle>
-              <CardDescription>Distribution of volunteer hours</CardDescription>
+              <CardTitle className="text-lg">{t("analytics.charts.hours_title", "Hours by Project")}</CardTitle>
+              <CardDescription>{t("analytics.charts.hours_desc", "Distribution of volunteer hours")}</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="h-[300px] mt-4 w-full">
@@ -292,10 +294,10 @@ export default function OrganizationAnalyticsPage() {
           <Card className="border-0 shadow-sm shadow-forest-border/20 h-full">
             <CardHeader className="pb-2 flex flex-row items-center justify-between">
               <div>
-                <CardTitle className="text-lg">Retention Rate (%)</CardTitle>
-                <CardDescription>Percentage of volunteers who returned for a second project</CardDescription>
+                <CardTitle className="text-lg">{t("analytics.charts.retention_title", "Retention Rate (%)")}</CardTitle>
+                <CardDescription>{t("analytics.charts.retention_desc", "Percentage of volunteers who returned for a second project")}</CardDescription>
               </div>
-              <Badge className="bg-[#2C3322] text-[#829661] border-0">+4% this month</Badge>
+              <Badge className="bg-[#2C3322] text-[#829661] border-0">+4% {t("analytics.this_month", "this month")}</Badge>
             </CardHeader>
             <CardContent>
               <div className="h-[300px] mt-4 w-full">

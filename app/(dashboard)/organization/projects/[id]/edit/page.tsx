@@ -11,8 +11,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 export default function EditProjectPage({ params }: { params: { id: string } }) {
+  const { t } = useTranslation("common");
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDraft, setIsDraft] = useState(false);
@@ -47,7 +49,7 @@ export default function EditProjectPage({ params }: { params: { id: string } }) 
     // Simulate API call
     setTimeout(() => {
       setIsSubmitting(false);
-      toast.success(asDraft ? "Project saved as draft" : "Project updated successfully!");
+      toast.success(asDraft ? t("projects.saved_draft", "Project saved as draft") : t("projects.updated_success", "Project updated successfully!"));
       router.push('/organization/projects');
     }, 1500);
   };
@@ -62,13 +64,13 @@ export default function EditProjectPage({ params }: { params: { id: string } }) 
             className="flex items-center text-sm font-medium text-forest-muted hover:text-[#829661] transition-colors mb-2"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Projects
+            {t("projects.back_to_projects", "Back to Projects")}
           </button>
           <h1 className="text-3xl font-bold text-forest-beige tracking-tight">
-            Edit Project
+            {t("projects.edit_title", "Edit Project")}
           </h1>
           <p className="text-forest-muted mt-1">
-            Update your project details below.
+            {t("projects.edit_desc", "Update your project details below.")}
           </p>
         </div>
       </div>
@@ -83,13 +85,13 @@ export default function EditProjectPage({ params }: { params: { id: string } }) 
         <Card className="border-0 shadow-sm shadow-forest-border/20">
           <CardContent className="p-6 md:p-8 space-y-6">
             <div className="space-y-4">
-              <h3 className="text-lg font-bold text-forest-beige">1. Basic Information</h3>
+              <h3 className="text-lg font-bold text-forest-beige">{t("projects.basic_info", "1. Basic Information")}</h3>
               <div className="h-px bg-[#1E211A]" />
             </div>
 
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="title">Project Title <span className="text-red-500">*</span></Label>
+                <Label htmlFor="title">{t("projects.project_title", "Project Title")} <span className="text-red-500">*</span></Label>
                 <Input 
                   id="title" 
                   value={formData.title} 
@@ -101,22 +103,22 @@ export default function EditProjectPage({ params }: { params: { id: string } }) 
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="category">Category <span className="text-red-500">*</span></Label>
+                  <Label htmlFor="category">{t("projects.category", "Category")} <span className="text-red-500">*</span></Label>
                   <Select value={formData.category} onValueChange={v => setFormData({...formData, category: v})}>
                     <SelectTrigger className="focus-ring">
-                      <SelectValue placeholder="Select a category" />
+                      <SelectValue placeholder={t("projects.category_placeholder", "Select a category")} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="environment">Environment</SelectItem>
-                      <SelectItem value="education">Education</SelectItem>
-                      <SelectItem value="health">Health</SelectItem>
+                      <SelectItem value="environment">{t("projects.category_env", "Environment")}</SelectItem>
+                      <SelectItem value="education">{t("projects.category_edu", "Education")}</SelectItem>
+                      <SelectItem value="health">{t("projects.category_health", "Health")}</SelectItem>
                       <SelectItem value="animal">Animal Welfare</SelectItem>
-                      <SelectItem value="community">Community</SelectItem>
+                      <SelectItem value="community">{t("projects.category_social", "Community")}</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="location">Location <span className="text-red-500">*</span></Label>
+                  <Label htmlFor="location">{t("projects.location", "Location")} <span className="text-red-500">*</span></Label>
                   <Input 
                     id="location" 
                     value={formData.location} 
@@ -128,7 +130,7 @@ export default function EditProjectPage({ params }: { params: { id: string } }) 
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="description">Project Description <span className="text-red-500">*</span></Label>
+                <Label htmlFor="description">{t("projects.project_desc", "Project Description")} <span className="text-red-500">*</span></Label>
                 <Textarea 
                   id="description" 
                   value={formData.description} 
@@ -145,13 +147,13 @@ export default function EditProjectPage({ params }: { params: { id: string } }) 
         <Card className="border-0 shadow-sm shadow-forest-border/20">
           <CardContent className="p-6 md:p-8 space-y-6">
             <div className="space-y-4">
-              <h3 className="text-lg font-bold text-forest-beige">2. Requirements & Benefits</h3>
+              <h3 className="text-lg font-bold text-forest-beige">{t("projects.req_ben", "2. Requirements & Benefits")}</h3>
               <div className="h-px bg-[#1E211A]" />
             </div>
 
             <div className="space-y-6">
               <div className="space-y-2">
-                <Label htmlFor="requirements">Requirements (one per line)</Label>
+                <Label htmlFor="requirements">{t("projects.requirements", "Requirements (one per line)")}</Label>
                 <Textarea 
                   id="requirements" 
                   value={formData.requirements} 
@@ -161,7 +163,7 @@ export default function EditProjectPage({ params }: { params: { id: string } }) 
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="benefits">Benefits (one per line)</Label>
+                <Label htmlFor="benefits">{t("projects.benefits", "Benefits (one per line)")}</Label>
                 <Textarea 
                   id="benefits" 
                   value={formData.benefits} 
@@ -177,13 +179,13 @@ export default function EditProjectPage({ params }: { params: { id: string } }) 
         <Card className="border-0 shadow-sm shadow-forest-border/20">
           <CardContent className="p-6 md:p-8 space-y-6">
             <div className="space-y-4">
-              <h3 className="text-lg font-bold text-forest-beige">3. Timeline & Capacity</h3>
+              <h3 className="text-lg font-bold text-forest-beige">{t("projects.timeline_cap", "3. Timeline & Capacity")}</h3>
               <div className="h-px bg-[#1E211A]" />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <Label htmlFor="volunteersNeeded">Volunteers Needed <span className="text-red-500">*</span></Label>
+                <Label htmlFor="volunteersNeeded">{t("projects.volunteers_needed", "Volunteers Needed")} <span className="text-red-500">*</span></Label>
                 <Input 
                   id="volunteersNeeded" 
                   type="number" 
@@ -195,7 +197,7 @@ export default function EditProjectPage({ params }: { params: { id: string } }) 
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="deadline">Application Deadline <span className="text-red-500">*</span></Label>
+                <Label htmlFor="deadline">{t("projects.app_deadline", "Application Deadline")} <span className="text-red-500">*</span></Label>
                 <div className="relative">
                   <CalendarIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#7A8072]" />
                   <Input 
@@ -209,7 +211,7 @@ export default function EditProjectPage({ params }: { params: { id: string } }) 
                 </div>
               </div>
               <div className="space-y-2 md:col-span-2">
-                <Label htmlFor="eventDate">Event Date & Time (Optional)</Label>
+                <Label htmlFor="eventDate">{t("projects.event_date", "Event Date & Time (Optional)")}</Label>
                 <Input 
                   id="eventDate" 
                   value={formData.eventDate} 
@@ -225,7 +227,7 @@ export default function EditProjectPage({ params }: { params: { id: string } }) 
         <Card className="border-0 shadow-sm shadow-forest-border/20">
           <CardContent className="p-6 md:p-8 space-y-6">
             <div className="space-y-4">
-              <h3 className="text-lg font-bold text-forest-beige">4. Project Banner</h3>
+              <h3 className="text-lg font-bold text-forest-beige">{t("projects.project_banner", "4. Project Banner")}</h3>
               <div className="h-px bg-[#1E211A]" />
             </div>
 
@@ -241,7 +243,7 @@ export default function EditProjectPage({ params }: { params: { id: string } }) 
                   <img src={bannerImage} alt="Preview" className="w-full h-full object-cover" />
                   <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                     <p className="text-forest-beige font-medium flex items-center gap-2">
-                      <Upload className="w-5 h-5" /> Click to change image
+                      <Upload className="w-5 h-5" /> {t("projects.click_to_change", "Click to change image")}
                     </p>
                   </div>
                 </div>
@@ -250,9 +252,9 @@ export default function EditProjectPage({ params }: { params: { id: string } }) 
                   <div className="w-16 h-16 bg-[#21261B] text-forest-accent rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
                     <Upload className="w-8 h-8" />
                   </div>
-                  <h4 className="text-forest-beige font-medium mb-1">Upload a new cover image</h4>
-                  <p className="text-forest-muted text-sm mb-4">PNG, JPG, WEBP up to 5MB. Recommended size 1200x600px.</p>
-                  <Button type="button" variant="outline" size="sm">Browse Files</Button>
+                  <h4 className="text-forest-beige font-medium mb-1">{t("projects.upload_new_cover", "Upload a new cover image")}</h4>
+                  <p className="text-forest-muted text-sm mb-4">{t("projects.img_guidelines", "PNG, JPG, WEBP up to 5MB. Recommended size 1200x600px.")}</p>
+                  <Button type="button" variant="outline" size="sm">{t("projects.browse_files", "Browse Files")}</Button>
                 </>
               )}
             </div>
@@ -271,7 +273,7 @@ export default function EditProjectPage({ params }: { params: { id: string } }) 
             ) : (
               <Save className="mr-2 h-5 w-5" />
             )}
-            Save Changes
+            {t("projects.save_changes", "Save Changes")}
           </Button>
         </div>
       </motion.form>

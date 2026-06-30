@@ -6,7 +6,14 @@ import { Search, Filter, MapPin, Clock, Users, Building2, Heart, FolderKanban } 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 import { supabase } from "@/lib/supabase/client";
@@ -16,12 +23,14 @@ const CATEGORIES = ["All", "Environment", "Education", "Health", "Animal Welfare
 import { useAuth } from "@/contexts/AuthContext";
 
 function ExplorePublicContent() {
+  const { t } = useTranslation("common");
   const { user, profile } = useAuth();
   const searchParams = useSearchParams();
   const initialQuery = searchParams.get("q") || "";
   
   const [searchQuery, setSearchQuery] = useState(initialQuery);
   const [activeCategory, setActiveCategory] = useState("All");
+  const [paidFilter, setPaidFilter] = useState("All");
   const [projects, setProjects] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -67,7 +76,12 @@ function ExplorePublicContent() {
     const matchesSearch = project.title?.toLowerCase().includes(searchQuery.toLowerCase()) || 
                           project.organizations?.name?.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory = activeCategory === "All" || project.category === activeCategory;
-    return matchesSearch && matchesCategory;
+    
+    let matchesPaid = true;
+    if (paidFilter === "Paid") matchesPaid = project.is_paid === true;
+    if (paidFilter === "Free") matchesPaid = project.is_paid === false || project.is_paid === null;
+
+    return matchesSearch && matchesCategory && matchesPaid;
   });
 
   return (
@@ -78,10 +92,10 @@ function ExplorePublicContent() {
         {/* Header Section */}
         <div className="text-center max-w-3xl mx-auto space-y-4">
           <h1 className="text-4xl md:text-5xl font-extrabold text-forest-beige tracking-tight">
-            Explore Open <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-500">Projects</span>
+            {t("explore.title")} <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-500">{t("explore.title_highlight")}</span>
           </h1>
           <p className="text-lg text-forest-muted">
-            Find the perfect cause to contribute your skills and time. Discover volunteering opportunities from organizations worldwide.
+            {t("explore.desc")}
           </p>
         </div>
 
@@ -90,16 +104,31 @@ function ExplorePublicContent() {
           <div className="relative flex-1">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#7A8072]" />
             <Input 
-              placeholder="Search projects or organizations..." 
+              placeholder={t("explore.search_placeholder")} 
               className="pl-12 h-14 rounded-full border-forest-border bg-forest-card focus-visible:ring-forest-accent shadow-sm text-base"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
-          <Button variant="outline" className="h-14 px-8 rounded-full border-forest-border bg-forest-card text-[#DFD5C2] hover:bg-[#181A15] shadow-sm">
-            <Filter className="w-5 h-5 mr-2" />
-            Filter
-          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" className="h-14 px-8 rounded-full border-forest-border bg-forest-card text-[#DFD5C2] hover:bg-[#181A15] shadow-sm">
+                <Filter className="w-5 h-5 mr-2" />
+                {paidFilter === "All" ? t("explore.filter_type") : (paidFilter === "Free" ? t("explore.free_volunteering") : t("explore.paid_programs"))}
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-48 bg-[#181A15] border-forest-border">
+              <DropdownMenuItem onClick={() => setPaidFilter("All")} className="text-forest-beige hover:bg-[#21261B] focus:bg-[#21261B] cursor-pointer">
+                {t("explore.all_projects")}
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setPaidFilter("Free")} className="text-forest-beige hover:bg-[#21261B] focus:bg-[#21261B] cursor-pointer">
+                {t("explore.free_volunteering")}
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setPaidFilter("Paid")} className="text-amber-500 hover:bg-[#21261B] focus:bg-[#21261B] cursor-pointer">
+                {t("explore.paid_programs")}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
 
         {/* Categories */}
@@ -114,7 +143,7 @@ function ExplorePublicContent() {
                   : "bg-forest-card text-forest-muted border border-forest-border hover:border-[#38402D] hover:bg-[#181A15]"
               }`}
             >
-              {category}
+              {category === "All" ? t("landing.categories.All", { defaultValue: "All" }) : t(`landing.categories.${category}`, { defaultValue: category })}
             </button>
           ))}
         </div>
@@ -154,7 +183,7 @@ function ExplorePublicContent() {
                         </Badge>
                         {project.is_paid && (
                           <Badge className="bg-amber-500/90 text-amber-950 backdrop-blur-sm border-0 font-bold hover:bg-amber-500 px-3 py-1">
-                            Paid
+                            {t("explore.paid_programs")}
                           </Badge>
                         )}
                       </div>
@@ -162,7 +191,7 @@ function ExplorePublicContent() {
                       {project.status === 'completed' && (
                         <div className="absolute top-4 right-4 pointer-events-none">
                           <Badge className="bg-blue-500 text-white border-0 font-medium px-3 py-1">
-                            Completed
+                            {t("org_dash.status_completed", "Completed")}
                           </Badge>
                         </div>
                       )}
@@ -188,14 +217,14 @@ function ExplorePublicContent() {
                         {project.deadline && (
                           <div className="flex items-center gap-3 text-sm text-forest-muted">
                             <Clock className="w-4 h-4 text-[#7A8072] shrink-0" />
-                            Apply by {new Date(project.deadline).toLocaleDateString()}
+                            {t("explore.deadline")}: {new Date(project.deadline).toLocaleDateString()}
                           </div>
                         )}
                       </div>
 
                       <div className="flex flex-col gap-2 mb-6">
                         <div className="flex items-center justify-between text-sm font-medium">
-                          <span className="text-forest-muted">Volunteers Needed</span>
+                          <span className="text-forest-muted">{t("explore.volunteers_needed")}</span>
                           <span className="text-forest-beige">{applied} / {needed}</span>
                         </div>
                         <div className="h-2 w-full bg-[#1E211A] rounded-full overflow-hidden">
@@ -213,7 +242,7 @@ function ExplorePublicContent() {
                             variant={isFull ? "outline" : "default"}
                             disabled={isFull}
                           >
-                            {isFull ? 'Project Full' : 'Apply Now'}
+                            {isFull ? t("explore.project_full") : t("explore.apply_now")}
                           </Button>
                         </Link>
                       ) : (
@@ -223,7 +252,7 @@ function ExplorePublicContent() {
                             variant={isFull ? "outline" : "default"}
                             disabled={isFull}
                           >
-                            {isFull ? 'Project Full' : 'Sign in to Apply'}
+                            {isFull ? t("explore.project_full") : t("explore.sign_in_apply")}
                           </Button>
                         </Link>
                       )}
@@ -240,9 +269,9 @@ function ExplorePublicContent() {
             <div className="w-20 h-20 bg-[#1E211A] rounded-full flex items-center justify-center mx-auto mb-4">
               <FolderKanban className="w-10 h-10 text-[#7A8072]" />
             </div>
-            <h3 className="text-xl font-bold text-forest-beige mb-2">No projects found</h3>
+            <h3 className="text-xl font-bold text-forest-beige mb-2">{t("explore.no_projects")}</h3>
             <p className="text-forest-muted">
-              Try adjusting your search or filters to find what you're looking for.
+              {t("explore.no_projects_desc")}
             </p>
           </div>
         )}

@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useTranslation } from "react-i18next";
 import { useAuth } from "@/contexts/AuthContext";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -27,37 +28,41 @@ import {
   HandHelping,
   Crown,
   Headset,
+  Wallet,
 } from "lucide-react";
 
 // Definitions based on PRD roles
 const volunteerLinks = [
-  { name: "Dashboard", href: "/volunteer/dashboard", icon: LayoutDashboard },
-  { name: "Explore", href: "/volunteer/explore", icon: Search },
-  { name: "My Events", href: "/volunteer/events", icon: CalendarDays },
-  { name: "Community", href: "/volunteer/community", icon: Users },
-  { name: "Messages", href: "/volunteer/messages", icon: MessageSquare },
-  { name: "Profile", href: "/volunteer/profile", icon: User },
+  { key: "dashboard", href: "/volunteer/dashboard", icon: LayoutDashboard },
+  { key: "explore", href: "/volunteer/explore", icon: Search },
+  { key: "events", href: "/volunteer/events", icon: CalendarDays },
+  { key: "wallet", href: "/volunteer/wallet", icon: Wallet },
+  { key: "community", href: "/volunteer/community", icon: Users },
+  { key: "messages", href: "/volunteer/messages", icon: MessageSquare },
+  { key: "profile", href: "/volunteer/profile", icon: User },
 ];
 
 const organizationLinks = [
-  { name: "Dashboard", href: "/organization/dashboard", icon: LayoutDashboard },
-  { name: "Projects", href: "/organization/projects", icon: Briefcase },
-  { name: "Applications", href: "/organization/applications", icon: FolderHeart },
-  { name: "Volunteers", href: "/organization/volunteers", icon: HandHelping },
-  { name: "Community", href: "/organization/community", icon: Users },
-  { name: "Events", href: "/organization/events", icon: CalendarDays },
-  { name: "Analytics", href: "/organization/analytics", icon: BarChart },
-  { name: "Messages", href: "/organization/messages", icon: MessageSquare },
-  { name: "Assistant", href: "/organization/assistant", icon: HandHelping }, // Using HandHelping or we can import Bot
-  { name: "Subscription", href: "/organization/subscription", icon: Crown },
-  { name: "Settings", href: "/organization/settings", icon: Settings },
+  { key: "dashboard", href: "/organization/dashboard", icon: LayoutDashboard },
+  { key: "projects", href: "/organization/projects", icon: Briefcase },
+  { key: "wallet", href: "/organization/wallet", icon: Wallet },
+  { key: "applications", href: "/organization/applications", icon: FolderHeart },
+  { key: "volunteers", href: "/organization/volunteers", icon: HandHelping },
+  { key: "community", href: "/organization/community", icon: Users },
+  { key: "events", href: "/organization/events", icon: CalendarDays },
+  { key: "analytics", href: "/organization/analytics", icon: BarChart },
+  { key: "messages", href: "/organization/messages", icon: MessageSquare },
+  { key: "assistant", href: "/organization/assistant", icon: HandHelping }, // Using HandHelping or we can import Bot
+  { key: "subscription", href: "/organization/subscription", icon: Crown },
+  { key: "settings", href: "/organization/settings", icon: Settings },
 ];
 
 const adminLinks = [
-  { name: "Dashboard", href: "/admin/dashboard", icon: LayoutDashboard },
-  { name: "Manage Users", href: "/admin/users", icon: Users },
-  { name: "Manage Projects", href: "/admin/projects", icon: FolderHeart },
-  { name: "Support", href: "/admin/support", icon: Headset },
+  { key: "dashboard", href: "/admin/dashboard", icon: LayoutDashboard },
+  { key: "manage_users", href: "/admin/users", icon: Users },
+  { key: "manage_projects", href: "/admin/projects", icon: FolderHeart },
+  { key: "wallet", href: "/admin/wallet", icon: Wallet },
+  { key: "support", href: "/admin/support", icon: Headset },
 ];
 
 export default function DashboardSidebar({
@@ -68,6 +73,7 @@ export default function DashboardSidebar({
   setMobileOpen: (open: boolean) => void;
 }) {
   const pathname = usePathname();
+  const { t } = useTranslation("common");
   const { profile } = useAuth();
   const [isCollapsed, setIsCollapsed] = useState(false);
 
@@ -119,21 +125,21 @@ export default function DashboardSidebar({
             const isActive = pathname?.startsWith(link.href);
             return (
               <Link
-                key={link.name}
+                key={link.key}
                 href={link.href}
                 onClick={() => setMobileOpen(false)}
                 className={`flex items-center gap-3 rounded-xl px-3 py-2.5 transition-all duration-200 group ${isActive
                     ? "bg-[#21261B] text-[#829661] font-medium"
                     : "text-forest-muted hover:bg-[#181A15] hover:text-forest-beige"
                   }`}
-                title={isCollapsed ? link.name : undefined}
+                title={isCollapsed ? t(`nav.${link.key}`) : undefined}
               >
                 <link.icon
                   size={20}
                   className={`flex-shrink-0 ${isActive ? "text-[#829661]" : "text-[#7A8072] group-hover:text-forest-muted"
                     }`}
                 />
-                {!isCollapsed && <span>{link.name}</span>}
+                {!isCollapsed && <span>{t(`nav.${link.key}`)}</span>}
               </Link>
             );
           })}
@@ -144,10 +150,10 @@ export default function DashboardSidebar({
         <button
           className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-red-500 transition-colors hover:bg-red-500/10 ${isCollapsed ? "justify-center" : ""
             }`}
-          title={isCollapsed ? "Logout" : undefined}
+          title={isCollapsed ? t("nav.logout") : undefined}
         >
           <LogOut size={20} />
-          {!isCollapsed && <span className="font-medium">Logout</span>}
+          {!isCollapsed && <span className="font-medium">{t("nav.logout")}</span>}
         </button>
       </div>
     </div>

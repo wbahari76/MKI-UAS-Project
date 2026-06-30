@@ -26,8 +26,10 @@ import {
 } from "@/components/ui/select";
 import { supabase } from "@/lib/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { useTranslation } from "react-i18next";
 
 export default function OrganizationApplicationsPage() {
+  const { t } = useTranslation("common");
   const { user } = useAuth();
   const [applications, setApplications] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -46,12 +48,12 @@ export default function OrganizationApplicationsPage() {
         setLoading(true);
         const { data: org, error: orgError } = await supabase
           .from('organizations')
-          .select('id, subscription_tier')
+          .select('id')
           .eq('owner_id', user.id)
           .single();
 
         if (orgError) throw orgError;
-        setSubscriptionTier(org.subscription_tier || "free");
+        setSubscriptionTier("free");
 
         const { data: appsData, error: appsError } = await supabase
           .from('project_applications')
@@ -86,21 +88,8 @@ export default function OrganizationApplicationsPage() {
 
         if (profilesError) throw profilesError;
 
-        const profileIds = Array.from(new Set((profilesData || []).map(p => p.id)));
-        const { data: volProfilesData, error: volProfilesError } = await supabase
-          .from('volunteer_profiles')
-          .select('profile_id, cv_url, portfolio_url')
-          .in('profile_id', profileIds);
-
-        if (volProfilesError) throw volProfilesError;
-
-        const volProfilesMap = (volProfilesData || []).reduce((acc, vp) => {
-          acc[vp.profile_id] = vp;
-          return acc;
-        }, {} as Record<string, any>);
-
         const profilesMap = (profilesData || []).reduce((acc, profile) => {
-          acc[profile.user_id] = { ...profile, ...volProfilesMap[profile.id] };
+          acc[profile.user_id] = profile;
           return acc;
         }, {} as Record<string, any>);
 
@@ -144,12 +133,12 @@ export default function OrganizationApplicationsPage() {
     setIsDialogOpen(true);
   };
 
-  const uniqueProjects = ["All Projects", ...Array.from(new Set(applications.map(app => app.project)))];
+  const uniqueProjects = [t("applications.filter_all_projects", "All Projects"), ...Array.from(new Set(applications.map(app => app.project)))];
 
   const filteredApps = applications.filter(app => {
     const matchesSearch = app.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
                           app.project.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesProject = selectedProject === "All Projects" || app.project === selectedProject;
+    const matchesProject = selectedProject === t("applications.filter_all_projects", "All Projects") || app.project === selectedProject;
     return matchesSearch && matchesProject;
   });
 
@@ -159,14 +148,14 @@ export default function OrganizationApplicationsPage() {
       if (appToApprove) {
         const approvedForProject = applications.filter(a => a.project === appToApprove.project && a.status === 'approved').length;
         if (approvedForProject >= 20) {
-          setUpgradeReason("You have reached the maximum limit of 20 volunteers per project on the Free plan.");
+          setUpgradeReason(t("applications.limit_volunteers", "You have reached the maximum limit of 20 volunteers per project on the Free plan."));
           setShowUpgradeDialog(true);
           return;
         }
 
         const pendingCount = applications.filter(a => a.status === 'pending').length;
         if (pendingCount >= 50) {
-          setUpgradeReason("You have reached the maximum limit of 50 active applications on the Free plan.");
+          setUpgradeReason(t("applications.limit_active", "You have reached the maximum limit of 50 active applications on the Free plan."));
           setShowUpgradeDialog(true);
           return;
         }
@@ -192,11 +181,11 @@ export default function OrganizationApplicationsPage() {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "approved":
-        return <Badge className="bg-[#2C3322] text-[#829661] hover:bg-[#38402D] border-0">Approved</Badge>;
+        return <Badge className="bg-[#2C3322] text-[#829661] hover:bg-[#38402D] border-0">{t("applications.approve")}</Badge>;
       case "pending":
-        return <Badge className="bg-amber-500/10 text-amber-400 hover:bg-amber-200 border-0">Pending</Badge>;
+        return <Badge className="bg-amber-500/10 text-amber-400 hover:bg-amber-200 border-0">{t("applications.pending", "Pending")}</Badge>;
       case "rejected":
-        return <Badge className="bg-red-500/10 text-red-400 hover:bg-red-200 border-0">Rejected</Badge>;
+        return <Badge className="bg-red-500/10 text-red-400 hover:bg-red-200 border-0">{t("applications.reject")}</Badge>;
       default:
         return <Badge>{status}</Badge>;
     }
@@ -210,8 +199,8 @@ export default function OrganizationApplicationsPage() {
     <div className="space-y-6 pb-20">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-forest-beige tracking-tight">Applications</h1>
-          <p className="text-forest-muted mt-1">Review and manage volunteer applications for your projects.</p>
+          <h1 className="text-3xl font-bold text-forest-beige tracking-tight">{t("applications.title")}</h1>
+          <p className="text-forest-muted mt-1">{t("applications.desc")}</p>
         </div>
       </div>
 
@@ -221,7 +210,7 @@ export default function OrganizationApplicationsPage() {
             <div className="relative flex-1 w-full max-w-md">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#7A8072]" />
               <Input 
-                placeholder="Search applicants or projects..." 
+                placeholder={t("applications.search")}
                 className="pl-9 bg-[#181A15] border-forest-border focus-visible:ring-blue-500"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -231,7 +220,7 @@ export default function OrganizationApplicationsPage() {
             <div className="w-full sm:w-[240px]">
               <Select value={selectedProject} onValueChange={setSelectedProject}>
                 <SelectTrigger className="bg-[#181A15] border-forest-border">
-                  <SelectValue placeholder="Filter by Project" />
+                  <SelectValue placeholder={t("applications.filter")} />
                 </SelectTrigger>
                 <SelectContent>
                   {uniqueProjects.map((project, idx) => (
@@ -250,11 +239,11 @@ export default function OrganizationApplicationsPage() {
             <table className="w-full text-sm text-left">
               <thead className="text-xs text-forest-muted uppercase bg-[#181A15] border-b border-forest-border">
                 <tr>
-                  <th className="px-6 py-4 font-medium">Applicant</th>
-                  <th className="px-6 py-4 font-medium">Project</th>
-                  <th className="px-6 py-4 font-medium">Status</th>
-                  <th className="px-6 py-4 font-medium">Applied On</th>
-                  <th className="px-6 py-4 font-medium text-right">Actions</th>
+                  <th className="px-6 py-4 font-medium">{t("applications.applicant")}</th>
+                  <th className="px-6 py-4 font-medium">{t("applications.project")}</th>
+                  <th className="px-6 py-4 font-medium">{t("applications.status")}</th>
+                  <th className="px-6 py-4 font-medium">{t("applications.applied_on")}</th>
+                  <th className="px-6 py-4 font-medium text-right">{t("applications.actions")}</th>
                 </tr>
               </thead>
               <tbody>
@@ -291,7 +280,7 @@ export default function OrganizationApplicationsPage() {
                               variant="outline" 
                               className="text-[#829661] border-[#4A5D23] hover:bg-[#21261B] h-8 px-2"
                               onClick={() => handleStatusChange(app.id, 'approved')}
-                              title="Approve"
+                              title={t("applications.approve")}
                             >
                               <CheckCircle className="w-4 h-4" />
                             </Button>
@@ -300,7 +289,7 @@ export default function OrganizationApplicationsPage() {
                               variant="outline" 
                               className="text-red-600 border-red-500/20 hover:bg-red-500/10 h-8 px-2"
                               onClick={() => handleStatusChange(app.id, 'rejected')}
-                              title="Reject"
+                              title={t("applications.reject")}
                             >
                               <XCircle className="w-4 h-4" />
                             </Button>
@@ -312,7 +301,7 @@ export default function OrganizationApplicationsPage() {
                             className="h-8 text-forest-muted hover:text-blue-400 hover:bg-blue-500/10"
                             onClick={() => handleViewProfile(app)}
                           >
-                            <FileText className="w-4 h-4 mr-2" /> View Profile
+                            <FileText className="w-4 h-4 mr-2" /> {t("applications.view_profile")}
                           </Button>
                         )}
                       </div>
@@ -323,7 +312,7 @@ export default function OrganizationApplicationsPage() {
                 {filteredApps.length === 0 && (
                   <tr>
                     <td colSpan={5} className="px-6 py-12 text-center text-forest-muted">
-                      No applications found.
+                      {t("applications.no_apps")}
                     </td>
                   </tr>
                 )}
@@ -361,30 +350,30 @@ export default function OrganizationApplicationsPage() {
             {/* Header info */}
             <div>
               <h3 className="text-2xl font-bold text-forest-beige">{selectedApp?.name}</h3>
-              <p className="text-sm font-medium text-blue-400 mt-1">{selectedApp?.role} Applied for {selectedApp?.project}</p>
+              <p className="text-sm font-medium text-blue-400 mt-1">{selectedApp?.role} {t("applications.applied_for", "Applied for")} {selectedApp?.project}</p>
             </div>
 
             {/* Quick Stats Grid */}
             <div className="grid grid-cols-3 gap-4 p-4 bg-[#181A15] rounded-xl border border-forest-border text-center">
               <div>
-                <p className="text-xs text-[#7A8072] uppercase font-semibold">Rating</p>
+                <p className="text-xs text-[#7A8072] uppercase font-semibold">{t("applications.rating")}</p>
                 <p className="text-base font-bold text-forest-beige flex items-center justify-center gap-1 mt-1">
                   <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
                   {selectedApp?.rating}
                 </p>
               </div>
               <div className="border-x border-forest-border">
-                <p className="text-xs text-[#7A8072] uppercase font-semibold">Completed</p>
+                <p className="text-xs text-[#7A8072] uppercase font-semibold">{t("applications.completed")}</p>
                 <p className="text-base font-bold text-forest-beige flex items-center justify-center gap-1 mt-1">
                   <Award className="w-4 h-4 text-forest-accent" />
-                  {selectedApp?.completedProjects} Projects
+                  {selectedApp?.completedProjects}
                 </p>
               </div>
               <div>
-                <p className="text-xs text-[#7A8072] uppercase font-semibold">Total Hours</p>
+                <p className="text-xs text-[#7A8072] uppercase font-semibold">{t("applications.total_hours")}</p>
                 <p className="text-base font-bold text-forest-beige flex items-center justify-center gap-1 mt-1">
                   <Calendar className="w-4 h-4 text-indigo-500" />
-                  {selectedApp?.volunteerHours} Hours
+                  {selectedApp?.volunteerHours}
                 </p>
               </div>
             </div>
@@ -405,9 +394,8 @@ export default function OrganizationApplicationsPage() {
               </div>
             </div>
 
-            {/* Bio / About */}
             <div className="space-y-2">
-              <h4 className="text-sm font-semibold text-forest-beige">About Me</h4>
+              <h4 className="text-sm font-semibold text-forest-beige">{t("applications.about_me")}</h4>
               <p className="text-sm text-forest-muted bg-[#181A15] p-4 rounded-xl border border-forest-border leading-relaxed italic">
                 "{selectedApp?.bio}"
               </p>
@@ -415,36 +403,35 @@ export default function OrganizationApplicationsPage() {
 
             {/* Skills */}
             <div className="space-y-2">
-              <h4 className="text-sm font-semibold text-forest-beige">Skills</h4>
+              <h4 className="text-sm font-semibold text-forest-beige">{t("applications.skills")}</h4>
               <div className="flex flex-wrap gap-2">
                 {selectedApp?.skills?.length ? selectedApp.skills.map((skill: string, idx: number) => (
                   <Badge key={idx} variant="secondary" className="bg-blue-500/10 text-blue-400 hover:bg-blue-500/10 border-0">
                     {skill}
                   </Badge>
-                )) : <span className="text-xs text-forest-muted">No specific skills listed.</span>}
+                )) : <span className="text-xs text-forest-muted">{t("applications.no_skills")}</span>}
               </div>
             </div>
 
-            {/* Attachments */}
             <div className="space-y-2">
-              <h4 className="text-sm font-semibold text-forest-beige">Attachments</h4>
+              <h4 className="text-sm font-semibold text-forest-beige">{t("applications.attachments")}</h4>
               <div className="flex flex-wrap gap-3">
                 {selectedApp?.cv_url ? (
                   <a href={selectedApp.cv_url} target="_blank" rel="noreferrer" className="flex items-center gap-2 px-3 py-2 bg-[#2C3322] border border-[#4A5D23] rounded-lg text-sm text-[#829661] hover:bg-[#38402D] transition-colors">
                     <FileText className="w-4 h-4" />
-                    View CV
+                    {t("applications.view_cv")}
                   </a>
                 ) : (
-                  <span className="text-sm text-forest-muted italic">No CV uploaded</span>
+                  <span className="text-sm text-forest-muted italic">{t("applications.no_cv")}</span>
                 )}
                 
                 {selectedApp?.portfolio_url ? (
                   <a href={selectedApp.portfolio_url} target="_blank" rel="noreferrer" className="flex items-center gap-2 px-3 py-2 bg-indigo-900/30 border border-indigo-700/50 rounded-lg text-sm text-indigo-400 hover:bg-indigo-900/50 transition-colors">
                     <FileText className="w-4 h-4" />
-                    View Portfolio
+                    {t("applications.view_portfolio")}
                   </a>
                 ) : (
-                  <span className="text-sm text-forest-muted italic">No Portfolio</span>
+                  <span className="text-sm text-forest-muted italic">{t("applications.no_portfolio")}</span>
                 )}
               </div>
             </div>
@@ -452,7 +439,7 @@ export default function OrganizationApplicationsPage() {
 
           <DialogFooter className="bg-[#181A15] px-6 py-4 flex gap-2">
             <Button variant="outline" className="rounded-xl" onClick={() => setIsDialogOpen(false)}>
-              Close
+              {t("applications.close")}
             </Button>
             {selectedApp?.status === 'pending' && (
               <>
@@ -464,7 +451,7 @@ export default function OrganizationApplicationsPage() {
                     setIsDialogOpen(false);
                   }}
                 >
-                  Reject
+                  {t("applications.reject")}
                 </Button>
                 <Button 
                   className="bg-[#4A5D23] hover:bg-[#38402D] text-forest-beige rounded-xl"
@@ -473,7 +460,7 @@ export default function OrganizationApplicationsPage() {
                     setIsDialogOpen(false);
                   }}
                 >
-                  Approve
+                  {t("applications.approve")}
                 </Button>
               </>
             )}
@@ -487,16 +474,16 @@ export default function OrganizationApplicationsPage() {
           <DialogHeader>
             <DialogTitle className="text-xl text-forest-beige flex items-center gap-2">
               <Crown className="w-6 h-6 text-amber-500" />
-              Upgrade to Pro
+              {t("applications.upgrade_pro")}
             </DialogTitle>
             <DialogDescription className="text-forest-muted pt-2">
               {upgradeReason}
             </DialogDescription>
           </DialogHeader>
           <div className="py-4">
-            <h4 className="text-sm font-medium text-forest-beige mb-3">Pro Plan Benefits:</h4>
+            <h4 className="text-sm font-medium text-forest-beige mb-3">{t("applications.pro_benefits")}</h4>
             <ul className="space-y-2">
-              {["Unlimited Volunteers per Project", "Unlimited Active Applications", "AI Volunteer Matching", "Export Volunteer Data"].map((feature, i) => (
+              {[t("applications.pro_feat1", "Unlimited Volunteers per Project"), t("applications.pro_feat2", "Unlimited Active Applications"), t("applications.pro_feat3", "AI Volunteer Matching"), t("applications.pro_feat4", "Export Volunteer Data")].map((feature, i) => (
                 <li key={i} className="flex items-center gap-2 text-sm text-[#DFD5C2]">
                   <CheckCircle className="w-4 h-4 text-forest-accent" />
                   {feature}
@@ -506,12 +493,12 @@ export default function OrganizationApplicationsPage() {
           </div>
           <DialogFooter className="sm:justify-between">
             <Button variant="ghost" onClick={() => setShowUpgradeDialog(false)} className="text-forest-muted">
-              Cancel
+              {t("applications.cancel", "Cancel")}
             </Button>
             <Link href="/organization/subscription">
               <Button className="btn-primary group w-full sm:w-auto">
                 <Zap className="w-4 h-4 mr-2 group-hover:animate-pulse" />
-                View Subscription
+                {t("applications.view_subscription", "View Subscription")}
               </Button>
             </Link>
           </DialogFooter>

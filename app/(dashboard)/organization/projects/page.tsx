@@ -25,8 +25,10 @@ import {
 import { supabase } from "@/lib/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { format } from "date-fns";
+import { useTranslation } from "react-i18next";
 
 export default function OrganizationProjectsPage() {
+  const { t } = useTranslation("common");
   const { user } = useAuth();
   const [projects, setProjects] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -34,6 +36,8 @@ export default function OrganizationProjectsPage() {
   const [filterType, setFilterType] = useState<"all" | "paid" | "unpaid">("all");
   const [projectToDelete, setProjectToDelete] = useState<string | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [projectToCancel, setProjectToCancel] = useState<string | null>(null);
+  const [isCancelling, setIsCancelling] = useState(false);
 
   useEffect(() => {
     async function fetchProjects() {
@@ -65,6 +69,16 @@ export default function OrganizationProjectsPage() {
     }
 
     fetchProjects();
+
+    // Realtime subscription so org sees changes when admin approves/rejects
+    const channel = supabase.channel('org-projects-list')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'projects' }, () => {
+        fetchProjects();
+      }).subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, [user]);
 
   const filteredProjects = projects.filter(p => {
@@ -93,16 +107,38 @@ export default function OrganizationProjectsPage() {
     }
   };
 
+  const confirmCancelRefund = async () => {
+    if (!projectToCancel) return;
+    setIsCancelling(true);
+    try {
+      const { error } = await supabase.rpc('cancel_project_and_refund', { p_project_id: projectToCancel });
+      if (error) throw error;
+      
+      setProjects(projects.map(p => p.id === projectToCancel ? { ...p, status: 'cancelled' } : p));
+      toast.success("Project cancelled and volunteers refunded successfully");
+    } catch (error: any) {
+      console.error(error);
+      toast.error(error.message || "Failed to cancel project");
+    } finally {
+      setIsCancelling(false);
+      setProjectToCancel(null);
+    }
+  };
+
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "published":
       case "recruiting":
       case "active":
-        return <Badge className="bg-[#2C3322] text-[#829661] border-[#4A5D23]">Active</Badge>;
+        return <Badge className="bg-[#2C3322] text-[#829661] border-[#4A5D23]">{t("projects.active")}</Badge>;
       case "draft":
-        return <Badge className="bg-[#1E211A] text-[#DFD5C2] border-forest-border">Draft</Badge>;
+        return <Badge className="bg-[#1E211A] text-[#DFD5C2] border-forest-border">{t("projects.draft")}</Badge>;
+      case "pending":
+        return <Badge className="bg-amber-500/10 text-amber-400 border-amber-500/20">{t("projects.pending", "Pending Review")}</Badge>;
       case "completed":
-        return <Badge className="bg-blue-500/10 text-blue-400 border-blue-500/20">Completed</Badge>;
+        return <Badge className="bg-blue-500/10 text-blue-400 border-blue-500/20">{t("projects.completed")}</Badge>;
+      case "cancelled":
+        return <Badge className="bg-red-500/10 text-red-400 border-red-500/20">{t("projects.cancelled", "Cancelled")}</Badge>;
       default:
         return <Badge className="capitalize">{status}</Badge>;
     }
@@ -124,13 +160,13 @@ export default function OrganizationProjectsPage() {
     <div className="space-y-6 pb-20">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-forest-beige tracking-tight">Manage Projects</h1>
-          <p className="text-forest-muted mt-1">Create, edit, and track your volunteer projects.</p>
+          <h1 className="text-3xl font-bold text-forest-beige tracking-tight">{t("projects.manage_projects")}</h1>
+          <p className="text-forest-muted mt-1">{t("projects.manage_desc")}</p>
         </div>
         <Link href="/organization/projects/new">
           <Button className="btn-primary w-full sm:w-auto">
             <Plus className="w-5 h-5 mr-2" />
-            Create Project
+            {t("projects.create_new")}
           </Button>
         </Link>
       </div>
@@ -141,7 +177,7 @@ export default function OrganizationProjectsPage() {
             <div className="relative flex-1 max-w-md">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#7A8072]" />
               <Input 
-                placeholder="Search projects..." 
+                placeholder={t("projects.search")}
                 className="pl-9 bg-[#181A15] border-forest-border focus-visible:ring-forest-accent"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -156,7 +192,7 @@ export default function OrganizationProjectsPage() {
                 className={filterType === "all" ? "bg-forest-card" : ""}
               >
                 <Filter className="w-4 h-4 mr-2" />
-                All
+                {t("projects.all")}
               </Button>
               <Button 
                 variant={filterType === "paid" ? "default" : "outline"} 
@@ -165,7 +201,7 @@ export default function OrganizationProjectsPage() {
                 className={filterType === "paid" ? "bg-forest-card text-emerald-400" : ""}
               >
                 <Wallet className="w-4 h-4 mr-2 text-emerald-500" />
-                Paid
+                {t("projects.paid")}
               </Button>
               <Button 
                 variant={filterType === "unpaid" ? "default" : "outline"} 
@@ -174,7 +210,7 @@ export default function OrganizationProjectsPage() {
                 className={filterType === "unpaid" ? "bg-forest-card text-amber-400" : ""}
               >
                 <HeartHandshake className="w-4 h-4 mr-2 text-amber-500" />
-                Unpaid
+                {t("projects.unpaid")}
               </Button>
             </div>
           </div>
@@ -183,11 +219,11 @@ export default function OrganizationProjectsPage() {
             <table className="w-full text-sm text-left">
               <thead className="text-xs text-forest-muted uppercase bg-[#181A15] border-b border-forest-border">
                 <tr>
-                  <th className="px-6 py-4 font-medium">Project Name & Category</th>
-                  <th className="px-6 py-4 font-medium">Status</th>
-                  <th className="px-6 py-4 font-medium">Type</th>
-                  <th className="px-6 py-4 font-medium">Timeline</th>
-                  <th className="px-6 py-4 font-medium text-right">Actions</th>
+                  <th className="px-6 py-4 font-medium">{t("projects.name_category")}</th>
+                  <th className="px-6 py-4 font-medium">{t("projects.status")}</th>
+                  <th className="px-6 py-4 font-medium">{t("projects.type")}</th>
+                  <th className="px-6 py-4 font-medium">{t("projects.timeline")}</th>
+                  <th className="px-6 py-4 font-medium text-right">{t("projects.actions")}</th>
                 </tr>
               </thead>
               <tbody>
@@ -196,14 +232,14 @@ export default function OrganizationProjectsPage() {
                     <td colSpan={5} className="px-6 py-12 text-center text-forest-muted">
                       <div className="flex justify-center items-center">
                         <Loader2 className="w-6 h-6 animate-spin mr-2" />
-                        Loading projects...
+                        {t("projects.loading")}
                       </div>
                     </td>
                   </tr>
                 ) : filteredProjects.length === 0 ? (
                   <tr>
                     <td colSpan={5} className="px-6 py-12 text-center text-forest-muted">
-                      No projects found matching your search.
+                      {t("projects.no_projects")}
                     </td>
                   </tr>
                 ) : (
@@ -223,11 +259,11 @@ export default function OrganizationProjectsPage() {
                           </span>
                           {project.is_paid ? (
                             <Badge className="bg-emerald-500/10 text-emerald-400 border-emerald-500/20 w-fit text-[10px]">
-                              Paid ({project.compensation_type})
+                              {t("projects.paid_project", "Paid")} ({project.compensation_type})
                             </Badge>
                           ) : (
                             <Badge className="bg-amber-500/10 text-amber-400 border-amber-500/20 w-fit text-[10px]">
-                              Volunteer (Unpaid)
+                              {t("projects.unpaid_project", "Volunteer (Unpaid)")}
                             </Badge>
                           )}
                         </div>
@@ -235,7 +271,7 @@ export default function OrganizationProjectsPage() {
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-2 text-forest-muted">
                           <CalendarDays className="w-4 h-4" />
-                          {project.deadline ? format(new Date(project.deadline), 'MMM d, yyyy') : 'No deadline'}
+                          {project.deadline ? format(new Date(project.deadline), 'MMM d, yyyy') : t("projects.no_deadline")}
                         </div>
                       </td>
                       <td className="px-6 py-4 text-right">
@@ -247,18 +283,26 @@ export default function OrganizationProjectsPage() {
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end" className="w-40">
                             <DropdownMenuItem className="cursor-pointer" onClick={() => toast.info(`Viewing details for ${project.title}`)}>
-                              <ExternalLink className="w-4 h-4 mr-2" /> View Details
+                              <ExternalLink className="w-4 h-4 mr-2" /> {t("projects.view_details")}
                             </DropdownMenuItem>
                             <Link href={`/organization/projects/${project.id}/edit`}>
                               <DropdownMenuItem className="cursor-pointer">
-                                <Edit className="w-4 h-4 mr-2" /> Edit Project
+                                <Edit className="w-4 h-4 mr-2" /> {t("projects.edit_project")}
                               </DropdownMenuItem>
                             </Link>
+                            {(project.status === 'published' || project.status === 'active') && (
+                              <DropdownMenuItem 
+                                className="cursor-pointer text-amber-500 focus:text-amber-500 focus:bg-amber-500/10"
+                                onClick={() => setProjectToCancel(project.id)}
+                              >
+                                <Trash2 className="w-4 h-4 mr-2" /> Cancel & Refund
+                              </DropdownMenuItem>
+                            )}
                             <DropdownMenuItem 
                               className="cursor-pointer text-red-600 focus:text-red-600 focus:bg-red-500/10"
                               onClick={() => setProjectToDelete(project.id)}
                             >
-                              <Trash2 className="w-4 h-4 mr-2" /> Delete
+                              <Trash2 className="w-4 h-4 mr-2" /> {t("projects.delete")}
                             </DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>
@@ -275,9 +319,9 @@ export default function OrganizationProjectsPage() {
       <Dialog open={!!projectToDelete} onOpenChange={(open) => !open && setProjectToDelete(null)}>
         <DialogContent className="bg-[#181A15] border-forest-border sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle className="text-forest-beige">Are you sure?</DialogTitle>
+            <DialogTitle className="text-forest-beige">{t("projects.are_you_sure")}</DialogTitle>
             <DialogDescription className="text-forest-muted">
-              This will permanently delete the project and all of its associated data (applications, events, etc.). This action cannot be undone.
+              {t("projects.delete_warning")}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="mt-4">
@@ -286,14 +330,44 @@ export default function OrganizationProjectsPage() {
               onClick={() => setProjectToDelete(null)}
               className="bg-transparent border-forest-border text-forest-beige hover:bg-forest-border/50"
             >
-              Cancel
+              {t("projects.cancel")}
             </Button>
             <Button 
               onClick={confirmDelete}
               className="bg-red-600 text-white hover:bg-red-700 border-0"
               disabled={isDeleting}
             >
-              {isDeleting ? "Deleting..." : "Delete"}
+              {isDeleting ? t("projects.delete") + "..." : t("projects.delete")}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Cancel & Refund Dialog */}
+      <Dialog open={!!projectToCancel} onOpenChange={(open) => !open && setProjectToCancel(null)}>
+        <DialogContent className="bg-[#181A15] border-forest-border sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle className="text-amber-500">Cancel & Refund Project?</DialogTitle>
+            <DialogDescription className="text-forest-muted">
+              Are you sure you want to cancel this project? For paid projects, 90% of the registration fee for each approved volunteer will be deducted from your Organization's Pending Balance and the volunteers will be refunded. This action cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="mt-4">
+            <Button 
+              variant="outline" 
+              onClick={() => setProjectToCancel(null)}
+              className="bg-transparent border-forest-border text-forest-beige hover:bg-forest-border/50"
+              disabled={isCancelling}
+            >
+              No, keep project
+            </Button>
+            <Button 
+              onClick={confirmCancelRefund}
+              className="bg-amber-600 text-white hover:bg-amber-700 border-0"
+              disabled={isCancelling}
+            >
+              {isCancelling ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
+              Yes, Cancel & Refund
             </Button>
           </DialogFooter>
         </DialogContent>

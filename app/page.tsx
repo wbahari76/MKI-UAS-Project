@@ -4,6 +4,7 @@ export const dynamic = 'force-dynamic';
 
 import { motion, useInView } from 'framer-motion';
 import { useRef, useState, useEffect } from 'react';
+import { useTranslation } from "react-i18next";
 import Link from 'next/link';
 import {
     HandHelping, Users, Building2, FolderKanban, Clock,
@@ -57,6 +58,7 @@ function AnimatedCounter({ value, suffix = '' }: { value: number; suffix?: strin
 
 // Section Components
 function HeroSection() {
+    const { t } = useTranslation("common");
     return (
         <section className="relative min-h-screen flex items-center bg-forest overflow-hidden">
             {/* Background Pattern */}
@@ -73,20 +75,12 @@ function HeroSection() {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.6 }}
                     >
-                        <Badge className="mb-6 bg-[#2C3322] text-[#829661] border-[#4A5D23]">
-                            <Sparkles className="w-3.5 h-3.5 mr-1.5" />
-                            Social Impact Platform
-                        </Badge>
 
-                        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-forest-beige mb-6 leading-tight">
-                            Connected Communities.
-                            <br />
-                            <span className="text-gradient">Sustained Lives.</span>
+                        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-forest-beige mb-6 leading-tight" dangerouslySetInnerHTML={{ __html: t('hero.title').replace('. ', '.<br/><span class="text-gradient">') + '</span>' }}>
                         </h1>
 
                         <p className="text-lg md:text-xl text-forest-muted mb-10 max-w-2xl mx-auto">
-                            JALA VIVE bridges organizations with volunteers in one collaborative ecosystem.
-                            Create impact, join causes, and transform communities together.
+                            {t('hero.description')}
                         </p>
                     </motion.div>
 
@@ -99,14 +93,14 @@ function HeroSection() {
                         <Link href="/register?role=volunteer">
                             <Button size="lg" className="bg-forest-accent hover:bg-[#4A5D23] text-forest-beige shadow-lg shadow-forest-accent/25 h-14 px-8 text-base rounded-xl group">
                                 <HandHelping className="w-5 h-5 mr-2" />
-                                Become a Volunteer
+                                {t('hero.join_btn')}
                                 <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                             </Button>
                         </Link>
                         <Link href="/register?role=organization">
                             <Button size="lg" variant="outline" className="h-14 px-8 text-base rounded-xl border-2 border-forest-border hover:border-forest-accent hover:text-[#829661]">
                                 <Building2 className="w-5 h-5 mr-2" />
-                                Create a Project
+                                {t('hero.explore_btn')}
                             </Button>
                         </Link>
                     </motion.div>
@@ -118,6 +112,7 @@ function HeroSection() {
 }
 
 function ImpactKPISection() {
+    const { t } = useTranslation("common");
     const [metrics, setMetrics] = useState({
         volunteers: 0,
         organizations: 0,
@@ -202,12 +197,12 @@ function ImpactKPISection() {
     }, []);
 
     const kpis: Array<{ label: string; value: number; suffix: string; icon: any; color: string; format?: (v: number) => string }> = [
-        { label: 'Active Volunteers', value: metrics.volunteers, suffix: '', icon: Users, color: 'emerald' },
-        { label: 'Verified Organizations', value: metrics.organizations, suffix: '', icon: Building2, color: 'blue' },
-        { label: 'Platform Projects', value: metrics.projects, suffix: '', icon: FolderKanban, color: 'amber' },
-        { label: 'Volunteer Hours', value: metrics.hours, suffix: '', icon: Clock, color: 'purple' },
-        { label: 'Lives Impacted', value: metrics.lives, suffix: '+', icon: Heart, color: 'rose' },
-        { label: 'Project Success Rate', value: metrics.successRate, suffix: '%', icon: Award, color: 'emerald' },
+        { label: t('landing.impact.kpis.volunteers'), value: metrics.volunteers, suffix: '', icon: Users, color: 'emerald' },
+        { label: t('landing.impact.kpis.organizations'), value: metrics.organizations, suffix: '', icon: Building2, color: 'blue' },
+        { label: t('landing.impact.kpis.projects'), value: metrics.projects, suffix: '', icon: FolderKanban, color: 'amber' },
+        { label: t('landing.impact.kpis.hours'), value: metrics.hours, suffix: '', icon: Clock, color: 'purple' },
+        { label: t('landing.impact.kpis.lives'), value: metrics.lives, suffix: '+', icon: Heart, color: 'rose' },
+        { label: t('landing.impact.kpis.success'), value: metrics.successRate, suffix: '%', icon: Award, color: 'emerald' },
     ];
 
     const [realActivities, setRealActivities] = useState<string[]>(["Loading live activity..."]);
@@ -230,12 +225,12 @@ function ImpactKPISection() {
             <div className="container-custom relative z-10">
                 <div className="text-center max-w-3xl mx-auto mb-16">
                     <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-                        <Badge className="mb-6 bg-emerald-500/10 text-emerald-400 border-emerald-500/20 px-3 py-1 text-xs tracking-widest uppercase">Live Metrics</Badge>
+
                         <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 tracking-tight">
-                            Our Collective <span className="text-forest-accent">Impact</span>
+                            {t('landing.impact.title')} <span className="text-forest-accent">{t('landing.impact.title_highlight')}</span>
                         </h2>
                         <p className="text-forest-muted text-lg md:text-xl">
-                            Every connection creates measurable social impact.
+                            {t('landing.impact.desc')}
                         </p>
                     </motion.div>
                 </div>
@@ -295,7 +290,7 @@ function ImpactKPISection() {
                                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                                     <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
                                 </div>
-                                <h3 className="text-lg font-semibold text-white">Live Activity</h3>
+                                <h3 className="text-lg font-semibold text-white">{t('landing.impact.live')}</h3>
                             </div>
 
                             <div className="flex-1 relative overflow-hidden min-h-[200px]">
@@ -348,7 +343,7 @@ function ImpactKPISection() {
                 >
                     <Link href="/impact">
                         <Button className="rounded-full bg-white text-black hover:bg-gray-200 px-8 h-12 font-bold shadow-lg transition-transform hover:scale-105">
-                            View Full Impact Report
+                            {t('landing.impact.btn')}
                         </Button>
                     </Link>
                 </motion.div>
@@ -358,6 +353,7 @@ function ImpactKPISection() {
 }
 
 function FeaturedProjectsSection() {
+    const { t } = useTranslation("common");
     const projects = [
         {
             id: '1',
@@ -400,12 +396,12 @@ function FeaturedProjectsSection() {
                     viewport={{ once: true }}
                     className="text-center max-w-2xl mx-auto mb-12"
                 >
-                    <Badge className="mb-4 bg-[#2C3322] text-[#829661]">Featured Projects</Badge>
+
                     <h2 className="text-3xl md:text-4xl font-bold text-forest-beige mb-4">
-                        Make an Impact Today
+                        {t('landing.featured.title')}
                     </h2>
                     <p className="text-forest-muted">
-                        Discover meaningful volunteer opportunities and start your journey to create lasting change.
+                        {t('landing.featured.desc')}
                     </p>
                 </motion.div>
 
@@ -451,7 +447,7 @@ function FeaturedProjectsSection() {
 
                                 <div className="mb-4">
                                     <div className="flex items-center justify-between text-sm mb-1">
-                                        <span className="text-forest-muted">Volunteers</span>
+                                        <span className="text-forest-muted">{t('landing.featured.volunteers')}</span>
                                         <span className="font-medium text-forest-beige">
                                             {project.volunteers.current}/{project.volunteers.needed}
                                         </span>
@@ -469,7 +465,7 @@ function FeaturedProjectsSection() {
 
                                 <Link href={`/explore/${project.id}`}>
                                     <Button className="w-full bg-forest-accent hover:bg-[#4A5D23] group/btn">
-                                        View Details
+                                        {t('landing.featured.btn_details')}
                                         <ChevronRight className="w-4 h-4 ml-1 group-hover/btn:translate-x-1 transition-transform" />
                                     </Button>
                                 </Link>
@@ -481,7 +477,7 @@ function FeaturedProjectsSection() {
                 <div className="text-center mt-10">
                     <Link href="/explore">
                         <Button variant="outline" size="lg" className="rounded-xl">
-                            View All Projects
+                            {t('landing.featured.btn_all')}
                             <ArrowRight className="w-4 h-4 ml-2" />
                         </Button>
                     </Link>
@@ -492,6 +488,7 @@ function FeaturedProjectsSection() {
 }
 
 function CategoriesSection() {
+    const { t } = useTranslation("common");
     const defaultCategories = [
         { name: 'Education', icon: GraduationCap, count: 0, color: 'blue' },
         { name: 'Environment', icon: TreeDeciduous, count: 0, color: 'emerald' },
@@ -537,10 +534,10 @@ function CategoriesSection() {
                     className="text-center max-w-2xl mx-auto mb-12"
                 >
                     <h2 className="text-3xl md:text-4xl font-bold text-forest-beige mb-4">
-                        Explore by Category
+                        {t('landing.categories.title')}
                     </h2>
                     <p className="text-forest-muted">
-                        Find volunteer opportunities that match your passion and skills.
+                        {t('landing.categories.desc')}
                     </p>
                 </motion.div>
 
@@ -570,9 +567,9 @@ function CategoriesSection() {
                                                 <Icon className="w-7 h-7" />
                                             </div>
                                             <h3 className="font-semibold text-forest-beige mb-1 group-hover:text-[#829661] transition-colors">
-                                                {category.name}
+                                                {t(`landing.categories.${category.name}`)}
                                             </h3>
-                                            <p className="text-sm text-forest-muted">{category.count} projects</p>
+                                            <p className="text-sm text-forest-muted">{category.count} {t('landing.categories.projects')}</p>
                                         </CardContent>
                                     </Card>
                                 </Link>
@@ -586,29 +583,30 @@ function CategoriesSection() {
 }
 
 function HowItWorksSection() {
+    const { t } = useTranslation("common");
     const steps = [
         {
             step: 1,
-            title: 'Sign Up',
-            description: 'Create your free account as a volunteer or organization',
+            title: t('landing.how.step1_title'),
+            description: t('landing.how.step1_desc'),
             icon: Users,
         },
         {
             step: 2,
-            title: 'Discover',
-            description: 'Explore projects, events, and communities that match your interests',
+            title: t('landing.how.step2_title'),
+            description: t('landing.how.step2_desc'),
             icon: Globe,
         },
         {
             step: 3,
-            title: 'Connect',
-            description: 'Apply to projects or recruit volunteers for your causes',
+            title: t('landing.how.step3_title'),
+            description: t('landing.how.step3_desc'),
             icon: MessageCircle,
         },
         {
             step: 4,
-            title: 'Impact',
-            description: 'Make a difference and earn certificates and achievements',
+            title: t('landing.how.step4_title'),
+            description: t('landing.how.step4_desc'),
             icon: Award,
         },
     ];
@@ -622,12 +620,12 @@ function HowItWorksSection() {
                     viewport={{ once: true }}
                     className="text-center max-w-2xl mx-auto mb-12"
                 >
-                    <Badge className="mb-4 bg-blue-500/10 text-blue-400">How It Works</Badge>
+
                     <h2 className="text-3xl md:text-4xl font-bold text-forest-beige mb-4">
-                        Your Journey Starts Here
+                        {t('landing.how.title')}
                     </h2>
                     <p className="text-forest-muted">
-                        Get started in minutes and begin making an impact today.
+                        {t('landing.how.desc')}
                     </p>
                 </motion.div>
 
@@ -673,6 +671,7 @@ function HowItWorksSection() {
 }
 
 function TestimonialsSection() {
+    const { t } = useTranslation("common");
     const testimonials = [
         {
             name: 'Sarah Chen',
@@ -704,10 +703,10 @@ function TestimonialsSection() {
                     className="text-center max-w-2xl mx-auto mb-12"
                 >
                     <h2 className="text-3xl md:text-4xl font-bold text-forest-beige mb-4">
-                        Stories from Our Community
+                        {t('landing.testimonials.title')}
                     </h2>
                     <p className="text-forest-muted">
-                        Hear from volunteers and organizations who are making a difference.
+                        {t('landing.testimonials.desc')}
                     </p>
                 </motion.div>
 
@@ -750,6 +749,7 @@ function TestimonialsSection() {
 }
 
 function FAQSection() {
+    const { t } = useTranslation("common");
     const faqs = [
         {
             question: 'How do I sign up as a volunteer?',
@@ -786,12 +786,12 @@ function FAQSection() {
                     viewport={{ once: true }}
                     className="text-center max-w-2xl mx-auto mb-12"
                 >
-                    <Badge className="mb-4 bg-amber-500/10 text-amber-400">FAQ</Badge>
+
                     <h2 className="text-3xl md:text-4xl font-bold text-forest-beige mb-4">
-                        Frequently Asked Questions
+                        {t('landing.faq.title')}
                     </h2>
-                    <p className="text-forest-muted">
-                        Everything you need to know about JALA VIVE.
+                    <p className="text-forest-muted text-lg">
+                        {t('landing.faq.desc')}
                     </p>
                 </motion.div>
 
@@ -826,6 +826,7 @@ function FAQSection() {
 }
 
 function CTASection() {
+    const { t } = useTranslation("common");
     return (
         <section className="py-16 md:py-24 bg-forest-card border-y border-forest-border">
             <div className="container-custom">
@@ -836,21 +837,21 @@ function CTASection() {
                     className="text-center max-w-3xl mx-auto"
                 >
                     <h2 className="text-3xl md:text-4xl font-bold text-forest-beige mb-4">
-                        Ready to Make an Impact?
+                        {t('landing.cta.title')}
                     </h2>
                     <p className="text-forest-muted text-lg mb-8">
-                        Join thousands of volunteers and organizations creating positive change in communities across Indonesia.
+                        {t('landing.cta.desc')}
                     </p>
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                         <Link href="/register">
                             <Button size="lg" className="bg-forest-card text-[#829661] hover:bg-[#21261B] h-14 px-8 text-base rounded-xl shadow-lg">
-                                Get Started for Free
+                                {t('landing.cta.btn_start')}
                                 <ArrowRight className="w-4 h-4 ml-2" />
                             </Button>
                         </Link>
                         <Link href="/explore">
                             <Button size="lg" variant="outline" className="h-14 px-8 text-base rounded-xl border-2 border-forest-border text-forest-beige hover:bg-forest-card/10">
-                                Browse Projects
+                                {t('landing.cta.btn_browse')}
                             </Button>
                         </Link>
                     </div>

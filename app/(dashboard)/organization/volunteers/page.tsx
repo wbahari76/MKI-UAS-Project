@@ -26,8 +26,10 @@ import {
 import { supabase } from "@/lib/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
+import { useTranslation } from "react-i18next";
 
 export default function ManageVolunteersPage() {
+  const { t } = useTranslation("common");
   const { user } = useAuth();
   const router = useRouter();
   const [volunteers, setVolunteers] = useState<any[]>([]);
@@ -164,10 +166,10 @@ export default function ManageVolunteersPage() {
       <div className="flex flex-col space-y-4 md:flex-row md:items-center md:justify-between md:space-y-0">
         <div>
           <h1 className="text-3xl font-bold text-forest-beige tracking-tight">
-            Volunteer Directory
+            {t("volunteers.title", "Volunteer Directory")}
           </h1>
           <p className="text-forest-muted mt-1">
-            Manage your community of approved volunteers and their records.
+            {t("volunteers.desc", "Manage your community of approved volunteers and their records.")}
           </p>
         </div>
       </div>
@@ -177,14 +179,14 @@ export default function ManageVolunteersPage() {
         <div className="relative flex-1 w-full max-w-md">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#7A8072]" />
           <Input 
-            placeholder="Search by name or skills..." 
+            placeholder={t("volunteers.search_placeholder", "Search by name or skills...")} 
             className="pl-9 bg-forest-card border-forest-border focus-visible:ring-forest-accent"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
         <Button variant="outline" className="w-full sm:w-auto bg-forest-card">
-          <Filter className="w-4 h-4 mr-2" /> Filter
+          <Filter className="w-4 h-4 mr-2" /> {t("analytics.filter", "Filter")}
         </Button>
       </div>
 
@@ -196,8 +198,8 @@ export default function ManageVolunteersPage() {
       ) : filteredVols.length === 0 ? (
         <div className="text-center py-20 bg-forest-card rounded-xl border border-forest-border">
           <User className="w-12 h-12 text-forest-muted mx-auto mb-4" />
-          <h3 className="text-xl font-bold text-forest-beige">No Volunteers Found</h3>
-          <p className="text-forest-muted mt-2">You don't have any approved volunteers yet.</p>
+          <h3 className="text-xl font-bold text-forest-beige">{t("volunteers.no_volunteers", "No Volunteers Found")}</h3>
+          <p className="text-forest-muted mt-2">{t("volunteers.no_volunteers_desc", "You don't have any approved volunteers yet.")}</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -242,16 +244,16 @@ export default function ManageVolunteersPage() {
                   </div>
                   <div className="flex items-center text-sm text-forest-muted">
                     <Calendar className="w-4 h-4 mr-2 text-[#7A8072]" />
-                    Joined {vol.joinedAt}
+                    {t("volunteers.joined", "Joined")} {vol.joinedAt}
                   </div>
                   
                   <div className="flex items-center gap-4 mt-4 p-3 bg-[#181A15] rounded-lg">
                     <div className="flex-1">
-                      <p className="text-xs text-forest-muted mb-1">Hours</p>
+                      <p className="text-xs text-forest-muted mb-1">{t("volunteers.hours", "Hours")}</p>
                       <p className="font-semibold text-forest-beige">{vol.volunteerHours}</p>
                     </div>
                     <div className="flex-1 border-l border-forest-border pl-4">
-                      <p className="text-xs text-forest-muted mb-1">Rating</p>
+                      <p className="text-xs text-forest-muted mb-1">{t("volunteers.rating", "Rating")}</p>
                       <p className="font-semibold text-amber-500 flex items-center">
                         <Star className="w-3 h-3 mr-1 fill-current" /> {vol.rating}
                       </p>
@@ -264,7 +266,7 @@ export default function ManageVolunteersPage() {
                     className="flex-1 bg-[#2C3322] hover:bg-[#38402D] text-[#829661]" 
                     onClick={() => router.push(`/organization/messages?user=${vol.id}`)}
                   >
-                    <MessageCircle className="w-4 h-4 mr-2" /> Message
+                    <MessageCircle className="w-4 h-4 mr-2" /> {t("volunteers.message", "Message")}
                   </Button>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -273,14 +275,14 @@ export default function ManageVolunteersPage() {
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" className="w-48 rounded-xl">
-                      <DropdownMenuItem onClick={() => handleViewProfile(vol)}>View Full Profile</DropdownMenuItem>
-                      <DropdownMenuItem>Assign to Project</DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => handleIssueClick(vol)}>Issue E-Certificate</DropdownMenuItem>
-                      <DropdownMenuItem>Download Resume</DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => handleViewProfile(vol)}>{t("volunteers.view_profile", "View Full Profile")}</DropdownMenuItem>
+                      <DropdownMenuItem>{t("volunteers.assign_project", "Assign to Project")}</DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => handleIssueClick(vol)}>{t("volunteers.issue_cert", "Issue E-Certificate")}</DropdownMenuItem>
+                      <DropdownMenuItem>{t("volunteers.download_resume", "Download Resume")}</DropdownMenuItem>
                       {vol.status === 'Active' ? (
-                        <DropdownMenuItem className="text-amber-400 focus:text-amber-400 focus:bg-amber-500/10">Mark as Inactive</DropdownMenuItem>
+                        <DropdownMenuItem className="text-amber-400 focus:text-amber-400 focus:bg-amber-500/10">{t("volunteers.mark_inactive", "Mark as Inactive")}</DropdownMenuItem>
                       ) : (
-                        <DropdownMenuItem className="text-[#829661] focus:text-[#829661] focus:bg-[#21261B]">Mark as Active</DropdownMenuItem>
+                        <DropdownMenuItem className="text-[#829661] focus:text-[#829661] focus:bg-[#21261B]">{t("volunteers.mark_active", "Mark as Active")}</DropdownMenuItem>
                       )}
                     </DropdownMenuContent>
                   </DropdownMenu>
@@ -325,24 +327,24 @@ export default function ManageVolunteersPage() {
             {/* Quick Stats Grid */}
             <div className="grid grid-cols-3 gap-4 p-4 bg-[#181A15] rounded-xl border border-forest-border text-center">
               <div>
-                <p className="text-xs text-[#7A8072] uppercase font-semibold">Rating</p>
+                <p className="text-xs text-[#7A8072] uppercase font-semibold">{t("volunteers.rating", "Rating")}</p>
                 <p className="text-base font-bold text-forest-beige flex items-center justify-center gap-1 mt-1">
                   <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
                   {selectedApp?.rating}
                 </p>
               </div>
               <div className="border-x border-forest-border">
-                <p className="text-xs text-[#7A8072] uppercase font-semibold">Completed</p>
+                <p className="text-xs text-[#7A8072] uppercase font-semibold">{t("volunteers.completed", "Completed")}</p>
                 <p className="text-base font-bold text-forest-beige flex items-center justify-center gap-1 mt-1">
                   <Award className="w-4 h-4 text-forest-accent" />
-                  {selectedApp?.completedProjects} Projects
+                  {selectedApp?.completedProjects}
                 </p>
               </div>
               <div>
-                <p className="text-xs text-[#7A8072] uppercase font-semibold">Total Hours</p>
+                <p className="text-xs text-[#7A8072] uppercase font-semibold">{t("volunteers.total_hours", "Total Hours")}</p>
                 <p className="text-base font-bold text-forest-beige flex items-center justify-center gap-1 mt-1">
                   <Calendar className="w-4 h-4 text-indigo-500" />
-                  {selectedApp?.volunteerHours} Hours
+                  {selectedApp?.volunteerHours}
                 </p>
               </div>
             </div>
@@ -351,21 +353,21 @@ export default function ManageVolunteersPage() {
             <div className="space-y-3 text-sm text-forest-muted">
               <div className="flex items-center gap-3">
                 <Mail className="w-4 h-4 text-[#7A8072]" />
-                <span className="font-semibold text-forest-beige">Email:</span> {selectedApp?.email}
+                <span className="font-semibold text-forest-beige">{t("volunteers.email", "Email")}:</span> {selectedApp?.email}
               </div>
               <div className="flex items-center gap-3">
                 <Phone className="w-4 h-4 text-[#7A8072]" />
-                <span className="font-semibold text-forest-beige">Phone:</span> {selectedApp?.phone}
+                <span className="font-semibold text-forest-beige">{t("volunteers.phone", "Phone")}:</span> {selectedApp?.phone}
               </div>
               <div className="flex items-center gap-3">
                 <MapPin className="w-4 h-4 text-[#7A8072]" />
-                <span className="font-semibold text-forest-beige">Location:</span> {selectedApp?.location}
+                <span className="font-semibold text-forest-beige">{t("volunteers.location", "Location")}:</span> {selectedApp?.location}
               </div>
             </div>
 
             {/* Bio / About */}
             <div className="space-y-2">
-              <h4 className="text-sm font-semibold text-forest-beige">About</h4>
+              <h4 className="text-sm font-semibold text-forest-beige">{t("volunteers.about", "About")}</h4>
               <p className="text-sm text-forest-muted bg-[#181A15] p-4 rounded-xl border border-forest-border leading-relaxed italic">
                 "{selectedApp?.bio}"
               </p>
@@ -373,7 +375,7 @@ export default function ManageVolunteersPage() {
 
             {/* Skills */}
             <div className="space-y-2">
-              <h4 className="text-sm font-semibold text-forest-beige">Skills</h4>
+              <h4 className="text-sm font-semibold text-forest-beige">{t("volunteers.skills", "Skills")}</h4>
               <div className="flex flex-wrap gap-2">
                 {selectedApp?.skills?.map((skill: string, idx: number) => (
                   <Badge key={idx} variant="secondary" className="bg-[#21261B] text-[#829661] hover:bg-[#2C3322] border-0">
@@ -386,10 +388,10 @@ export default function ManageVolunteersPage() {
 
           <DialogFooter className="bg-[#181A15] px-6 py-4 flex gap-2 justify-end">
             <Button variant="outline" className="rounded-xl w-full sm:w-auto" onClick={() => setIsDialogOpen(false)}>
-              Close
+              {t("volunteers.close", "Close")}
             </Button>
             <Button className="rounded-xl w-full sm:w-auto bg-[#4A5D23] hover:bg-[#38402D] text-forest-beige" onClick={() => handleIssueClick(selectedApp)}>
-              Issue E-Certificate
+              {t("volunteers.issue_cert", "Issue E-Certificate")}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -399,15 +401,15 @@ export default function ManageVolunteersPage() {
       <Dialog open={isUploadDialogOpen} onOpenChange={setIsUploadDialogOpen}>
         <DialogContent className="sm:max-w-[450px] rounded-2xl">
           <DialogHeader>
-            <DialogTitle>Issue E-Certificate</DialogTitle>
+            <DialogTitle>{t("volunteers.issue_cert", "Issue E-Certificate")}</DialogTitle>
             <DialogDescription>
-              Upload a certificate document for {selectedApp?.name}.
+              {t("volunteers.upload_cert", "Upload a certificate document for")} {selectedApp?.name}.
             </DialogDescription>
           </DialogHeader>
           
           <div className="py-6 space-y-4">
             <div className="space-y-2">
-              <label className="text-sm font-medium text-forest-beige">Certificate File (PDF, PNG, JPG)</label>
+              <label className="text-sm font-medium text-forest-beige">{t("volunteers.cert_file", "Certificate File (PDF, PNG, JPG)")}</label>
               <Input 
                 type="file" 
                 accept=".pdf,.png,.jpg,.jpeg"
@@ -418,14 +420,14 @@ export default function ManageVolunteersPage() {
             {uploadFile && (
               <p className="text-sm text-[#829661] bg-[#21261B] p-3 rounded-lg border border-[#2C3322] flex items-center">
                 <Check className="w-4 h-4 mr-2" />
-                Selected: {uploadFile.name}
+                {t("volunteers.selected", "Selected:")} {uploadFile.name}
               </p>
             )}
           </div>
 
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsUploadDialogOpen(false)}>
-              Cancel
+              {t("applications.cancel", "Cancel")}
             </Button>
             <Button 
               className="bg-[#4A5D23] hover:bg-[#38402D] text-forest-beige" 
@@ -435,7 +437,7 @@ export default function ManageVolunteersPage() {
                 setIsUploadDialogOpen(false);
               }}
             >
-              Send Certificate
+              {t("volunteers.send_cert", "Send Certificate")}
             </Button>
           </DialogFooter>
         </DialogContent>

@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 const STUDY_PROGRAMS = [
   "Computer Science",
@@ -32,6 +33,7 @@ const STUDY_PROGRAMS = [
 ];
 
 export default function ProfilePage() {
+  const { t } = useTranslation("common");
   const { user, profile, updateProfile, refreshProfile } = useAuth();
   
   const [formData, setFormData] = useState({
@@ -295,8 +297,8 @@ export default function ProfilePage() {
   return (
     <div className="max-w-4xl mx-auto space-y-8 pb-20">
       <div>
-        <h1 className="text-3xl font-bold text-forest-beige tracking-tight">Profile Setup</h1>
-        <p className="text-forest-muted mt-1">Complete your profile and upload your CV to start applying.</p>
+        <h1 className="text-3xl font-bold text-forest-beige tracking-tight">{t("profile.title", "Profile Setup")}</h1>
+        <p className="text-forest-muted mt-1">{t("profile.desc", "Complete your profile and upload your CV to start applying.")}</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -320,7 +322,7 @@ export default function ProfilePage() {
               
               <div className="w-full mt-4 space-y-2">
                 <div className="flex justify-between text-xs">
-                  <span className="text-forest-muted">Profile Completion</span>
+                  <span className="text-forest-muted">{t("profile.completion", "Profile Completion")}</span>
                   <span className="font-semibold text-forest-accent">{completionScore}%</span>
                 </div>
                 <div className="w-full bg-forest-border/30 rounded-full h-2 mt-2 overflow-hidden">
@@ -331,7 +333,7 @@ export default function ProfilePage() {
                 </div>
                 {completionScore < 80 && (
                    <p className="text-[11px] text-yellow-500 mt-2 text-left">
-                     Reach 80% completion to apply for projects.
+                     {t("profile.reach_80", "Reach 80% completion to apply for projects.")}
                    </p>
                 )}
               </div>
@@ -343,19 +345,19 @@ export default function ProfilePage() {
         <div className="md:col-span-2">
           <Tabs defaultValue="personal" className="w-full">
             <TabsList className="grid w-full grid-cols-2 mb-6">
-              <TabsTrigger value="personal">Personal Info</TabsTrigger>
-              <TabsTrigger value="resume">Resume & CV</TabsTrigger>
+              <TabsTrigger value="personal">{t("profile.personal_info", "Personal Info")}</TabsTrigger>
+              <TabsTrigger value="resume">{t("profile.resume_cv", "Resume & CV")}</TabsTrigger>
             </TabsList>
             
             <TabsContent value="personal">
               <Card className="border-0 shadow-sm shadow-forest-border/20 bg-forest-card">
                 <CardHeader>
-                  <CardTitle>Personal Information</CardTitle>
+                  <CardTitle>{t("profile.personal_info", "Personal Information")}</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label htmlFor="name">Full Name <span className="text-red-500">*</span></Label>
+                      <Label htmlFor="name">{t("profile.full_name", "Full Name")} <span className="text-red-500">*</span></Label>
                       <Input 
                         id="name" 
                         value={formData.full_name} 
@@ -367,7 +369,7 @@ export default function ProfilePage() {
                       <Input defaultValue={user?.email || ""} disabled />
                     </div>
                     <div className="space-y-2">
-                      <Label>Phone Number <span className="text-red-500">*</span></Label>
+                      <Label>{t("profile.phone", "Phone Number")} <span className="text-red-500">*</span></Label>
                       <Input 
                         placeholder="+62 8..." 
                         value={formData.phone}
@@ -375,7 +377,7 @@ export default function ProfilePage() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label>Location <span className="text-red-500">*</span></Label>
+                      <Label>{t("profile.location", "Location")} <span className="text-red-500">*</span></Label>
                       <Input 
                         placeholder="e.g. Jakarta, Indonesia" 
                         value={formData.location}
@@ -383,7 +385,7 @@ export default function ProfilePage() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label>Birth Date <span className="text-red-500">*</span></Label>
+                      <Label>{t("profile.birth_date", "Birth Date")} <span className="text-red-500">*</span></Label>
                       <Input 
                         type="date"
                         value={formData.birth_date}
@@ -391,25 +393,25 @@ export default function ProfilePage() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label>Gender <span className="text-red-500">*</span></Label>
+                      <Label>{t("profile.gender", "Gender")} <span className="text-red-500">*</span></Label>
                       <select 
                         className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 text-white bg-transparent"
                         value={formData.gender}
                         onChange={(e) => setFormData({...formData, gender: e.target.value})}
                       >
-                        <option value="" className="bg-[#181A15] text-[#DFD5C2]">Select Gender</option>
-                        <option value="Male" className="bg-[#181A15] text-[#DFD5C2]">Male</option>
-                        <option value="Female" className="bg-[#181A15] text-[#DFD5C2]">Female</option>
-                        <option value="Other" className="bg-[#181A15] text-[#DFD5C2]">Other</option>
+                        <option value="" className="bg-[#181A15] text-[#DFD5C2]">{t("profile.select_gender", "Select Gender")}</option>
+                        <option value="Male" className="bg-[#181A15] text-[#DFD5C2]">{t("profile.male", "Male")}</option>
+                        <option value="Female" className="bg-[#181A15] text-[#DFD5C2]">{t("profile.female", "Female")}</option>
+                        <option value="Other" className="bg-[#181A15] text-[#DFD5C2]">{t("profile.other", "Other")}</option>
                       </select>
                     </div>
                   </div>
                   
                   <div className="space-y-2 pt-2">
-                    <Label>Bio / About Me <span className="text-red-500">*</span></Label>
+                    <Label>{t("profile.bio", "Bio / About Me")} <span className="text-red-500">*</span></Label>
                     <textarea 
                       className="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 text-white bg-transparent"
-                      placeholder="Tell us a little about yourself..." 
+                      placeholder={t("profile.bio_placeholder", "Tell us a little about yourself...")} 
                       value={formData.bio}
                       onChange={(e) => setFormData({...formData, bio: e.target.value})}
                     />
@@ -428,31 +430,31 @@ export default function ProfilePage() {
             <TabsContent value="resume">
               <Card className="border-0 shadow-sm shadow-forest-border/20 bg-forest-card">
                 <CardHeader>
-                  <CardTitle>Professional Experience & CV</CardTitle>
-                  <CardDescription>Upload your CV to let organizations know your background.</CardDescription>
+                  <CardTitle>{t("profile.prof_exp", "Professional Experience & CV")}</CardTitle>
+                  <CardDescription>{t("profile.prof_exp_desc", "Upload your CV to let organizations know your background.")}</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
                   
                   <div className="space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-2 relative">
-                        <Label>Education Level <span className="text-red-500">*</span></Label>
+                        <Label>{t("profile.education_level", "Education Level")} <span className="text-red-500">*</span></Label>
                         <select 
                           className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 text-white bg-transparent"
                           value={educationLevel}
                           onChange={(e) => setEducationLevel(e.target.value)}
                         >
-                          <option value="" className="bg-[#181A15] text-[#DFD5C2]">Select Level</option>
-                          <option value="High School" className="bg-[#181A15] text-[#DFD5C2]">High School / SMA / SMK</option>
-                          <option value="Associate Degree" className="bg-[#181A15] text-[#DFD5C2]">Associate Degree (D3)</option>
-                          <option value="Bachelor's Degree" className="bg-[#181A15] text-[#DFD5C2]">Bachelor's Degree (S1)</option>
-                          <option value="Master's Degree" className="bg-[#181A15] text-[#DFD5C2]">Master's Degree (S2)</option>
-                          <option value="Doctorate" className="bg-[#181A15] text-[#DFD5C2]">Doctorate (S3)</option>
-                          <option value="Other" className="bg-[#181A15] text-[#DFD5C2]">Other</option>
+                          <option value="" className="bg-[#181A15] text-[#DFD5C2]">{t("profile.select_level", "Select Level")}</option>
+                          <option value="High School" className="bg-[#181A15] text-[#DFD5C2]">{t("profile.high_school", "High School / SMA / SMK")}</option>
+                          <option value="Associate Degree" className="bg-[#181A15] text-[#DFD5C2]">{t("profile.associate", "Associate Degree (D3)")}</option>
+                          <option value="Bachelor's Degree" className="bg-[#181A15] text-[#DFD5C2]">{t("profile.bachelor", "Bachelor's Degree (S1)")}</option>
+                          <option value="Master's Degree" className="bg-[#181A15] text-[#DFD5C2]">{t("profile.master", "Master's Degree (S2)")}</option>
+                          <option value="Doctorate" className="bg-[#181A15] text-[#DFD5C2]">{t("profile.doctorate", "Doctorate (S3)")}</option>
+                          <option value="Other" className="bg-[#181A15] text-[#DFD5C2]">{t("profile.other", "Other")}</option>
                         </select>
                         {educationLevel === "Other" && (
                           <Input 
-                            placeholder="Specify your education level..."
+                            placeholder={t("profile.specify_level", "Specify your education level...")}
                             className="mt-2"
                             value={otherEducationLevel}
                             onChange={(e) => setOtherEducationLevel(e.target.value)}
@@ -461,15 +463,15 @@ export default function ProfilePage() {
                       </div>
 
                       <div className="space-y-2 relative">
-                        <Label>Current Status <span className="text-red-500">*</span></Label>
+                        <Label>{t("profile.current_status", "Current Status")} <span className="text-red-500">*</span></Label>
                         <select 
                           className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 text-white bg-transparent"
                           value={educationStatus}
                           onChange={(e) => setEducationStatus(e.target.value)}
                         >
-                          <option value="" className="bg-[#181A15] text-[#DFD5C2]">Select Status</option>
-                          <option value="Currently Enrolled" className="bg-[#181A15] text-[#DFD5C2]">Currently Enrolled / Masih Sekolah/Kuliah</option>
-                          <option value="Graduated" className="bg-[#181A15] text-[#DFD5C2]">Graduated / Lulus</option>
+                          <option value="" className="bg-[#181A15] text-[#DFD5C2]">{t("profile.select_status", "Select Status")}</option>
+                          <option value="Currently Enrolled" className="bg-[#181A15] text-[#DFD5C2]">{t("profile.enrolled", "Currently Enrolled / Masih Sekolah/Kuliah")}</option>
+                          <option value="Graduated" className="bg-[#181A15] text-[#DFD5C2]">{t("profile.graduated", "Graduated / Lulus")}</option>
                         </select>
                       </div>
                     </div>
@@ -477,20 +479,20 @@ export default function ProfilePage() {
                     {educationLevel !== "High School" && (
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-2 relative">
-                        <Label>Study Program <span className="text-red-500">*</span></Label>
+                        <Label>{t("profile.study_program", "Study Program")} <span className="text-red-500">*</span></Label>
                         <select 
                           className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 text-white bg-transparent"
                           value={studyProgram}
                           onChange={(e) => setStudyProgram(e.target.value)}
                         >
-                          <option value="" className="bg-[#181A15] text-[#DFD5C2]">Select Study Program</option>
+                          <option value="" className="bg-[#181A15] text-[#DFD5C2]">{t("profile.select_program", "Select Study Program")}</option>
                           {STUDY_PROGRAMS.map(prog => (
                             <option key={prog} value={prog} className="bg-[#181A15] text-[#DFD5C2]">{prog}</option>
                           ))}
                         </select>
                         {studyProgram === "Other" && (
                           <Input 
-                            placeholder="Specify your study program..."
+                            placeholder={t("profile.specify_program", "Specify your study program...")}
                             className="mt-2"
                             value={otherStudyProgram}
                             onChange={(e) => setOtherStudyProgram(e.target.value)}
@@ -499,11 +501,11 @@ export default function ProfilePage() {
                       </div>
 
                       <div className="space-y-2 relative">
-                        <Label>University <span className="text-red-500">*</span></Label>
+                        <Label>{t("profile.university", "University")} <span className="text-red-500">*</span></Label>
                         <div className="relative">
                           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#7A8072]" />
                           <Input 
-                            placeholder="Search your university..."
+                            placeholder={t("profile.search_uni", "Search your university...")}
                             className="pl-9"
                             value={uniSearchQuery}
                             onChange={(e) => setUniSearchQuery(e.target.value)}
@@ -543,7 +545,7 @@ export default function ProfilePage() {
                       </div>
                     )}
                     <div className="space-y-2">
-                      <Label>Upload Portfolio / Work Samples <span className="text-forest-muted font-normal text-xs ml-2">(Optional, +20%)</span></Label>
+                      <Label>{t("profile.upload_portfolio", "Upload Portfolio / Work Samples")} <span className="text-forest-muted font-normal text-xs ml-2">{t("profile.optional_20", "(Optional, +20%)")}</span></Label>
                       <div className="relative border border-input rounded-md px-3 py-2 flex items-center bg-transparent">
                         <Input 
                           type="file" 
@@ -554,12 +556,12 @@ export default function ProfilePage() {
                         />
                         <div className="flex items-center gap-2 text-sm text-muted-foreground w-full">
                           {isUploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
-                          <span className="truncate">{formData.portfolio_url ? "Portfolio Uploaded" : "Select File (PDF, DOCX, ZIP)"}</span>
+                          <span className="truncate">{formData.portfolio_url ? t("profile.portfolio_uploaded", "Portfolio Uploaded") : t("profile.select_portfolio", "Select File (PDF, DOCX, ZIP)")}</span>
                         </div>
                       </div>
                       {formData.portfolio_url && (
                         <a href={formData.portfolio_url} target="_blank" rel="noreferrer" className="text-xs text-forest-accent hover:underline block mt-1">
-                          View Uploaded Portfolio
+                          {t("profile.view_portfolio", "View Uploaded Portfolio")}
                         </a>
                       )}
                     </div>
@@ -569,8 +571,8 @@ export default function ProfilePage() {
                     <div className="w-16 h-16 bg-[#181A15] rounded-full flex items-center justify-center mb-4">
                       <FileUp className="w-8 h-8 text-forest-accent" />
                     </div>
-                    <h3 className="text-lg font-medium text-forest-beige mb-1">Upload your CV / Resume <span className="text-red-500">*</span></h3>
-                    <p className="text-sm text-forest-muted mb-6">PDF, DOCX up to 5MB</p>
+                    <h3 className="text-lg font-medium text-forest-beige mb-1">{t("profile.upload_cv", "Upload your CV / Resume")} <span className="text-red-500">*</span></h3>
+                    <p className="text-sm text-forest-muted mb-6">{t("profile.cv_format", "PDF, DOCX up to 5MB")}</p>
                     
                     <div className="relative">
                       <Input 
@@ -582,15 +584,15 @@ export default function ProfilePage() {
                       />
                       <Button variant="outline" className="border-forest-accent text-forest-accent hover:bg-forest-accent/10 pointer-events-none">
                         {isUploading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Upload className="w-4 h-4 mr-2" />}
-                        {isUploading ? "Uploading..." : "Select File"}
+                        {isUploading ? t("profile.uploading", "Uploading...") : t("profile.select_file", "Select File")}
                       </Button>
                     </div>
                     
                     {formData.cv_url && (
                       <div className="mt-4 p-3 bg-green-900/20 border border-green-800 rounded flex items-center gap-3">
                         <FileText className="w-5 h-5 text-green-500" />
-                        <span className="text-sm text-green-100 text-left line-clamp-1 max-w-[200px]">CV Uploaded</span>
-                        <a href={formData.cv_url} target="_blank" rel="noreferrer" className="text-xs text-green-400 hover:underline ml-auto">View</a>
+                        <span className="text-sm text-green-100 text-left line-clamp-1 max-w-[200px]">{t("profile.cv_uploaded", "CV Uploaded")}</span>
+                        <a href={formData.cv_url} target="_blank" rel="noreferrer" className="text-xs text-green-400 hover:underline ml-auto">{t("profile.view", "View")}</a>
                       </div>
                     )}
                   </div>

@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { Handshake, Globe, Target, Building2, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 
 const fadeIn = {
   initial: { opacity: 0, y: 20 },
@@ -20,43 +21,45 @@ const stagger = {
   }
 };
 
-const PARTNERSHIP_TIERS = [
-  {
-    title: "Corporate Partner",
-    description: "Align your brand with impactful social and environmental projects. Engage your employees in corporate volunteering programs.",
-    icon: Building2,
-    benefits: [
-      "Custom CSR campaign creation",
-      "Employee volunteering tracking",
-      "Impact reports and analytics",
-      "Brand visibility across JALA VIVE"
-    ]
-  },
-  {
-    title: "NGO / Non-Profit",
-    description: "Amplify your reach and connect with dedicated volunteers ready to support your noble causes.",
-    icon: Globe,
-    benefits: [
-      "Priority volunteer matching",
-      "Advanced project management tools",
-      "Community broadcast features",
-      "Donation integration (Coming Soon)"
-    ]
-  },
-  {
-    title: "Community Partner",
-    description: "For local communities and universities looking to organize and manage their own impact initiatives.",
-    icon: Target,
-    benefits: [
-      "Private community groups",
-      "Event scheduling tools",
-      "Digital certificates for members",
-      "Dedicated support channel"
-    ]
-  }
-];
-
 export default function PartnershipPage() {
+  const { t } = useTranslation("common");
+
+  const PARTNERSHIP_TIERS = [
+    {
+      title: t("partnership.corporate_title"),
+      description: t("partnership.corporate_desc"),
+      icon: Building2,
+      benefits: [
+        t("partnership.c_b1"),
+        t("partnership.c_b2"),
+        t("partnership.c_b3"),
+        t("partnership.c_b4")
+      ]
+    },
+    {
+      title: t("partnership.ngo_title"),
+      description: t("partnership.ngo_desc"),
+      icon: Globe,
+      benefits: [
+        t("partnership.n_b1"),
+        t("partnership.n_b2"),
+        t("partnership.n_b3"),
+        t("partnership.n_b4")
+      ]
+    },
+    {
+      title: t("partnership.com_title"),
+      description: t("partnership.com_desc"),
+      icon: Target,
+      benefits: [
+        t("partnership.co_b1"),
+        t("partnership.co_b2"),
+        t("partnership.co_b3"),
+        t("partnership.co_b4")
+      ]
+    }
+  ];
+
   return (
     <div className="min-h-screen bg-[#131511]">
       {/* Hero Section */}
@@ -78,23 +81,19 @@ export default function PartnershipPage() {
             variants={stagger}
             className="flex flex-col items-center gap-5"
           >
-            <motion.div variants={fadeIn}>
-              <div className="inline-flex items-center px-4 py-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 text-xs font-bold uppercase tracking-[0.2em] backdrop-blur-md shadow-[0_0_20px_rgba(16,185,129,0.1)]">
-                PARTNERSHIP
-              </div>
-            </motion.div>
+
             
             <motion.div variants={fadeIn}>
               <h1 className="text-[44px] sm:text-[56px] md:text-[68px] font-bold text-white tracking-tight leading-[1.1]">
-                Amplify Your Impact <br className="hidden sm:block" />
-                Together with <br className="hidden sm:block" />
+                {t("partnership.hero_title")} <br className="hidden sm:block" />
+                {t("partnership.hero_title_2")} <br className="hidden sm:block" />
                 <span className="text-forest-accent drop-shadow-sm">JALA VIVE</span>
               </h1>
             </motion.div>
             
             <motion.div variants={fadeIn} className="max-w-[600px] mx-auto">
               <p className="text-[18px] md:text-[20px] text-gray-400 leading-[170%]">
-                Join forces with us to build a more sustainable and caring world. Whether you're a corporation, NGO, or university, we have the right tools to scale your initiatives.
+                {t("partnership.hero_desc")}
               </p>
             </motion.div>
             
@@ -102,14 +101,14 @@ export default function PartnershipPage() {
               <Link href="/register?role=organization" className="w-full sm:w-auto">
                   <motion.div whileHover={{ scale: 1.03 }} className="w-full">
                     <Button className="w-full sm:w-auto h-[52px] px-8 rounded-[16px] bg-forest-accent hover:bg-[#4A5D23] text-white text-[16px] font-semibold shadow-lg shadow-forest-accent/20 transition-colors">
-                      Become a Partner
+                      {t("partnership.btn_partner")}
                     </Button>
                   </motion.div>
               </Link>
               <Link href="/explore" className="w-full sm:w-auto">
                   <motion.div whileHover={{ scale: 1.03 }} className="w-full">
                     <Button variant="ghost" className="w-full sm:w-auto h-[52px] px-8 rounded-[16px] border border-white/10 hover:bg-white/5 text-white text-[16px] font-semibold transition-colors">
-                      Explore Projects
+                      {t("partnership.btn_explore")}
                     </Button>
                   </motion.div>
               </Link>
@@ -123,10 +122,10 @@ export default function PartnershipPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
             <h2 className="text-3xl md:text-4xl font-bold text-forest-beige tracking-tight">
-              Partnership Opportunities
+              {t("partnership.tier_title")}
             </h2>
             <p className="text-forest-muted text-lg">
-              Choose the tier that best fits your organization's goals.
+              {t("partnership.tier_desc")}
             </p>
           </div>
 
@@ -147,7 +146,7 @@ export default function PartnershipPage() {
                 <p className="text-forest-muted leading-relaxed mb-8 flex-1">{tier.description}</p>
                 
                 <div className="space-y-3 mb-8">
-                  <p className="text-sm font-semibold text-forest-beige uppercase tracking-wider">Benefits:</p>
+                  <p className="text-sm font-semibold text-forest-beige uppercase tracking-wider">{t("partnership.benefits")}</p>
                   <ul className="space-y-2">
                     {tier.benefits.map((benefit, j) => (
                       <li key={j} className="flex items-start gap-2 text-sm text-[#DFD5C2]">
@@ -160,7 +159,7 @@ export default function PartnershipPage() {
                 
                 <Link href="/register?role=organization" className="w-full">
                   <Button variant="outline" className="w-full border-forest-border hover:bg-[#1E211A] text-forest-beige">
-                    Learn More
+                    {t("partnership.learn_more")}
                   </Button>
                 </Link>
               </motion.div>
@@ -175,15 +174,15 @@ export default function PartnershipPage() {
         
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8">
           <h2 className="text-3xl md:text-5xl font-bold text-forest-beige leading-tight">
-            Ready to collaborate?
+            {t("partnership.cta_title")}
           </h2>
           <p className="text-lg text-forest-muted">
-            Let's discuss how we can work together to maximize your social impact.
+            {t("partnership.cta_desc")}
           </p>
           <div className="pt-4 flex justify-center">
             <Link href="/register?role=organization">
               <Button className="h-14 px-8 rounded-full bg-forest-accent hover:bg-[#4A5D23] text-forest-beige text-lg font-semibold shadow-lg shadow-forest-accent/20 transition-all gap-2">
-                Contact Our Team <ArrowRight size={20} />
+                {t("partnership.btn_contact")} <ArrowRight size={20} />
               </Button>
             </Link>
           </div>

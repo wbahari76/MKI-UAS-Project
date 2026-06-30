@@ -11,8 +11,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { StatsCard } from "@/components/ui/stats-card";
 import { formatDistanceToNow } from "date-fns";
+import { useTranslation } from "react-i18next";
 
 export default function AdminDashboardPage() {
+  const { t } = useTranslation("common");
   const [announcement, setAnnouncement] = useState("");
   const [isSending, setIsSending] = useState(false);
 
@@ -154,23 +156,23 @@ export default function AdminDashboardPage() {
     setTimeout(() => {
       setIsSending(false);
       setAnnouncement("");
-      toast.success("Announcement broadcasted successfully to all online users!");
+      toast.success(t("admin_dash.success_broadcast"));
     }, 1000);
   };
 
   return (
     <div className="space-y-8 pb-20">
       <div>
-        <h1 className="text-3xl font-bold text-forest-beige tracking-tight">Platform Overview</h1>
-        <p className="text-forest-muted mt-1">Monitor platform activity and manage system-wide settings.</p>
+        <h1 className="text-3xl font-bold text-forest-beige tracking-tight">{t("admin_dash.platform_overview")}</h1>
+        <p className="text-forest-muted mt-1">{t("admin_dash.platform_desc")}</p>
       </div>
 
       {/* Stats Overview */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <StatsCard title="Total Volunteers" value={stats.volunteers.toString()} icon={Users} trend={{ value: 0, isPositive: true }} />
-        <StatsCard title="Organizations" value={stats.organizations.toString()} icon={Building2} trend={{ value: 0, isPositive: true }} />
-        <StatsCard title="Active Projects" value={stats.activeProjects.toString()} icon={CalendarDays} trend={{ value: 0, isPositive: true }} />
-        <StatsCard title="System Health" value="99.9%" icon={Activity} />
+        <StatsCard title={t("admin_dash.total_volunteers")} value={stats.volunteers.toString()} icon={Users} trend={{ value: 0, isPositive: true }} />
+        <StatsCard title={t("admin_dash.organizations")} value={stats.organizations.toString()} icon={Building2} trend={{ value: 0, isPositive: true }} />
+        <StatsCard title={t("admin_dash.active_projects")} value={stats.activeProjects.toString()} icon={CalendarDays} trend={{ value: 0, isPositive: true }} />
+        <StatsCard title={t("admin_dash.system_health")} value="99.9%" icon={Activity} />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -181,16 +183,16 @@ export default function AdminDashboardPage() {
             <CardHeader className="border-b border-forest-border bg-forest text-forest-beige rounded-t-xl">
               <CardTitle className="flex items-center gap-2 text-lg">
                 <Megaphone className="w-5 h-5 text-emerald-400" />
-                Broadcast Announcement
+                {t("admin_dash.broadcast_announcement")}
               </CardTitle>
             </CardHeader>
             <CardContent className="p-6">
               <form onSubmit={handleBroadcast} className="space-y-4">
                 <p className="text-sm text-forest-muted">
-                  Send a realtime notification to all currently connected users across the platform.
+                  {t("admin_dash.broadcast_desc")}
                 </p>
                 <Textarea
-                  placeholder="Type your announcement here..."
+                  placeholder={t("admin_dash.type_announcement")}
                   className="min-h-[120px] bg-[#181A15] border-0 focus-visible:ring-forest-border"
                   value={announcement}
                   onChange={(e) => setAnnouncement(e.target.value)}
@@ -201,9 +203,9 @@ export default function AdminDashboardPage() {
                     className="bg-forest text-forest-beige hover:bg-forest-card px-6"
                     disabled={!announcement.trim() || isSending}
                   >
-                    {isSending ? "Broadcasting..." : (
+                    {isSending ? t("admin_dash.broadcasting") : (
                       <>
-                        Broadcast Now
+                        {t("admin_dash.broadcast_now")}
                         <Send className="w-4 h-4 ml-2" />
                       </>
                     )}
@@ -220,13 +222,13 @@ export default function AdminDashboardPage() {
             <CardHeader className="border-b border-forest-border">
               <CardTitle className="text-lg flex items-center gap-2">
                 <Server className="w-5 h-5 text-[#7A8072]" />
-                Live Activity
+                {t("admin_dash.live_activity")}
               </CardTitle>
             </CardHeader>
             <CardContent className="p-0">
               <div className="divide-y divide-slate-100 max-h-[300px] overflow-y-auto">
                 {logs.length === 0 ? (
-                  <div className="p-4 text-sm text-forest-muted">No recent activity.</div>
+                  <div className="p-4 text-sm text-forest-muted">{t("admin_dash.no_recent")}</div>
                 ) : logs.map((log, i) => (
                   <div key={i} className="p-4 flex items-start gap-3 hover:bg-[#181A15] transition-colors">
                     <div className="w-2 h-2 rounded-full bg-forest-accent mt-2 shrink-0" />

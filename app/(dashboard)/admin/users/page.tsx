@@ -16,8 +16,9 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { toast } from "sonner";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { supabase } from "@/lib/supabase/client";
 
 export default function AdminUsersPage() {
@@ -25,6 +26,7 @@ export default function AdminUsersPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState("all");
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<any>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -294,7 +296,7 @@ export default function AdminUsersPage() {
                             )}
                             <DropdownMenuItem
                               className="text-forest-beige focus:bg-[#21261B] focus:text-forest-beige cursor-pointer"
-                              onSelect={() => toast.info("Full profile view coming soon.")}
+                              onSelect={() => setSelectedUser(user)}
                             >
                               View Full Profile
                             </DropdownMenuItem>
@@ -309,6 +311,65 @@ export default function AdminUsersPage() {
           </CardContent>
         </Tabs>
       </Card>
+
+      {/* User Details Dialog */}
+      <Dialog open={!!selectedUser} onOpenChange={(open) => !open && setSelectedUser(null)}>
+        <DialogContent className="bg-[#181A15] border-forest-border sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle className="text-forest-beige text-xl">User Profile</DialogTitle>
+          </DialogHeader>
+          {selectedUser && (
+            <div className="space-y-6 mt-4">
+              <div className="flex items-center gap-4">
+                <Avatar className="w-16 h-16">
+                  <AvatarFallback className={selectedUser.role === 'Organization' ? 'bg-blue-500/10 text-blue-400 text-2xl' : 'bg-[#2C3322] text-[#829661] text-2xl'}>
+                    {selectedUser.name.charAt(0)}
+                  </AvatarFallback>
+                </Avatar>
+                <div>
+                  <h3 className="text-xl font-bold text-forest-beige">{selectedUser.name}</h3>
+                  <Badge variant="outline" className={
+                    selectedUser.role === 'Organization'
+                      ? 'border-blue-500/30 text-blue-400 bg-blue-500/5 mt-1'
+                      : 'border-[#829661]/30 text-[#829661] bg-[#829661]/5 mt-1'
+                  }>
+                    {selectedUser.role}
+                  </Badge>
+                </div>
+              </div>
+
+              <div className="space-y-4 pt-4 border-t border-[#1E211A]">
+                <div>
+                  <p className="text-sm font-medium text-forest-muted">Email Address</p>
+                  <p className="text-forest-beige">{selectedUser.email}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-forest-muted">Status</p>
+                  <Badge variant="outline" className={`mt-1 ${
+                    selectedUser.status === 'Verified' || selectedUser.status === 'Active'
+                      ? 'border-emerald-500/30 text-emerald-500 bg-emerald-500/5'
+                      : selectedUser.status === 'Suspended'
+                        ? 'border-red-500/30 text-red-500 bg-red-500/5'
+                        : 'border-yellow-500/30 text-yellow-500 bg-yellow-500/5'
+                  }`}>
+                    {selectedUser.status}
+                  </Badge>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-forest-muted">Joined Date</p>
+                  <p className="text-forest-beige">{selectedUser.joinDate}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-forest-muted">User ID</p>
+                  <p className="text-xs text-forest-muted font-mono bg-[#1E211A] p-2 rounded-md mt-1 break-all">
+                    {selectedUser.id}
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

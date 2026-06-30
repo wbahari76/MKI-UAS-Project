@@ -76,9 +76,7 @@ export default function ImpactPage() {
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-20 space-y-6">
           <motion.div initial="initial" animate="animate" variants={fadeInUp}>
-            <span className="inline-block py-1 px-3 rounded-full bg-blue-500/10 text-blue-400 text-sm font-semibold tracking-wider uppercase mb-4">
-              Our Impact
-            </span>
+
             <h1 className="text-4xl md:text-6xl font-extrabold text-forest-beige tracking-tight leading-tight">
               Measuring What <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-emerald-500">Matters</span>
             </h1>

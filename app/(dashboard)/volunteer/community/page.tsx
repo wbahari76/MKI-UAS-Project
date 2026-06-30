@@ -21,6 +21,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 // Mock Data
 const INITIAL_POSTS = [
@@ -46,6 +47,7 @@ const INITIAL_POSTS = [
 ];
 
 export default function CommunityPage() {
+  const { t } = useTranslation("common");
   const { user, profile } = useAuth();
   const userName = profile?.full_name || user?.email?.split("@")[0] || "Volunteer";
   
@@ -172,10 +174,10 @@ export default function CommunityPage() {
       {/* Header */}
       <div>
         <h1 className="text-3xl font-bold text-forest-beige tracking-tight">
-          Community
+          {t("community.title", "Community")}
         </h1>
         <p className="text-forest-muted mt-1">
-          Share your impact, connect with others, and get inspired.
+          {t("community.desc", "Share your impact, connect with others, and get inspired.")}
         </p>
       </div>
 
@@ -191,7 +193,7 @@ export default function CommunityPage() {
               </Avatar>
               <div className="flex-1 space-y-4">
                 <Textarea 
-                  placeholder="Share your volunteer experience or thoughts..." 
+                  placeholder={t("community.start_post", "Share your volunteer experience or thoughts...")} 
                   className="min-h-[100px] resize-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0 bg-transparent px-0 text-base"
                   value={newPost}
                   onChange={(e) => setNewPost(e.target.value)}
@@ -207,7 +209,7 @@ export default function CommunityPage() {
                     className="btn-primary rounded-full px-6"
                     disabled={!newPost.trim() || isPosting}
                   >
-                    {isPosting ? "Posting..." : "Post"}
+                    {isPosting ? t("explore.processing", "Posting...") : t("explore.submit_application", "Post").replace(" Application", "")}
                   </Button>
                 </div>
               </div>

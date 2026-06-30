@@ -12,6 +12,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
+import { LanguageSwitcher } from "@/components/ui/LanguageSwitcher";
+import { useTranslation } from "react-i18next";
 
 export default function DashboardHeader({
   setMobileOpen,
@@ -19,6 +21,7 @@ export default function DashboardHeader({
   setMobileOpen: (open: boolean) => void;
 }) {
   const { user, profile } = useAuth();
+  const { t } = useTranslation("common");
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -73,6 +76,7 @@ export default function DashboardHeader({
       </div>
 
       <div className="flex items-center gap-3 sm:gap-4">
+        <LanguageSwitcher />
         <Link href={`${basePath}/messages`}>
           <button className="relative rounded-full p-2 text-forest-muted hover:bg-[#1E211A] transition-colors">
             <MessageSquare size={20} />
@@ -102,25 +106,25 @@ export default function DashboardHeader({
               <Link href="/volunteer/profile">
                 <DropdownMenuItem className="cursor-pointer rounded-lg px-3 py-2">
                   <User className="mr-2 h-4 w-4" />
-                  <span>My Profile</span>
+                  <span>{t("nav.my_profile")}</span>
                 </DropdownMenuItem>
               </Link>
             )}
             <Link href={`${basePath}/settings`}>
               <DropdownMenuItem className="cursor-pointer rounded-lg px-3 py-2">
                 <Settings className="mr-2 h-4 w-4" />
-                <span>Settings</span>
+                <span>{t("nav.settings")}</span>
               </DropdownMenuItem>
             </Link>
             <Link href="/help">
               <DropdownMenuItem className="cursor-pointer rounded-lg px-3 py-2">
                 <HelpCircle className="mr-2 h-4 w-4" />
-                <span>Help Center</span>
+                <span>{t("nav.help_center")}</span>
               </DropdownMenuItem>
             </Link>
             <DropdownMenuItem onClick={handleLogout} className="cursor-pointer text-red-500 focus:text-red-400 focus:bg-red-500/10 rounded-lg px-3 py-2 mt-1">
               <LogOut className="mr-2 h-4 w-4" />
-              <span>Log out</span>
+              <span>{t("nav.logout")}</span>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

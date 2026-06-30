@@ -20,16 +20,19 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useAuth } from '@/contexts/AuthContext';
 import { cn } from '@/lib/utils';
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
+import { LanguageSwitcher } from "@/components/ui/LanguageSwitcher";
 
 const publicNavItems = [
-    { name: 'Explore', href: '/explore' },
-    { name: 'Communities', href: '/communities' },
-    { name: 'Events', href: '/events' },
-    { name: 'About', href: '/about' },
-    { name: 'Partnership', href: '/partnership' },
+    { key: 'explore', href: '/explore' },
+    { key: 'communities', href: '/communities' },
+    { key: 'events', href: '/events' },
+    { key: 'about', href: '/about' },
+    { key: 'partnership', href: '/partnership' },
 ];
 
 export function PublicNavbar() {
+    const { t } = useTranslation("common");
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -129,20 +132,22 @@ export function PublicNavbar() {
                     <div className="hidden lg:flex flex-1 items-center justify-center gap-8">
                         {publicNavItems.map((item) => (
                             <Link
-                                key={item.name}
+                                key={item.key}
                                 href={item.href}
                                 className={cn(
                                     "text-[14px] font-medium transition-colors",
                                     isActive(item.href) ? "text-white" : "text-gray-400 hover:text-white"
                                 )}
                             >
-                                {item.name}
+                                {t(`nav.${item.key}`)}
                             </Link>
                         ))}
                     </div>
 
                     {/* Right Zone: Actions */}
                     <div className="flex-1 flex items-center justify-end gap-5">
+                        <LanguageSwitcher />
+
                         {/* Search Button (Mobile) */}
                         <Button
                             variant="ghost"
@@ -177,7 +182,7 @@ export function PublicNavbar() {
                                         <DropdownMenuItem asChild>
                                             <Link href={getDashboardLink()} className="flex items-center gap-2 cursor-pointer hover:bg-white/5">
                                                 <Shield className="w-4 h-4" />
-                                                Dashboard
+                                                {t("nav.dashboard")}
                                             </Link>
                                         </DropdownMenuItem>
                                         <DropdownMenuItem
@@ -185,7 +190,7 @@ export function PublicNavbar() {
                                             className="flex items-center gap-2 text-red-500 focus:text-red-500 cursor-pointer hover:bg-white/5"
                                         >
                                             <LogIn className="w-4 h-4 rotate-180" />
-                                            Sign Out
+                                            {t("nav.signout", "Sign Out")}
                                         </DropdownMenuItem>
                                     </DropdownMenuContent>
                                 </DropdownMenu>
@@ -193,11 +198,11 @@ export function PublicNavbar() {
                         ) : (
                             <div className="hidden sm:flex items-center gap-5">
                                 <Link href="/login" className="text-[14px] font-semibold text-gray-400 hover:text-white transition-colors">
-                                    Log in
+                                    {t("nav.login")}
                                 </Link>
                                 <Link href="/register">
                                     <Button className="bg-white hover:bg-gray-200 text-black rounded-full px-6 h-10 font-bold transition-transform hover:scale-105 text-[14px]">
-                                        Get Started
+                                        {t("nav.register")}
                                     </Button>
                                 </Link>
                             </div>
@@ -227,7 +232,7 @@ export function PublicNavbar() {
                         <div className="px-4 py-4 space-y-1">
                             {publicNavItems.map((item) => (
                                 <Link
-                                    key={item.name}
+                                    key={item.key}
                                     href={item.href}
                                     onClick={() => setIsMobileMenuOpen(false)}
                                     className={cn(
@@ -237,7 +242,7 @@ export function PublicNavbar() {
                                             : "text-gray-400 hover:text-white hover:bg-white/5"
                                     )}
                                 >
-                                    {item.name}
+                                    {t(`nav.${item.key}`)}
                                 </Link>
                             ))}
                             <div className="pt-4 mt-2 border-t border-white/10 space-y-2">
@@ -248,14 +253,14 @@ export function PublicNavbar() {
                                             onClick={() => setIsMobileMenuOpen(false)}
                                             className="block px-4 py-3 rounded-xl text-sm font-medium text-gray-400 hover:text-white hover:bg-white/5 transition-colors"
                                         >
-                                            Dashboard
+                                            {t("nav.dashboard")}
                                         </Link>
                                         <Link
                                             href="/profile"
                                             onClick={() => setIsMobileMenuOpen(false)}
                                             className="block px-4 py-3 rounded-xl text-sm font-medium text-gray-400 hover:text-white hover:bg-white/5 transition-colors"
                                         >
-                                            Profile
+                                            {t("nav.profile", "Profile")}
                                         </Link>
                                         <button
                                             onClick={() => {
@@ -264,19 +269,19 @@ export function PublicNavbar() {
                                             }}
                                             className="w-full text-left px-4 py-3 rounded-xl text-sm font-medium text-red-500 hover:bg-red-500/10 transition-colors"
                                         >
-                                            Sign Out
+                                            {t("nav.signout", "Sign Out")}
                                         </button>
                                     </>
                                 ) : (
                                     <div className="flex flex-col gap-3 px-2 py-2">
                                         <Link href="/login" onClick={() => setIsMobileMenuOpen(false)}>
                                             <Button variant="outline" className="w-full rounded-full border-white/10 text-white hover:bg-white/5 h-12 font-semibold">
-                                                Log In
+                                                {t("nav.login")}
                                             </Button>
                                         </Link>
                                         <Link href="/register" onClick={() => setIsMobileMenuOpen(false)}>
                                             <Button className="w-full rounded-full bg-white text-black hover:bg-gray-200 h-12 font-semibold">
-                                                Get Started
+                                                {t("nav.register")}
                                             </Button>
                                         </Link>
                                     </div>
@@ -311,18 +316,18 @@ export function PublicNavbar() {
                                         <Input
                                             value={searchQuery}
                                             onChange={(e) => setSearchQuery(e.target.value)}
-                                            placeholder="Search projects, organizations, events..."
+                                            placeholder={t("nav.search_placeholder", "Search projects, organizations, events...")}
                                             className="pl-12 h-12 text-base border-0 focus:ring-0"
                                             autoFocus
                                         />
                                     </form>
                                 </div>
                                 <div className="border-t border-forest-border p-4">
-                                    <p className="text-xs text-forest-muted mb-3">Quick Links</p>
+                                    <p className="text-xs text-forest-muted mb-3">{t("nav.quick_links", "Quick Links")}</p>
                                     <div className="flex flex-wrap gap-2">
                                         <Button variant="outline" size="sm" className="rounded-full">
                                             <Heart className="w-3.5 h-3.5 mr-1.5" />
-                                            Education Projects
+                                            {t("nav.edu_projects", "Education Projects")}
                                         </Button>
                                         <Button variant="outline" size="sm" className="rounded-full">
                                             <MapPin className="w-3.5 h-3.5 mr-1.5" />
@@ -330,12 +335,12 @@ export function PublicNavbar() {
                                         </Button>
                                         <Button variant="outline" size="sm" className="rounded-full">
                                             <Calendar className="w-3.5 h-3.5 mr-1.5" />
-                                            This Week
+                                            {t("nav.this_week", "This Week")}
                                         </Button>
                                     </div>
                                 </div>
                                 <div className="border-t border-forest-border px-4 py-3 bg-[#181A15] text-xs text-forest-muted">
-                                    Press <kbd className="px-1.5 py-0.5 bg-forest-card rounded border border-forest-border font-mono">ESC</kbd> to close
+                                    {t("nav.press", "Press")} <kbd className="px-1.5 py-0.5 bg-forest-card rounded border border-forest-border font-mono">ESC</kbd> {t("nav.to_close", "to close")}
                                 </div>
                             </div>
                         </motion.div>

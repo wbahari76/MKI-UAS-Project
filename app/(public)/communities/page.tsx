@@ -1,223 +1,182 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Search, Filter, MapPin, Users, Target, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
+import { supabase } from "@/lib/supabase/client";
 
-const fadeInUp = {
-  initial: { opacity: 0, y: 30 },
-  animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.5, ease: "easeOut" }
-};
-
-const staggerContainer = {
-  animate: {
-    transition: {
-      staggerChildren: 0.1
-    }
-  }
-};
-
-const PUBLIC_COMMUNITIES = [
-  {
-    id: 1,
-    name: "OceanSavers Network",
-    focus: "Marine Conservation",
-    location: "Global / Coastal Regions",
-    members: "1,200+",
-    activeProjects: 8,
-    description: "Dedicated to preserving marine life and keeping our oceans clean through community-driven cleanup initiatives and educational programs.",
-    image: "https://images.unsplash.com/photo-1618477461853-cf6ed80fabe9?auto=format&fit=crop&w=800&q=80",
-    logo: "O"
-  },
-  {
-    id: 2,
-    name: "Future Coders Foundation",
-    focus: "Tech Education",
-    location: "Remote / Virtual",
-    members: "850+",
-    activeProjects: 4,
-    description: "Empowering the next generation of developers from underprivileged backgrounds by providing free mentorship and coding bootcamps.",
-    image: "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=800&q=80",
-    logo: "F"
-  },
-  {
-    id: 3,
-    name: "Urban Relief",
-    focus: "Poverty Alleviation",
-    location: "Metropolitan Areas",
-    members: "3,400+",
-    activeProjects: 12,
-    description: "Providing essential supplies, food drives, and temporary shelter assistance to homeless and vulnerable populations in urban centers.",
-    image: "https://images.unsplash.com/photo-1593113563332-e14b58e7279b?auto=format&fit=crop&w=800&q=80",
-    logo: "U"
-  },
-  {
-    id: 4,
-    name: "Earth Guardians",
-    focus: "Reforestation",
-    location: "Southeast Asia",
-    members: "2,100+",
-    activeProjects: 6,
-    description: "Working hands-on to combat deforestation by planting native tree species and rehabilitating damaged forest ecosystems.",
-    image: "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=800&q=80",
-    logo: "E"
-  },
-];
+const CATEGORIES = ["All", "Environment", "Education", "Health", "Animal Welfare", "Community"];
 
 export default function PublicCommunitiesPage() {
+  const { t } = useTranslation("common");
+  const [organizations, setOrganizations] = useState<any[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [activeCategory, setActiveCategory] = useState("All");
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchOrganizations() {
+      try {
+        setLoading(true);
+        const { data, error } = await supabase
+          .from('organizations')
+          .select('*')
+          .eq('is_verified', true)
+          .order('created_at', { ascending: false });
+
+        if (error) throw error;
+        setOrganizations(data || []);
+      } catch (error) {
+        console.error("Error fetching organizations:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchOrganizations();
+  }, []);
+
+  const filteredOrgs = organizations.filter(org => {
+    const matchesSearch = org.name?.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                          org.city?.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesCategory = activeCategory === "All" || org.category === activeCategory;
+    return matchesSearch && matchesCategory;
+  });
+
   return (
     <div className="min-h-screen bg-[#181A15] pt-24 pb-20">
-      
-      {/* Background Decor */}
-      <div className="absolute top-0 inset-x-0 h-[500px] bg-gradient-to-b from-blue-500/10 to-transparent -z-10" />
+      <div className="absolute top-0 inset-x-0 h-[400px] bg-gradient-to-b from-blue-500/5 to-transparent -z-10" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
         {/* Header Section */}
-        <div className="text-center max-w-3xl mx-auto mb-16 space-y-6">
-          <motion.div initial="initial" animate="animate" variants={fadeInUp}>
-            <span className="inline-block py-1 px-3 rounded-full bg-blue-500/10 text-blue-400 text-sm font-semibold tracking-wider uppercase mb-4">
-              Community Directory
-            </span>
-            <h1 className="text-4xl md:text-5xl font-extrabold text-forest-beige tracking-tight leading-tight">
-              Discover Organizations <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-500">Making an Impact</span>
-            </h1>
-            <p className="text-lg text-forest-muted mt-4">
-              Connect with verified non-profits, NGOs, and community groups that align with your passions and values.
-            </p>
-          </motion.div>
+        <div className="text-center max-w-3xl mx-auto space-y-4">
+          <h1 className="text-4xl md:text-5xl font-extrabold text-forest-beige tracking-tight">
+            {t("communities.title")} <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-500">{t("communities.title_highlight")}</span>
+          </h1>
+          <p className="text-lg text-forest-muted">
+            {t("communities.desc")}
+          </p>
         </div>
 
-        {/* Search & Filter Bar */}
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="bg-forest-card p-4 rounded-2xl shadow-sm border border-forest-border mb-12 flex flex-col md:flex-row gap-4"
-        >
+        {/* Search & Filter */}
+        <div className="flex flex-col sm:flex-row gap-4 max-w-3xl mx-auto">
           <div className="relative flex-1">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#7A8072]" />
             <Input 
-              placeholder="Search organizations by name, focus area, or location..." 
-              className="pl-12 h-12 bg-[#181A15] border-0 focus-visible:ring-blue-500 rounded-xl text-base"
+              placeholder={t("communities.search_placeholder")} 
+              className="pl-12 h-14 rounded-full border-forest-border bg-forest-card focus-visible:ring-blue-500 shadow-sm text-base"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
-          <div className="flex gap-4">
-            <Button variant="outline" className="h-12 px-6 rounded-xl border-forest-border text-forest-muted hover:bg-[#181A15]">
-              <Filter className="w-5 h-5 mr-2" /> Filters
-            </Button>
-            <Button className="h-12 px-8 rounded-xl bg-blue-600 hover:bg-blue-700 text-forest-beige font-medium">
-              Search
-            </Button>
-          </div>
-        </motion.div>
-
-        {/* Communities Grid */}
-        <motion.div 
-          initial="initial"
-          animate="animate"
-          variants={staggerContainer}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8"
-        >
-          {PUBLIC_COMMUNITIES.map((community) => (
-            <motion.div 
-              key={community.id} 
-              variants={fadeInUp}
-              className="group bg-forest-card rounded-3xl overflow-hidden border border-forest-border shadow-sm hover:shadow-xl transition-all duration-300"
-            >
-              {/* Community Banner Image */}
-              <div className="relative h-48 overflow-hidden">
-                <img 
-                  src={community.image} 
-                  alt={community.name} 
-                  className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent" />
-                <div className="absolute bottom-4 left-6 flex items-center gap-4">
-                  <div className="w-16 h-16 rounded-2xl bg-forest-card flex items-center justify-center text-2xl font-bold text-blue-400 shadow-md">
-                    {community.logo}
-                  </div>
-                  <div>
-                    <Badge className="bg-blue-500/80 hover:bg-blue-500 backdrop-blur-sm text-forest-beige border-0 font-medium mb-1">
-                      {community.focus}
-                    </Badge>
-                    <h3 className="text-2xl font-bold text-forest-beige line-clamp-1">
-                      {community.name}
-                    </h3>
-                  </div>
-                </div>
-              </div>
-
-              {/* Community Details */}
-              <div className="p-6">
-                <p className="text-forest-muted mb-6 line-clamp-2 leading-relaxed">
-                  {community.description}
-                </p>
-                
-                <div className="grid grid-cols-2 gap-4 mb-6">
-                  <div className="flex items-center text-sm text-forest-muted">
-                    <MapPin className="w-4 h-4 mr-2 text-[#7A8072] shrink-0" />
-                    <span className="line-clamp-1">{community.location}</span>
-                  </div>
-                  <div className="flex items-center text-sm text-forest-muted">
-                    <Users className="w-4 h-4 mr-2 text-[#7A8072] shrink-0" />
-                    <span className="line-clamp-1">{community.members} Volunteers</span>
-                  </div>
-                  <div className="flex items-center text-sm text-forest-muted col-span-2">
-                    <Target className="w-4 h-4 mr-2 text-[#7A8072] shrink-0" />
-                    <span className="line-clamp-1">{community.activeProjects} Active Projects</span>
-                  </div>
-                </div>
-
-                <div className="flex items-center justify-between pt-4 border-t border-forest-border">
-                  <Link href="/register">
-                    <Button variant="ghost" className="text-blue-400 hover:text-blue-400 hover:bg-blue-500/10 rounded-full px-4">
-                      View Profile
-                    </Button>
-                  </Link>
-                  <Link href="/register">
-                    <Button className="bg-blue-600 hover:bg-blue-700 text-forest-beige rounded-full px-6">
-                      Join Community <ArrowRight className="w-4 h-4 ml-2" />
-                    </Button>
-                  </Link>
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
-
-        {/* Load More */}
-        <div className="mt-16 text-center">
-          <Button variant="outline" className="rounded-full h-12 px-8 border-forest-border text-forest-muted hover:bg-[#181A15]">
-            View All Organizations
-          </Button>
         </div>
 
-        {/* Call to Action for Organizations */}
-        <motion.div 
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="mt-24 bg-blue-600 rounded-3xl p-8 md:p-12 text-center text-forest-beige relative overflow-hidden"
-        >
-          <div className="absolute top-0 right-0 w-64 h-64 bg-forest-card/10 rounded-full blur-3xl -z-10 transform translate-x-1/2 -translate-y-1/2" />
-          <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-400/20 rounded-full blur-3xl -z-10 transform -translate-x-1/2 translate-y-1/2" />
-          
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Are you an organization?</h2>
-          <p className="text-blue-100 text-lg mb-8 max-w-2xl mx-auto">
-            Join JALA VIVE to recruit passionate volunteers, manage your projects efficiently, and measure your impact in real-time.
-          </p>
-          <Link href="/register?type=organization">
-            <Button className="h-14 px-8 rounded-full bg-forest-card text-blue-400 hover:bg-[#181A15] text-lg font-semibold shadow-xl shadow-blue-900/20 transition-all">
-              Register Your Organization
-            </Button>
-          </Link>
-        </motion.div>
+        {/* Categories */}
+        <div className="flex items-center justify-center gap-2 overflow-x-auto pb-4 scrollbar-hide">
+          {CATEGORIES.map(category => (
+            <button
+              key={category}
+              onClick={() => setActiveCategory(category)}
+              className={`px-6 py-2.5 rounded-full whitespace-nowrap text-sm font-semibold transition-all shadow-sm ${
+                activeCategory === category 
+                  ? "bg-blue-600 text-white border-blue-600" 
+                  : "bg-forest-card text-forest-muted border border-forest-border hover:border-[#38402D] hover:bg-[#181A15]"
+              }`}
+            >
+              {category === "All" ? t("landing.categories.All", { defaultValue: "All" }) : t(`landing.categories.${category}`, { defaultValue: category })}
+            </button>
+          ))}
+        </div>
 
+        {/* Communities Grid */}
+        {loading ? (
+          <div className="flex justify-center py-20">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4">
+            {filteredOrgs.map((org, index) => (
+              <motion.div
+                key={org.id}
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
+                className="bg-forest-card rounded-3xl border border-forest-border overflow-hidden group hover:shadow-xl hover:shadow-blue-900/10 transition-all duration-300"
+              >
+                <div className="relative h-48 w-full overflow-hidden bg-[#1E211A]">
+                  <img 
+                    src={org.cover_url || "https://images.unsplash.com/photo-1618477461853-cf6ed80fabe9?auto=format&fit=crop&w=800&q=80"} 
+                    alt={org.name}
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-80"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#181A15] via-[#181A15]/40 to-transparent" />
+                  
+                  {/* Logo overlay */}
+                  <div className="absolute -bottom-6 left-6 w-20 h-20 rounded-2xl bg-[#181A15] border-4 border-[#181A15] overflow-hidden flex items-center justify-center shadow-lg">
+                    {org.logo_url ? (
+                      <img src={org.logo_url} alt="Logo" className="w-full h-full object-cover" />
+                    ) : (
+                      <span className="text-3xl font-bold text-blue-400">{org.name.charAt(0)}</span>
+                    )}
+                  </div>
+                </div>
+                
+                <div className="pt-10 p-6">
+                  <div className="flex justify-between items-start mb-4">
+                    <div>
+                      <h3 className="font-bold text-2xl text-forest-beige mb-1 group-hover:text-blue-400 transition-colors">
+                        {org.name}
+                      </h3>
+                      <div className="flex items-center gap-2 text-sm text-forest-muted">
+                        <MapPin className="w-4 h-4 text-[#7A8072]" />
+                        {org.city || t("communities.indonesia", "Indonesia")}
+                      </div>
+                    </div>
+                    <Badge className="bg-blue-500/10 text-blue-400 border-0">{org.category || 'General'}</Badge>
+                  </div>
+                  
+                  <p className="text-forest-muted mb-6 line-clamp-3">
+                    {org.description || t("communities.no_description", "No description provided.")}
+                  </p>
+                  
+                  <div className="grid grid-cols-2 gap-4 mb-6">
+                    <div className="bg-[#181A15] rounded-xl p-4 border border-forest-border flex items-center gap-3">
+                      <Target className="w-5 h-5 text-blue-400" />
+                      <div>
+                        <p className="text-xs text-forest-muted font-medium mb-0.5">{t("communities.projects")}</p>
+                        <p className="text-sm font-bold text-forest-beige">{org.total_projects || 0}</p>
+                      </div>
+                    </div>
+                    <div className="bg-[#181A15] rounded-xl p-4 border border-forest-border flex items-center gap-3">
+                      <Users className="w-5 h-5 text-emerald-400" />
+                      <div>
+                        <p className="text-xs text-forest-muted font-medium mb-0.5">{t("communities.volunteers")}</p>
+                        <p className="text-sm font-bold text-forest-beige">{org.total_volunteers || 0}</p>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <Link href={`/explore?q=${org.name}`}>
+                    <Button className="w-full h-12 rounded-xl bg-forest-beige text-forest-card hover:bg-white font-semibold">
+                      {t("communities.view_projects")} <ArrowRight className="w-4 h-4 ml-2" />
+                    </Button>
+                  </Link>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        )}
+
+        {!loading && filteredOrgs.length === 0 && (
+          <div className="text-center py-20 text-forest-muted">
+            {t("communities.no_communities")}
+          </div>
+        )}
       </div>
     </div>
   );
