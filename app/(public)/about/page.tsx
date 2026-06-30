@@ -1,8 +1,8 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, Users, Globe, Target, Shield, HeartHandshake, TrendingUp, Sparkles, Navigation } from "lucide-react";
+import { Users, Globe, Target, Shield, HeartHandshake, TrendingUp, ArrowRight, Navigation } from "lucide-react";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
@@ -49,9 +49,9 @@ const TEAM_MEMBERS = [
     image: "/cto.jpg",
   },
   {
-    name: "Salsa Putri",
+    name: "Laysa Latifah",
     role: "CCO",
-    image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80",
+    image: "/cco.jpg",
   },
   {
     name: "Dinda Candraviani",
@@ -62,20 +62,41 @@ const TEAM_MEMBERS = [
 
 export default function AboutPage() {
   const { t } = useTranslation("common");
+  const [stats, setStats] = useState({
+    volunteers: "0",
+    projects: "0",
+    orgs: "0"
+  });
+
+  useEffect(() => {
+    fetch("/api/stats")
+      .then(res => res.json())
+      .then(data => {
+        if (data) {
+          setStats({
+            volunteers: `${data.volunteers || 0}`,
+            projects: `${data.projects || 0}`,
+            orgs: `${data.orgs || 0}`
+          });
+        }
+      })
+      .catch(err => console.error("Failed to fetch stats:", err));
+  }, []);
+
   return (
-    <div className="min-h-screen bg-[#181A15] pt-24 pb-16">
+    <div className="min-h-screen bg-[#181A15] pt-16 pb-16">
       
       {/* Background gradients */}
       <div className="absolute top-0 right-0 w-1/3 h-[400px] bg-forest-accent/5 blur-[100px] rounded-full pointer-events-none" />
       <div className="absolute top-[20%] left-0 w-1/3 h-[400px] bg-blue-500/5 blur-[100px] rounded-full pointer-events-none" />
 
       {/* Hero Section */}
-      <section className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-16 mt-4 mb-8 text-center space-y-6">
+      <section className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 mt-2 mb-0 text-center space-y-6">
         <motion.div
           initial="initial"
           animate="animate"
           variants={stagger}
-          className="max-w-3xl mx-auto space-y-5"
+          className="max-w-3xl mx-auto space-y-6"
         >
           
           <motion.h1 variants={fadeIn} className="text-3xl md:text-5xl font-extrabold text-forest-beige tracking-tight leading-tight">
@@ -85,6 +106,23 @@ export default function AboutPage() {
           <motion.p variants={fadeIn} className="text-base md:text-lg text-forest-muted leading-relaxed max-w-xl mx-auto font-light">
             {t("about.hero_desc")}
           </motion.p>
+
+          {/* Divider stats bar */}
+          <motion.div
+            variants={fadeIn}
+            className="flex flex-wrap justify-center gap-8 pt-6 mt-2 border-t border-[#38402D]/50"
+          >
+            {[
+              { value: stats.volunteers, label: t("about.stat_volunteers") },
+              { value: stats.projects, label: t("about.stat_projects") },
+              { value: stats.orgs, label: t("about.stat_orgs") },
+            ].map((item, i) => (
+              <div key={i} className="text-center">
+                <div className="text-2xl font-bold text-forest-beige tracking-tight">{item.value}</div>
+                <div className="text-xs text-forest-muted mt-0.5">{item.label}</div>
+              </div>
+            ))}
+          </motion.div>
         </motion.div>
       </section>
 
@@ -105,13 +143,13 @@ export default function AboutPage() {
                 transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
               >
                 <span className="text-[#829661] text-sm font-semibold tracking-wider uppercase mb-3 block">
-                  The Problem
+                  {t("about.problem_tag")}
                 </span>
                 <h2 className="text-4xl md:text-5xl font-extrabold text-forest-beige tracking-tight mb-6 leading-tight">
-                  Why JALA VIVE<br/>is Needed
+                  {t("about.problem_title1")}<br/>{t("about.problem_title2")}
                 </h2>
                 <p className="text-forest-muted text-base leading-relaxed">
-                  Our research confirms that the current volunteer ecosystem is fragmented, creating unnecessary friction for both organizers and volunteers.
+                  {t("about.problem_desc")}
                 </p>
               </motion.div>
             </div>
@@ -126,14 +164,14 @@ export default function AboutPage() {
                   whileInView={{ opacity: 1, y: 0, scale: 1 }}
                   viewport={{ once: true, margin: "-50px" }}
                   transition={{ duration: 0.8, delay: 0, ease: [0.16, 1, 0.3, 1] }}
-                  className="group bg-[#1E211A]/60 backdrop-blur-xl border border-[#829661]/20 rounded-[24px] p-7 h-[180px] shadow-2xl shadow-black/50 hover:-translate-y-1.5 hover:shadow-[#829661]/10 hover:border-[#829661]/40 transition-all duration-300 flex flex-col justify-center relative overflow-hidden"
+                  className="group bg-[#1E211A]/60 backdrop-blur-xl border border-[#829661]/20 rounded-[24px] p-6 min-h-[200px] shadow-2xl shadow-black/50 hover:-translate-y-1.5 hover:shadow-[#829661]/10 hover:border-[#829661]/40 transition-all duration-300 flex flex-col justify-center relative overflow-hidden"
                 >
                   <div className="absolute inset-0 bg-gradient-to-br from-[#829661]/0 via-transparent to-[#829661]/0 group-hover:from-[#829661]/5 group-hover:to-transparent transition-all duration-500" />
                   <h3 className="text-[72px] font-bold text-forest-beige leading-none tracking-tighter group-hover:scale-[1.03] origin-left transition-transform duration-500 ease-out">
                     85<span className="text-4xl">%</span>
                   </h3>
-                  <h4 className="text-lg font-semibold text-[#DFD5C2] mt-2">Organizer Struggle</h4>
-                  <p className="text-sm text-forest-muted mt-1 line-clamp-3">of event organizers report that managing volunteer recruitment through manual forms is inefficient and time-consuming.</p>
+                  <h4 className="text-lg font-semibold text-[#DFD5C2] mt-2">{t("about.stat1_title")}</h4>
+                  <p className="text-sm text-forest-muted mt-1">{t("about.stat1_desc")}</p>
                 </motion.div>
 
                 {/* Card 2 */}
@@ -142,14 +180,14 @@ export default function AboutPage() {
                   whileInView={{ opacity: 1, y: 0, scale: 1 }}
                   viewport={{ once: true, margin: "-50px" }}
                   transition={{ duration: 0.8, delay: 0.12, ease: [0.16, 1, 0.3, 1] }}
-                  className="group bg-[#1E211A]/60 backdrop-blur-xl border border-[#829661]/20 rounded-[24px] p-7 h-[180px] shadow-2xl shadow-black/50 hover:-translate-y-1.5 hover:shadow-[#829661]/10 hover:border-[#829661]/40 transition-all duration-300 flex flex-col justify-center relative overflow-hidden"
+                  className="group bg-[#1E211A]/60 backdrop-blur-xl border border-[#829661]/20 rounded-[24px] p-6 min-h-[200px] shadow-2xl shadow-black/50 hover:-translate-y-1.5 hover:shadow-[#829661]/10 hover:border-[#829661]/40 transition-all duration-300 flex flex-col justify-center relative overflow-hidden"
                 >
                   <div className="absolute inset-0 bg-gradient-to-br from-[#829661]/0 via-transparent to-[#829661]/0 group-hover:from-[#829661]/5 group-hover:to-transparent transition-all duration-500" />
                   <h3 className="text-[72px] font-bold text-forest-beige leading-none tracking-tighter group-hover:scale-[1.03] origin-left transition-transform duration-500 ease-out">
                     78<span className="text-4xl">%</span>
                   </h3>
-                  <h4 className="text-lg font-semibold text-[#DFD5C2] mt-2">Volunteer Hesitation</h4>
-                  <p className="text-sm text-forest-muted mt-1 line-clamp-3">of potential volunteers abandon registration due to scattered information and unclear application processes.</p>
+                  <h4 className="text-lg font-semibold text-[#DFD5C2] mt-2">{t("about.stat2_title")}</h4>
+                  <p className="text-sm text-forest-muted mt-1">{t("about.stat2_desc")}</p>
                 </motion.div>
 
                 {/* Card 3 - Centered Bottom */}
@@ -158,14 +196,14 @@ export default function AboutPage() {
                   whileInView={{ opacity: 1, y: 0, scale: 1 }}
                   viewport={{ once: true, margin: "-50px" }}
                   transition={{ duration: 0.8, delay: 0.24, ease: [0.16, 1, 0.3, 1] }}
-                  className="sm:col-span-2 mx-auto w-full max-w-[360px] group bg-[#1E211A]/60 backdrop-blur-xl border border-[#829661]/20 rounded-[24px] p-7 h-[180px] shadow-2xl shadow-black/50 hover:-translate-y-1.5 hover:shadow-[#829661]/10 hover:border-[#829661]/40 transition-all duration-300 flex flex-col justify-center relative overflow-hidden"
+                  className="sm:col-span-2 mx-auto w-full max-w-[360px] group bg-[#1E211A]/60 backdrop-blur-xl border border-[#829661]/20 rounded-[24px] p-6 min-h-[200px] shadow-2xl shadow-black/50 hover:-translate-y-1.5 hover:shadow-[#829661]/10 hover:border-[#829661]/40 transition-all duration-300 flex flex-col justify-center relative overflow-hidden"
                 >
                   <div className="absolute inset-0 bg-gradient-to-br from-[#829661]/0 via-transparent to-[#829661]/0 group-hover:from-[#829661]/5 group-hover:to-transparent transition-all duration-500" />
                   <h3 className="text-[72px] font-bold text-forest-beige leading-none tracking-tighter group-hover:scale-[1.03] origin-left transition-transform duration-500 ease-out">
                     60<span className="text-4xl">%</span>
                   </h3>
-                  <h4 className="text-lg font-semibold text-[#DFD5C2] mt-2">Fragmentation</h4>
-                  <p className="text-sm text-forest-muted mt-1 line-clamp-3">of social impact tracking is lost due to disorganized data and lack of a centralized platform.</p>
+                  <h4 className="text-lg font-semibold text-[#DFD5C2] mt-2">{t("about.stat3_title")}</h4>
+                  <p className="text-sm text-forest-muted mt-1">{t("about.stat3_desc")}</p>
                 </motion.div>
 
               </div>
@@ -331,7 +369,7 @@ export default function AboutPage() {
       </section>
 
       {/* Team Section */}
-      <section className="py-12 overflow-hidden">
+      <section className="pt-12 pb-4 overflow-hidden">
         <div className="w-full">
           <div className="text-center max-w-2xl mx-auto mb-8 space-y-3 px-4">
             <h2 className="text-3xl font-extrabold text-forest-beige tracking-tight">
@@ -347,7 +385,7 @@ export default function AboutPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="relative z-10 py-16 px-4">
+      <section className="relative z-10 pt-4 pb-6 px-4">
         <div className="relative max-w-3xl mx-auto text-center space-y-6 bg-forest-card border border-forest-border p-10 rounded-[2.5rem] shadow-xl">
           <div className="absolute inset-0 bg-gradient-to-br from-forest-accent/5 to-transparent rounded-[2.5rem] pointer-events-none" />
           

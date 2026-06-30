@@ -149,7 +149,20 @@
     "cta_desc": "Bergabung dengan ribuan relawan dan organisasi sosial yang telah membuat dampak nyata di JALA VIVE.",
     "btn_volunteer": "Bergabung Relawan",
     "btn_org": "Daftar Organisasi",
-    "value_badge": "NILAI KAMI"
+    "value_badge": "NILAI KAMI",
+    "problem_tag": "Masalah Utama",
+    "problem_title1": "Mengapa JALA VIVE",
+    "problem_title2": "Dibutuhkan",
+    "problem_desc": "Riset kami mengonfirmasi bahwa ekosistem relawan saat ini terpecah, menciptakan hambatan yang tidak perlu bagi penyelenggara maupun relawan.",
+    "stat1_title": "Kesulitan Penyelenggara",
+    "stat1_desc": "dari penyelenggara acara melaporkan bahwa mengelola rekrutmen relawan melalui formulir manual sangat tidak efisien dan memakan waktu.",
+    "stat2_title": "Keraguan Relawan",
+    "stat2_desc": "dari calon relawan membatalkan pendaftaran akibat informasi yang tersebar dan proses aplikasi yang tidak jelas.",
+    "stat3_title": "Fragmentasi",
+    "stat3_desc": "pelacakan dampak sosial hilang akibat data yang tidak teratur dan ketiadaan platform terpusat.",
+    "stat_volunteers": "Relawan Aktif",
+    "stat_projects": "Proyek Selesai",
+    "stat_orgs": "Organisasi Mitra"
   },
   "explore": {
     "title": "Eksplorasi Program",

@@ -149,7 +149,20 @@
     "cta_desc": "Join thousands of volunteers and social organizations that have made a real impact on JALA VIVE.",
     "btn_volunteer": "Join as Volunteer",
     "btn_org": "Register Organization",
-    "value_badge": "OUR VALUE"
+    "value_badge": "OUR VALUE",
+    "problem_tag": "The Problem",
+    "problem_title1": "Why JALA VIVE",
+    "problem_title2": "is Needed",
+    "problem_desc": "Our research confirms that the current volunteer ecosystem is fragmented, creating unnecessary friction for both organizers and volunteers.",
+    "stat1_title": "Organizer Struggle",
+    "stat1_desc": "of event organizers report that managing volunteer recruitment through manual forms is inefficient and time-consuming.",
+    "stat2_title": "Volunteer Hesitation",
+    "stat2_desc": "of potential volunteers abandon registration due to scattered information and unclear application processes.",
+    "stat3_title": "Fragmentation",
+    "stat3_desc": "of social impact tracking is lost due to disorganized data and lack of a centralized platform.",
+    "stat_volunteers": "Active Volunteers",
+    "stat_projects": "Projects Completed",
+    "stat_orgs": "Partner Organizations"
   },
   "explore": {
     "title": "Explore Programs",

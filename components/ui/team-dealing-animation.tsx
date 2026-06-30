@@ -45,8 +45,8 @@ const CardContent = ({ member, isDealt, isComplete, isCEO }: { member: TeamMembe
       )}
     </div>
     <div className="flex flex-col justify-end p-2 lg:p-3 h-1/3 text-center pb-3 relative">
-      <h3 className={`font-bold text-forest-beige line-clamp-2 leading-tight ${isCEO ? 'text-[11px] lg:text-[13px]' : 'text-[10px] lg:text-[12px]'}`}>{member.name}</h3>
-      <p className={`font-black text-[#829661] tracking-widest mt-1 uppercase ${isCEO ? 'text-[9px] lg:text-[10px]' : 'text-[8px] lg:text-[9px]'}`}>{member.role}</p>
+      <h3 className={`font-bold text-forest-beige line-clamp-2 leading-tight ${isCEO ? 'text-[13px] lg:text-[15px]' : 'text-[12px] lg:text-[14px]'}`}>{member.name}</h3>
+      <p className={`font-black text-[#829661] tracking-widest mt-1 uppercase ${isCEO ? 'text-[10px] lg:text-[12px]' : 'text-[9px] lg:text-[11px]'}`}>{member.role}</p>
     </div>
   </motion.div>
 );
@@ -111,7 +111,7 @@ export function TeamDealingAnimation({ members }: TeamDealingAnimationProps) {
           <motion.div
             key={`deck-${idx}`}
             layoutId={`card-${idx}`}
-            className="absolute top-1/2 w-[110px] h-[170px] md:w-[130px] md:h-[190px] lg:w-[140px] lg:h-[210px]"
+            className="absolute top-1/2 w-[130px] h-[210px] md:w-[155px] md:h-[250px] lg:w-[180px] lg:h-[280px]"
             style={{ 
                zIndex,
                left: `calc(50% + ${xOffset}px)`,
@@ -152,8 +152,8 @@ export function TeamDealingAnimation({ members }: TeamDealingAnimationProps) {
               }}
               // Dimensions dynamically sized to ensure all 7 fit beautifully
               style={{
-                width: isCEO ? 'clamp(120px, 11vw, 150px)' : 'clamp(100px, 9vw, 130px)',
-                height: isCEO ? 'clamp(190px, 17vw, 230px)' : 'clamp(160px, 14vw, 200px)',
+                width: isCEO ? 'clamp(150px, 14vw, 180px)' : 'clamp(130px, 12vw, 155px)',
+                height: isCEO ? 'clamp(240px, 21vw, 280px)' : 'clamp(210px, 18vw, 250px)',
               }}
               className="relative shrink-0"
             >

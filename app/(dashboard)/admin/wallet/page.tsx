@@ -36,9 +36,15 @@ export default function AdminWalletPage() {
           setTotalWithdrawn(Number(total_withdrawn) || 0);
           setTotalTopup(Number(total_topup) || 0);
           
-          const feesSum = transactions.reduce((acc: number, curr: any) => acc + Math.floor(Number(curr.amount) / 9), 0);
+          // Filter out top ups and refunds to only get actual registration revenue
+          const revenueTx = transactions.filter((tx: any) => 
+            !tx.description?.toLowerCase().includes('top up') &&
+            !tx.description?.toLowerCase().includes('refund')
+          );
+
+          const feesSum = revenueTx.reduce((acc: number, curr: any) => acc + Math.floor(Number(curr.amount) / 9), 0);
           setPlatformRevenue(feesSum);
-          setTransactions(transactions);
+          setTransactions(revenueTx);
         }
       } catch (err) {
         console.error("Error fetching admin wallet data:", err);
