@@ -21,7 +21,7 @@ customLanguageDetector.addDetector({
   lookup(options) {
     let found = Cookies.get("NEXT_LOCALE");
     if (!found && typeof window !== "undefined") {
-      found = localStorage.getItem("i18nextLng");
+      found = localStorage.getItem("i18nextLng") || undefined;
     }
     return found;
   },
