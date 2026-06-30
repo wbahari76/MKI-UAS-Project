@@ -49,9 +49,9 @@ const TEAM_MEMBERS = [
     image: "/cto.jpg",
   },
   {
-    name: "Laysa Latifah",
+    name: "Salsa Putri",
     role: "CCO",
-    image: "/cco.jpg",
+    image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80",
   },
   {
     name: "Dinda Candraviani",
@@ -85,7 +85,7 @@ export default function AboutPage() {
 
   return (
     <div className="min-h-screen bg-[#181A15] pt-16 pb-16">
-      
+
       {/* Background gradients */}
       <div className="absolute top-0 right-0 w-1/3 h-[400px] bg-forest-accent/5 blur-[100px] rounded-full pointer-events-none" />
       <div className="absolute top-[20%] left-0 w-1/3 h-[400px] bg-blue-500/5 blur-[100px] rounded-full pointer-events-none" />
@@ -98,11 +98,11 @@ export default function AboutPage() {
           variants={stagger}
           className="max-w-3xl mx-auto space-y-6"
         >
-          
+
           <motion.h1 variants={fadeIn} className="text-3xl md:text-5xl font-extrabold text-forest-beige tracking-tight leading-tight">
             {t("about.hero_title")} <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#829661] to-emerald-500">{t("about.hero_title_highlight")}</span> {t("about.hero_title_end")}
           </motion.h1>
-          
+
           <motion.p variants={fadeIn} className="text-base md:text-lg text-forest-muted leading-relaxed max-w-xl mx-auto font-light">
             {t("about.hero_desc")}
           </motion.p>
@@ -146,7 +146,7 @@ export default function AboutPage() {
                   {t("about.problem_tag")}
                 </span>
                 <h2 className="text-4xl md:text-5xl font-extrabold text-forest-beige tracking-tight mb-6 leading-tight">
-                  {t("about.problem_title1")}<br/>{t("about.problem_title2")}
+                  {t("about.problem_title1")}<br />{t("about.problem_title2")}
                 </h2>
                 <p className="text-forest-muted text-base leading-relaxed">
                   {t("about.problem_desc")}
@@ -157,7 +157,7 @@ export default function AboutPage() {
             {/* RIGHT COLUMN */}
             <div className="md:w-[65%] w-full relative">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 relative z-10">
-                
+
                 {/* Card 1 */}
                 <motion.div
                   initial={{ opacity: 0, y: 30, scale: 0.96 }}
@@ -215,7 +215,7 @@ export default function AboutPage() {
       {/* Visi Section */}
       <section className="relative z-10 py-20 my-8 bg-forest-card/30 border-y border-forest-border">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -278,7 +278,7 @@ export default function AboutPage() {
                 border: "hover:border-rose-500/30"
               }
             ].map((misi, idx) => (
-              <motion.div 
+              <motion.div
                 key={idx}
                 initial={{ opacity: 0, y: 15 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -342,7 +342,7 @@ export default function AboutPage() {
                 icon: <Shield className="w-5 h-5 text-amber-500" />
               }
             ].map((value, idx) => (
-              <motion.div 
+              <motion.div
                 key={idx}
                 initial={{ opacity: 0, scale: 0.98 }}
                 whileInView={{ opacity: 1, scale: 1 }}
@@ -388,7 +388,7 @@ export default function AboutPage() {
       <section className="relative z-10 pt-4 pb-6 px-4">
         <div className="relative max-w-3xl mx-auto text-center space-y-6 bg-forest-card border border-forest-border p-10 rounded-[2.5rem] shadow-xl">
           <div className="absolute inset-0 bg-gradient-to-br from-forest-accent/5 to-transparent rounded-[2.5rem] pointer-events-none" />
-          
+
           <h2 className="text-2xl md:text-4xl font-extrabold text-forest-beige leading-tight tracking-tight">
             {t("about.cta_title")}
           </h2>
