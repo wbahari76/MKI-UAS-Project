@@ -80,7 +80,7 @@ export function Footer() {
                 {/* Bottom */}
                 <div className="pt-8 border-t border-[#38402D] flex flex-col md:flex-row items-center justify-between gap-4">
                     <p className="text-forest-muted text-sm">
-                        © 2024 JALA VIVE. All rights reserved.
+                        © 2026 JALA VIVE. All rights reserved.
                     </p>
                     <div className="flex flex-wrap items-center gap-4 sm:gap-6 text-sm">
                         <Link href="/guidelines" className="text-forest-muted hover:text-forest-beige transition-colors">Community Guidelines</Link>
